@@ -67,7 +67,7 @@ This directly replaces the original design's `guest_session_id` cookie: `respond
 
 Uses **Supabase's native anonymous-to-permanent conversion** (`supabase.auth.updateUser({ email })` called from the client while the anonymous session is active), not a manual data-transfer step.
 
-1. Guest responds → `responses` row created with `responder_user_id = <anonymous auth.uid()>`, `response_origin = 'guest'` (snapshot, permanent), `attribution` computed per §5.
+1. Guest responds → `responses` row created with `responder_user_id = <anonymous auth.uid()>` (this *is* ownership — see §5), `response_origin = 'guest'` (snapshot, permanent), `identity_assurance` computed per §5.
 2. Guest is shown the "save this?" email prompt (`docs/USER_FLOWS.md` §6). They submit an email.
 3. Client calls `supabase.auth.updateUser({ email })` on the existing anonymous session. Supabase sends an OTP/confirmation to that address.
 4. On successful verification, **Supabase converts the same `auth.users` row in place** — same UID, `is_anonymous` flips to `false`, an identity is linked. Because every `responses.responder_user_id` already pointed at that UID, **all of that guest's response history is already correctly attributed with zero migration/transfer code.** This is a meaningful simplification over the first draft's custom `guest_session_id` transfer query.
@@ -144,14 +144,32 @@ responses
                                                 -- snapshot of whether responder_user_id was
                                                 -- anonymous at the moment this row was written.
                                                 -- Never recomputed after the account upgrades.
-  attribution        text not null            -- 'verified' | 'unverified' — see rule below
+  identity_assurance text not null            -- 'none' | 'recipient_confirmed' — see rule below.
+                                               -- Records what was actually VERIFIED about who
+                                               -- responded. Does NOT decide whether this row
+                                               -- belongs in someone's account — that's ownership
+                                               -- (responder_user_id), a separate concern below.
   created_at         timestamptz not null default now()
   updated_at         timestamptz not null default now()
   unique (recommendation_id)
 ```
 
-**`attribution` rule (computed once, at write time, by the server action — never retroactively recomputed):**
-`attribution = 'verified'` if and only if `recommendation.recipient_type = 'registered'` **and** `responder_user_id = recommendation.recipient_user_id` **and** `response_origin = 'authenticated'` at that exact moment. Every guest-recipient response, and every response from an anonymous session, is `'unverified'`. Because registered-recipient responses now *require* login as the exact recipient before they can be created at all (§20 Q5), in practice every `recipient_type = 'registered'` response ends up `'verified'` — but the field is still computed explicitly rather than assumed, so the invariant is visible in the data itself, not just enforced procedurally.
+### Three separate concepts on `responses` — do not conflate them
+
+This table intentionally keeps three different questions in three different fields, because collapsing them caused the wrong behavior in the first draft:
+
+| Concept | Field | Mutable? | Answers |
+|---|---|---|---|
+| **Ownership** | `responder_user_id` | Yes, in principle | "Whose account does this response currently live under? What shows up in their Inbox/Me?" |
+| **Origin** | `response_origin` | No — write-once | "What was the verification *context* at the moment this row was created — anonymous or already-permanent?" |
+| **Identity assurance** | `identity_assurance` | No — computed once, at write time | "What did we actually confirm about who this was, at that moment?" |
+
+**Ownership** is what determines whose history a response appears in. In V1, ownership only ever moves via Supabase's native anonymous→permanent conversion (§4) — the underlying `auth.users` row keeps the exact same UID, so `responder_user_id` never literally changes value; what changes is that UID's *account* going from ephemeral/anonymous to durable/permanent. This is deliberately left open as a concept (not hard-coded as "immutable once set") so a future explicit claim mechanism — e.g. recovering history from a different device/browser — can reassign ownership later without touching `response_origin` or `identity_assurance` on the historical rows at all. Nothing in V1 needs that second mechanism; the schema just doesn't foreclose it.
+
+**`identity_assurance` rule (computed once, at write time, by the server action — never retroactively recomputed):**
+`identity_assurance = 'recipient_confirmed'` if and only if `recommendation.recipient_type = 'registered'` **and** `responder_user_id = recommendation.recipient_user_id` **and** `response_origin = 'authenticated'` at that exact moment — i.e., we affirmatively confirmed this was the named recipient's own authenticated account responding. Every guest-recipient response, and every response made from an anonymous session, is `'none'` — not because it's illegitimate or excluded from anyone's history, but simply because there was nothing to confirm. Because registered-recipient responses now *require* login as the exact recipient before they can be created at all (§20 Q5), in practice every `recipient_type = 'registered'` response ends up `'recipient_confirmed'` — but the field is still computed explicitly rather than assumed, so the invariant is visible in the data itself, not just enforced procedurally.
+
+**This is exactly what makes the intended guest→account experience work:** someone can arrive as a nameless guest, respond immediately, build a little history of `identity_assurance = 'none'` / `response_origin = 'guest'` responses under their anonymous account, decide Put Me On is useful, type their email, and the moment they verify it, that entire accumulated history appears under their new permanent account — automatically, with no filtering or re-processing — because ownership (`responder_user_id`) never had to change. `response_origin` and `identity_assurance` on those historical rows stay exactly as recorded, permanently — an honest record of what was actually true at the time, independent of what the account later becomes.
 
 **Not modeled as tables:** `listen_clicked` is a PostHog event only — no product surface needs to query "did they click listen" from Postgres, so persisting it in the DB would be pure duplication. If that changes later, it's an additive table.
 
@@ -345,7 +363,7 @@ Schema changes are authored as Supabase CLI migration files, applied to `put-me-
 - **Same link opened repeatedly / on multiple devices:** stateless reads, no session requirement to view — works by construction.
 - **Registered recipient opens while logged out:** they can still view/listen with no wall (the page itself never requires login). **Responding does require login as exactly that recipient** (§11, §20 Q5) — if they try to respond while logged out, or logged in as someone else, the action rejects and the UI prompts login for the correct account at that specific step. This is the direct fix for the "Maya forwards her link to Josh, Josh submits Maya's response" problem raised in review.
 - **Multiple people with the same display name:** the recipient picker shows `handle` alongside `display_name` when there's a collision (§5) — `handle` exists for exactly this case. `recipient_user_id` is always the real FK selected from that disambiguated picker, never inferred from a name string alone.
-- **Someone maliciously responds through another person's guest URL:** for guest-recipient recommendations there was never a verified identity to begin with, so this isn't a new failure mode — the response is always `attribution = 'unverified'`/`response_origin = 'guest'`, and the UI is expected to never claim "Charles said X," only "someone responded" framing.
+- **Someone maliciously responds through another person's guest URL:** for guest-recipient recommendations there was never a verified identity to begin with, so this isn't a new failure mode — the response is always `identity_assurance = 'none'`, and the UI is expected to never claim "Charles said X," only "someone responded" framing. Whoever's browser actually submitted it still *owns* that response (§5) and can see/edit it in their own history — the point is only that nobody else, including the sender, gets to treat it as a confirmed statement from "Charles."
 
 Remaining edge cases from `docs/USER_FLOWS.md` §12 not called out above are covered inline in §4 (guest upgrade), §15 (duplicate submit), and §16/§6 (source-deleted-after-pass-on, tracking params/unsupported URLs).
 
@@ -382,7 +400,12 @@ Original rationale is kept below each item; the resolution is appended, not a re
 **1. Do guest responses ever become `attribution = 'verified'` after the guest creates a persistent account?**
 > Original proposal: no, they remain `'guest'` permanently.
 >
-> **RESOLVED:** Split into two fields instead of one. `response_origin` (`'guest'` | `'authenticated'`) is a permanent, write-once historical record — it never changes, even after the anonymous account becomes permanent. `attribution` (`'verified'` | `'unverified'`) is computed once at write time from `response_origin` and the recipient match. Creating an account later never retroactively proves identity for an unnamed guest — there was nothing to verify in the first place. See §5, §4.
+> **RESOLVED — reframed into three separate concepts, per further review.** The original single `attribution` field was conflating two different questions: "what got verified" and "does this belong in someone's account." Split into:
+> - **Ownership** (`responder_user_id`) — whose account this response lives under, and therefore what shows up in their Inbox/Me. This *can* change in principle; in V1 it moves exactly once, automatically, via Supabase's native anonymous→permanent conversion (§4) — same UID throughout, so a guest's full history becomes the new account's history with zero migration.
+> - **`response_origin`** (`'guest'` | `'authenticated'`) — a permanent, write-once historical record of the verification *context* at creation time. Never changes, regardless of what ownership later becomes.
+> - **`identity_assurance`** (`'none'` | `'recipient_confirmed'`) — a permanent, write-once record of what was actually *confirmed* about identity at that moment. Purely descriptive — it never gates whether a response belongs in someone's history; ownership alone decides that.
+>
+> Net effect is the same as originally intended (an account upgrade never retroactively proves a guest's identity) but stated more precisely, and it's what makes the "nameless guest builds history, then claims it by verifying an email" experience work cleanly — see §5.
 
 **2. Public URL = the row's `id` directly, or a separate rotatable `public_id`?**
 > Original proposal: use `id` directly for V1 simplicity.
