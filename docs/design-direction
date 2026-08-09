@@ -1,0 +1,1668 @@
+'''
+# Put Me On — V1 Design Direction
+
+## Feeling
+
+Human, intimate, restrained, slightly weird, useful.
+
+Feels more like a personal piece of the internet than a startup dashboard.
+
+Old internet ethos without retro cosplay.
+
+## References
+
+Partiful:
+- personality
+- confident microcopy
+- playful details
+
+Letterboxd:
+- cultural objects take visual priority
+- dense enough to feel useful
+
+Hinge:
+- interpersonal framing
+
+Notion:
+- restraint
+- functional simplicity
+
+Spotify:
+- music metadata conventions
+- album art can provide most color
+
+## Avoid
+
+- SaaS dashboard aesthetic
+- excessive cards
+- gradients for decoration
+- glassmorphism
+- giant pill buttons everywhere
+- excessive border radius
+- generic AI-generated illustrations
+- fake retro computer UI
+- pixel fonts
+- neon cyber aesthetic
+- visual clutter
+- engagement/gamification aesthetics
+
+## Visual principles
+
+- dark-first
+- near-black, not necessarily pure black
+- album artwork provides most color
+- restrained palette
+- strong typography hierarchy
+- hairline dividers
+- generous negative space where useful
+- small metadata can use monospace
+- links should feel like links
+- text can occasionally feel web-native rather than app-native
+- lowercase may be used intentionally, but not at the expense of readability
+
+## Interaction principles
+
+- interactions should feel immediate
+- subtle delight is encouraged
+- motion should explain state changes
+- no decorative animation that delays actions
+- recommendation itself is always the focus
+- interactions should feel personal rather than gamified
+
+## Implementation
+
+Do not invent a large design system.
+Create tokens only as recurring needs emerge.
+Prefer real HTML/CSS interactions over decorative libraries.
+Ask before adding animation/UI dependencies.
+
+# Put Me On — Design Direction
+
+### v0.1 · August 2026
+
+## 1. Design thesis
+
+**Put Me On should feel like a serious music website with tiny moments of human weirdness.**
+
+The interface should be:
+
+* sleek
+* quiet
+* human
+* curated
+* web-native
+* slightly strange
+* playful in meaningful moments
+* visually confident without looking expensive or luxurious
+* culturally aware without looking like it is trying to prove how cool it is
+
+The product should **not** visually behave like a typical social app.
+
+It should feel closer to:
+
+> **a living archive of people changing each other’s taste**
+
+than:
+
+> a place to consume music content.
+
+The interface itself should remain restrained enough that the most expressive things are:
+
+* album artwork
+* people
+* recommendations
+* notes between friends
+* provenance
+* response interactions
+* music traveling through relationships
+
+---
+
+# 2. Core design principles
+
+## Human relationships are the visual primitive
+
+The important object is not:
+
+> a song
+
+It is:
+
+> **Maya → Vyomi → Carry the Zero**
+
+Design should continually reinforce that recommendations move **from someone to someone**.
+
+Relationship language should appear throughout the product:
+
+* `maya sent you`
+* `charles put you on`
+* `you → josh`
+* `sam → you → ella`
+
+Arrows, connecting lines and small linked-node motifs can become recurring brand primitives.
+
+Do not reduce recommendations to generic music cards.
+
+---
+
+## The user never posts
+
+There should never be UI that visually resembles:
+
+* compose post
+* post to followers
+* create content
+* broadcast
+* share with audience
+
+The primary action is always:
+
+> **+ put someone on**
+
+Creation always feels interpersonal.
+
+Even future public activity should look like an observed interaction:
+
+> **Maya → Josh**
+
+not:
+
+> Maya posted a song.
+
+---
+
+## Utility first, social value second
+
+V1 should feel immediately useful even if the user has only one friend on the product.
+
+The logged-in product is primarily:
+
+**Inbox**
+Music people sent you.
+
+**Sent**
+Music you sent people and what happened.
+
+**Me**
+The history accumulating from these exchanges.
+
+**Put someone on**
+The primary creation action.
+
+No Feed in V1.
+
+The product should not depend on having a populated social network to feel useful.
+
+---
+
+## Fun belongs in meaningful moments
+
+Do not solve “this feels boring” by decorating the whole interface.
+
+Keep these calm:
+
+* navigation
+* lists
+* settings
+* account management
+* timestamps
+* basic filtering
+
+Put personality into:
+
+* `what did you think?`
+* `put me on`
+* sending
+* successful responses
+* pass-it-on
+* chains
+* provenance
+* subtle hover states
+* tiny confirmations
+* empty-state copy
+
+**95% controlled system, 5% delightful weirdness.**
+
+---
+
+## Album art supplies the color
+
+The interface itself should be overwhelmingly neutral.
+
+Use real album artwork wherever possible.
+
+Album covers should create the visual rhythm and variety of the product.
+
+Avoid:
+
+* generated color gradients based on covers
+* large tinted backgrounds
+* colorful cards
+* multiple bright status colors
+* rainbow social-app UI
+
+A page full of recommendations should naturally become colorful because **music is colorful**, not because the product UI is.
+
+---
+
+# 3. Brand character
+
+## Desired feeling
+
+Put Me On should feel:
+
+* personal
+* intimate
+* archival
+* understated
+* digitally native
+* slightly nostalgic
+* thoughtful
+* youthful without being juvenile
+* niche without being exclusionary
+* designed without looking over-designed
+
+Someone in their early 20s should think it is cool.
+
+Someone in their 30s should not think:
+
+> this is clearly an app for teenagers.
+
+---
+
+## Avoid
+
+Do not drift toward:
+
+### Airbuds
+
+Too teen-social, colorful, widget-like and overtly playful.
+
+### RateYourMusic
+
+Too dense, nerdy and database-first.
+
+### Last.fm
+
+Too utilitarian / legacy music-tracker coded.
+
+### Generic SaaS
+
+Avoid:
+
+* outlined CTA buttons everywhere
+* admin-dashboard structures
+* metric cards
+* dropdown-heavy navigation
+* giant settings menus
+* “productivity” visual language
+
+### Generic native social app
+
+Avoid:
+
+* bottom tab bars
+* floating circular + buttons
+* hamburger navigation as the primary IA
+* oversized rounded cards
+* mobile-app shell conventions
+* native-app layouts simply stretched onto desktop
+
+### Old-internet cosplay
+
+Avoid:
+
+* CRT filters
+* pixel fonts everywhere
+* fake Windows chrome
+* fake browser windows
+* excessive ASCII
+* Y2K graphics for decoration
+* maximal nostalgic clutter
+
+Use the **values of the old web**, not its costume.
+
+---
+
+# 4. Inspiration
+
+Pull specific qualities rather than copying entire visual systems.
+
+## Partiful
+
+Use:
+
+* personality
+* confident microcopy
+* delightful interaction details
+* willingness to feel human rather than corporate
+
+Do not copy:
+
+* party-specific maximal energy
+
+## Letterboxd
+
+Use:
+
+* cultural objects as the focus
+* history accumulating through usage
+* personality emerging from what someone has consumed
+
+Do not copy:
+
+* rating/review mechanics
+* status-heavy profile design
+
+## Hinge
+
+Use:
+
+* interpersonal framing
+* actions feeling directed toward another human
+
+## BeReal
+
+Use:
+
+* low-performance social behavior
+* less emphasis on audience creation
+
+## Spotify
+
+Use:
+
+* album art prominence
+* familiarity around music metadata
+* clear track/artist hierarchy
+
+Do not inherit:
+
+* algorithmic discovery language
+* streaming-player complexity
+
+## Notion
+
+Use:
+
+* restraint
+* web-native layouts
+* clear typography
+* quiet hierarchy
+
+Avoid:
+
+* turning Put Me On into productivity software
+
+---
+
+# 5. Visual identity
+
+## Color
+
+### Foundation
+
+Use approximately:
+
+* near-black page background
+* slightly lighter charcoal surfaces when necessary
+* warm/off-white primary type
+* middle gray secondary type
+* dim gray metadata
+* subtle hairline borders
+
+Do not use pure black + pure white everywhere. Slight warmth will feel more human.
+
+---
+
+## Accent strategy
+
+Do **not** use gold.
+
+Gold pushes the product toward:
+
+* luxury
+* vintage editorial
+* record-collector aesthetic
+* premium brand signaling
+
+That is not the core personality.
+
+The preferred approach is actually:
+
+### Almost no permanent brand accent.
+
+Use album art as the dominant color.
+
+Then give **connection/provenance** one subtle signal treatment.
+
+Potential direction:
+
+### Icy periwinkle / pale digital blue
+
+Use extremely sparingly for:
+
+* active provenance
+* confirmed connections
+* selected `put me on`
+* link-animation moments
+* focus states where useful
+
+It should feel closer to:
+
+> light from a screen at night
+
+than:
+
+> tech-company blue.
+
+Alternative direction:
+
+### Pure monochrome
+
+Use high-contrast white + motion/shape rather than a chromatic accent at all.
+
+This may ultimately be more timeless.
+
+---
+
+# 6. The brand primitive: connection
+
+Instead of making `put me on` special through color alone, make **connection itself** visually distinctive.
+
+A possible custom symbol:
+
+```text
+○    ○
+```
+
+Default.
+
+On hover:
+
+```text
+○····○
+```
+
+On `put me on`:
+
+```text
+○────○
+```
+
+Pass-on:
+
+```text
+○────○────○
+```
+
+This motif can eventually scale naturally into the taste graph.
+
+Possible applications:
+
+* `put me on` response
+* successful attribution
+* chains
+* sent → received history
+* future feed
+* future lineage maps
+* loading / confirmation animation
+
+It is much more ownable than:
+
+> green means success.
+
+---
+
+# 7. Typography
+
+The current direction has been **too small and too metadata-heavy**.
+
+The product should feel confident rather than precious.
+
+## Primary type
+
+Use one clean grotesk/sans as the primary interface face.
+
+It should handle:
+
+* names
+* tracks
+* artists
+* navigation
+* notes
+* response choices
+* headings
+
+Avoid a highly stylized display font.
+
+The content is expressive enough.
+
+---
+
+## Mono
+
+Use mono **sparingly**.
+
+Good uses:
+
+* timestamps
+* arrows
+* tiny status labels
+* provenance metadata
+* dates
+* system-like archival annotations
+
+Bad uses:
+
+* entire navigation
+* song titles
+* large amounts of body copy
+* every status
+* every piece of metadata
+
+Overusing mono makes the product feel cold and technical.
+
+---
+
+## Approximate scale
+
+### Desktop
+
+Page/track hero:
+**32–44px**
+
+Large Me/history stats:
+**40–56px**
+
+Section heading:
+**18–24px**
+
+Song:
+**16–18px**
+
+Person:
+**15–17px semibold**
+
+Artist:
+**14–16px**
+
+Body/note:
+**15–17px**
+
+Metadata:
+**11–13px**
+
+### Mobile
+
+Major track:
+**26–32px**
+
+Section headings:
+**18–22px**
+
+Song/person:
+**15–17px**
+
+Artist/body:
+**14–16px**
+
+Metadata:
+**11–12px**
+
+Never make important content tiny merely to create sophistication.
+
+---
+
+# 8. Web-first layout
+
+This is a **website**, not an app delivered through a browser.
+
+Desktop and mobile should not simply share one vertically stacked layout.
+
+---
+
+## Desktop
+
+Use the horizontal space intentionally.
+
+Preferred logged-in structure:
+
+```text
+┌──────────────┬────────────────────┬──────────────────────────────┐
+│              │                    │                              │
+│ navigation   │ recommendation     │ selected recommendation      │
+│              │ list               │ detail                       │
+│              │                    │                              │
+│ put me on    │                    │                              │
+│              │                    │                              │
+└──────────────┴────────────────────┴──────────────────────────────┘
+```
+
+### Left rail
+
+Persistent.
+
+Something like:
+
+```text
+put me on
+
+inbox
+sent
+me
+
++ put someone on
+
+
+Vyomi
+settings
+```
+
+Do not overstyle it.
+
+No boxes around every nav item.
+
+---
+
+## Master/detail behavior
+
+Inbox and Sent should benefit from desktop.
+
+### Center
+
+Recommendation history.
+
+### Right
+
+Selected recommendation.
+
+This makes Put Me On feel like a purposeful desktop website rather than an enlarged phone app.
+
+The detail pane can contain:
+
+* larger album artwork
+* sender relationship
+* song
+* artist
+* note
+* listen
+* response
+* source/pass-on history
+
+---
+
+## Mobile web
+
+Do not use:
+
+* bottom navigation
+* floating action buttons
+* full-time hamburger as the only navigation
+
+Instead:
+
+```text
+put me on               + put someone on
+
+inbox        sent        me
+```
+
+Or another compact top-navigation treatment.
+
+Settings can live behind the user's name/avatar.
+
+If necessary, secondary account controls can use a small menu, but **core product destinations should remain visible**.
+
+Design mobile on a raw ~390px web canvas, not inside an iPhone mockup during product iteration.
+
+---
+
+# 9. Navigation
+
+## V1
+
+Primary:
+
+* Inbox
+* Sent
+* Me
+* Put someone on
+
+Secondary:
+
+* account/settings
+
+No:
+
+* Feed
+* Explore
+* Notifications
+* public profile
+* search tab
+
+---
+
+## Future
+
+Feed should only appear after direct recommendation behavior is proven.
+
+Potential future IA:
+
+```text
+Inbox    Feed    Sent    Me
+             + Put someone on
+```
+
+But Feed must always mean:
+
+> recommendation activity between people
+
+not:
+
+> content people posted.
+
+---
+
+# 10. Inbox
+
+Inbox is Home.
+
+It should answer:
+
+> What have people wanted me to hear?
+
+---
+
+## Structure
+
+### Waiting
+
+Recommendations without a response.
+
+Avoid language like:
+
+* overdue
+* tasks
+* unfinished
+* pending action
+
+Music should not feel like homework.
+
+Possible language:
+
+`3 waiting`
+
+Then:
+
+### History
+
+Recommendations already responded to.
+
+---
+
+## Row hierarchy
+
+Use approximately:
+
+```text
+[art]
+
+Maya
+Carry the Zero · Built to Spill
+
+                                           2d
+```
+
+Album artwork:
+~48–56px desktop list.
+
+Name and track are the strongest content.
+
+Artist is secondary.
+
+Timestamp very quiet.
+
+Rows should be separated primarily through:
+
+* whitespace
+* thin rules
+
+Avoid card containers.
+
+---
+
+## Hover
+
+Desktop row hover can:
+
+* brighten slightly
+* enlarge artwork by ~2–4%
+* reveal subtle `open →`
+* shift a line or arrow
+* update the master/detail pane
+
+No dramatic movement.
+
+---
+
+# 11. History semantics
+
+Language must remain extremely precise.
+
+Bad:
+
+> Charles `put me on`
+
+Ambiguous.
+
+After confirmed attribution, prefer:
+
+> **Charles put you on**
+> Cleva · Erykah Badu
+
+For other responses:
+
+> **from Josh**
+> Redbone · Childish Gambino
+> `you said: liked it`
+
+or:
+
+> **Josh sent you**
+> Redbone · Childish Gambino
+> `liked it`
+
+Do not accidentally treat every response type as equivalent to historical provenance.
+
+`put me on` is the special state that creates meaningful attribution.
+
+---
+
+# 12. Sent
+
+Sent answers:
+
+> What happened to the music I sent people?
+
+Possible structure:
+
+### Waiting
+
+```text
+Maya
+Carry the Zero · Built to Spill
+2d
+
+no response yet
+```
+
+### History
+
+```text
+Josh
+Dagger · Slowdive
+
+you put Josh on
+```
+
+or:
+
+```text
+Josh said: put me on
+```
+
+Choose one canonical phrasing and use it consistently.
+
+Sent should feel relational rather than analytical.
+
+Avoid:
+
+* conversion percentages
+* hit rate
+* response rate
+* tastemaker scores
+
+---
+
+# 13. Recommendation landing page
+
+This is probably the **most important designed screen in V1**.
+
+Many users' first interaction with Put Me On will happen here.
+
+It should feel more expressive than Inbox.
+
+Example:
+
+```text
+vyomi wants to put you on to
+
+
+[ large album artwork ]
+
+
+CARRY THE ZERO
+Built to Spill
+
+"trust me after 2:34"
+
+
+listen ↗
+```
+
+No signup wall.
+
+No marketing pitch.
+
+No explanation of the entire platform.
+
+---
+
+# 14. “What did you think?”
+
+This should be one of the most distinctive interactions in the product.
+
+Response choices:
+
+* already knew it
+* not for me
+* liked it
+* put me on
+
+Design **custom vector pictograms** for each.
+
+Avoid generic:
+
+* thumbs up
+* thumbs down
+* heart
+* X
+
+The icons should feel slightly imperfect, like little system marks or stamps.
+
+Possible conceptual directions:
+
+### Already knew it
+
+* two overlapping discs
+* loop
+* repeat signal
+
+### Not for me
+
+* connection line turning away
+* waveform veering off
+* two nodes failing to connect
+
+### Liked it
+
+* vibrating speaker
+* small resonance lines
+* subtle sparkle/signal
+
+### Put me on
+
+* two nodes joining
+* line completing
+* transmission mark
+
+---
+
+## Interaction
+
+Default:
+
+quiet monochrome.
+
+Hover:
+
+* line draws
+* icon shifts 2–4px
+* text increases contrast
+
+Click:
+
+* ~100ms compression
+* selected mark “lands”
+* restrained connection animation
+
+For `put me on`, the two-node connection can visibly complete.
+
+No confetti.
+
+No fireworks.
+
+No XP.
+
+---
+
+# 15. Guest save interaction
+
+After response:
+
+```text
+saved :-)
+
+save this + the music people send you?
+
+[email                       ]
+[ save ]
+```
+
+Do not say:
+
+* Create an account
+* Sign up
+* Join Put Me On
+* Unlock your profile
+
+The product has already delivered value.
+
+Email gives the recommendation persistence.
+
+That is the pitch.
+
+---
+
+# 16. Put someone on composer
+
+This should feel nearly effortless.
+
+```text
+paste a Spotify link
+
+↓
+
+[ artwork ]
+Carry the Zero
+Built to Spill
+
+↓
+
+who's this for?
+
+Maya
+or
+[type a name]
+
+↓
+
+say something?  optional
+
+↓
+
+put them on
+```
+
+Do not add:
+
+* genre tags
+* mood
+* ratings
+* visibility selector
+* recipient groups
+* recommendation categories
+
+---
+
+# 17. Me
+
+Me should **not look like a profile dashboard**.
+
+The first prototype's:
+
+`8 / 6`
+
+stat layout felt generic and analytical.
+
+Instead, Me should feel more editorial and archival.
+
+---
+
+## Possible composition
+
+```text
+VYOMI
+@vyomi
+
+8 people have put you on.
+You've put 6 people on.
+```
+
+Use big type.
+
+No statistic cards.
+
+---
+
+## Sections
+
+### Recently put on to
+
+```text
+Dagger
+Slowdive
+from Sam
+```
+
+### People who put you on
+
+Potentially a quiet list of names once enough data exists.
+
+### People you've put on
+
+Likewise.
+
+### Chains
+
+This is the most distinctive potential section.
+
+---
+
+# 18. Chains
+
+V1 can show chains based on real observed pass-on activity.
+
+Do not wait for the full future taste graph to start expressing provenance visually.
+
+Example:
+
+```text
+CHAINS
+
+Sam ───── You ───── Josh
+
+Dagger
+Slowdive
+```
+
+Or:
+
+```text
+[Sam] ─── [You] ─── [Josh]
+            ↑
+          Dagger
+```
+
+Keep it simple.
+
+No canvas-based graph system required.
+
+---
+
+## Chain microinteraction
+
+When the module enters:
+
+* connecting line subtly draws once
+
+Hover nodes:
+
+**Sam**
+
+> sent Dagger to you
+
+**You**
+
+> said “put me on”
+
+**Josh**
+
+> you passed it to Josh
+
+This communicates the core product idea through interaction instead of explaining it with marketing copy.
+
+---
+
+# 19. Provenance as a recurring visual language
+
+Use provenance marks selectively throughout the site.
+
+Examples:
+
+```text
+Maya → you
+```
+
+```text
+you → Charles
+```
+
+```text
+Sam → you → Josh
+```
+
+Potentially mix:
+
+* names
+* small nodes
+* thin lines
+* tiny arrows
+
+Do not make the entire product look like a diagram.
+
+The motif should surface when understanding **how music moved** is useful.
+
+---
+
+# 20. Microinteractions
+
+## Good
+
+* album artwork grows 2–3% on row hover
+* underline draws beneath a text link
+* tiny arrow travels when sharing
+* connection line completes after `put me on`
+* copied link produces a subtle textual `copied`
+* recommendation entering Inbox shifts into place softly
+* chain extends when passed onward
+* custom response icon stamps into its selected state
+* detail pane changes with a quick fade/slide
+* sender note appears with subtle typographic treatment
+
+## Bad
+
+* bouncing buttons
+* excessive spring animation
+* confetti
+* floating hearts
+* animated gradients
+* constant motion
+* dopamine-heavy notifications
+* celebratory gamification
+
+Microinteractions should feel **discovered**, not demanded.
+
+---
+
+# 21. Texture
+
+The current interface is slightly too digitally perfect.
+
+Introduce a small amount of imperfection through custom assets.
+
+Potentially:
+
+* hand-adjusted vector connection icons
+* slightly irregular arrows
+* stamped response mark
+* imperfect underline
+* tiny hand-drawn signal animation
+
+Do not introduce:
+
+* paper textures everywhere
+* scrapbook imagery
+* tape
+* handwritten fonts
+* grunge overlays
+
+The base product remains extremely clean.
+
+---
+
+# 22. Copy
+
+Voice:
+
+* direct
+* plain
+* conversational
+* slightly playful
+* never marketing-heavy
+* never self-consciously cool
+
+Good:
+
+> vyomi wants to put you on to
+
+> what did you think?
+
+> saved :-)
+
+> who’s this for?
+
+> put someone on
+
+> charles put you on
+
+> no response yet
+
+> save this + the music people send you?
+
+Bad:
+
+> Discover music through authentic human connection.
+
+> Unlock your personalized taste network.
+
+> Grow your influence.
+
+> Your musical journey starts here.
+
+> You’re officially a tastemaker!
+
+The interface should rarely explain its philosophy explicitly.
+
+**The interaction itself should demonstrate it.**
+
+---
+
+# 23. Lowercase
+
+Lowercase can remain part of the brand, but should not become dogma.
+
+Good candidates:
+
+* `put me on`
+* small action copy
+* conversational prompts
+* timestamps/status metadata
+
+Use conventional capitalization where it improves legibility.
+
+Do not sacrifice accessibility to make everything aesthetically lowercase.
+
+---
+
+# 24. Custom assets
+
+Create a small bespoke asset family rather than buying a huge icon system.
+
+Highest-value custom assets:
+
+1. connection / `put me on` symbol
+2. already knew it
+3. not for me
+4. liked it
+5. pass-on / chain extension
+6. perhaps a tiny share/transmission icon
+
+Everything else can use extremely simple conventional UI icons.
+
+The custom system should be recognizable even at ~16–24px.
+
+---
+
+# 25. Responsive philosophy
+
+## Desktop
+
+The best place to:
+
+* manage recommendation history
+* browse Inbox
+* inspect Sent
+* explore personal provenance
+* eventually browse Feed
+* examine chains
+
+Use richer master/detail layouts and more editorial compositions.
+
+---
+
+## Mobile web
+
+The best place to:
+
+* open recommendation links from Messages
+* listen
+* respond
+* quickly put someone on
+* check a recommendation
+
+Mobile must be excellent, but should still feel like a **responsive website**, not a native application simulation.
+
+---
+
+# 26. Future Feed design
+
+Not V1, but preserve this direction.
+
+The Feed should visually center the relationship:
+
+```text
+MAYA → JOSH
+
+Carry the Zero
+Built to Spill
+
+"you need this"
+```
+
+Not:
+
+```text
+Maya
+posted a song
+```
+
+Third-party future behavior:
+
+`listen too`
+
+This can eventually create a different provenance type:
+
+> discovered through Maya → Josh
+
+rather than:
+
+> Maya directly put you on.
+
+Keep those concepts visually and semantically distinct.
+
+---
+
+# 27. Future profile direction
+
+When profiles eventually become public, they should be generated primarily by behavior.
+
+Avoid traditional profile-building:
+
+* lengthy bios
+* curated interest lists
+* profile completion
+* cover photos
+* “favorite 5 genres”
+* follower-count dominance
+
+A person's activity should naturally create their identity.
+
+The interesting profile question is:
+
+> **Who shaped this person's taste, and whose taste have they shaped?**
+
+---
+
+# 28. Accessibility
+
+Dark design cannot become an excuse for illegibility.
+
+Ensure:
+
+* body text has sufficient contrast
+* inactive nav does not look disabled
+* artist names remain readable
+* meaningful statuses are not communicated through color alone
+* hover interactions have keyboard equivalents
+* response controls have text labels, not icons alone
+* focus states are visible
+* tap targets are generous on mobile
+* motion can degrade gracefully
+
+---
+
+# 29. Design anti-goals
+
+Put Me On should never feel like:
+
+* a crypto dashboard
+* a music analytics dashboard
+* a productivity inbox
+* a social-media feed with songs
+* a teenager-only widget app
+* an underground-music gatekeeping product
+* a nostalgic web-design exercise
+* a luxury record-store brand
+* an AI product
+* a generic SaaS starter template
+
+---
+
+# 30. V1 design surfaces
+
+Prioritize design effort approximately in this order:
+
+### 1. Recipient recommendation page
+
+First impression and acquisition.
+
+### 2. What did you think?
+
+Core feedback/reward interaction.
+
+### 3. Put someone on
+
+Core creation.
+
+### 4. Inbox
+
+Primary recurring utility.
+
+### 5. Sent
+
+Feedback loop.
+
+### 6. Me
+
+Proof that history accumulates.
+
+### 7. Chains
+
+Small preview of the differentiated long-term value.
+
+### 8. Account/settings
+
+Keep intentionally boring.
+
+Do **not** spend disproportionate time polishing Settings or marketing pages.
+
+---
+
+# 31. Current recommended V1 IA
+
+### Desktop
+
+```text
+PUT ME ON
+
+Inbox
+Sent
+Me
+
++ Put someone on
+
+
+Vyomi
+Settings
+```
+
+Inbox/Sent may use:
+
+```text
+navigation | list | detail
+```
+
+---
+
+### Mobile web
+
+```text
+put me on                    + put someone on
+
+inbox           sent           me
+```
+
+Then page content.
+
+No bottom nav.
+
+No floating action button.
+
+No hamburger for primary destinations.
+
+---
+
+# 32. What makes Put Me On special visually
+
+The differentiator should **not** be a loud brand color.
+
+It should be the accumulated design language around:
+
+### Transmission
+
+Someone sent this to someone.
+
+### Connection
+
+Someone successfully changed another person's taste.
+
+### Continuity
+
+That person passed it onward.
+
+### History
+
+Those little exchanges accumulate into a meaningful archive.
+
+Visually:
+
+```text
+○────○
+```
+
+becomes:
+
+```text
+○────○────○
+```
+
+And emotionally:
+
+> Maya sent you a song
+
+becomes:
+
+> Maya put you on
+
+becomes:
+
+> Maya → You → Josh
+
+That progression should become the visual heart of the product.
+
+---
+
+# 33. Final design bar
+
+When someone sees Put Me On, the reaction should not primarily be:
+
+> this website looks cool.
+
+It should be:
+
+> **wait, I want to know who put me onto everything.**
+
+The design exists to make that idea feel obvious, desirable and emotionally real.
+
+The restraint is important.
+
+The fun is important.
+
+But the strongest source of personality should always be:
+
+> **people passing taste between people.**
+
+  
+  '''
