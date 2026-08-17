@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Artwork } from "@/components/Artwork";
 import { CursorField } from "@/components/CursorField";
+import { TopographicWeb } from "@/components/TopographicWeb";
 import { ChainMark } from "@/components/icons/ConnectionMark";
 import { useMeData } from "@/lib/data/store";
 
@@ -19,6 +20,10 @@ export default function LandingPage() {
   return (
     <div className="relative flex min-h-dvh flex-col overflow-hidden">
       <CursorField className="opacity-50" />
+      <TopographicWeb
+        seed="landing"
+        className="pointer-events-none absolute -right-24 top-0 h-[560px] w-[560px] text-accent opacity-[0.22] sm:-right-16"
+      />
 
       <header className="relative z-10 flex items-center justify-between px-6 py-6 sm:px-10">
         <span className="font-detail text-[13px] font-bold tracking-wide text-text-secondary">put me on</span>

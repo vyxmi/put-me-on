@@ -8,6 +8,7 @@ import { ResponsePicker } from "./ResponsePicker";
 import { ConnectionLine } from "./ConnectionLine";
 import { GuestSavePrompt } from "./GuestSavePrompt";
 import { CursorField } from "@/components/CursorField";
+import { TopographicWeb } from "@/components/TopographicWeb";
 import { track as trackAnalytics } from "@/lib/analytics";
 import type { ResponseType } from "@/lib/data/types";
 
@@ -58,6 +59,10 @@ export function GuestLanding({ id }: { id: string }) {
   return (
     <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-5 py-16 sm:px-6">
       <CursorField />
+      <TopographicWeb
+        seed={id}
+        className="pointer-events-none absolute -top-20 left-1/2 h-[500px] w-[500px] -translate-x-1/2 text-accent opacity-[0.18]"
+      />
       <div className="relative z-10 flex w-full max-w-md flex-col items-center gap-9">
         <p className="text-center text-[14px] text-text-secondary">
           <span className="text-text-primary">{sender.displayName}</span> wants to put{" "}
@@ -86,7 +91,7 @@ export function GuestLanding({ id }: { id: string }) {
           <ResponsePicker current={response?.type} onSelect={handleSelect} />
         </div>
 
-        {showSavePrompt ? <GuestSavePrompt /> : null}
+        {showSavePrompt ? <GuestSavePrompt defaultName={recipientLabel} /> : null}
 
         <Link href="/inbox" className="text-link text-[12px] text-text-tertiary">
           put me on

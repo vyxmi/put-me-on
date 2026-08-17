@@ -5,7 +5,8 @@ import { track as trackAnalytics } from "@/lib/analytics";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export function GuestSavePrompt() {
+export function GuestSavePrompt({ defaultName }: { defaultName?: string }) {
+  const [name, setName] = useState(defaultName ?? "");
   const [email, setEmail] = useState("");
   const [stage, setStage] = useState<"form" | "checking" | "saved">("form");
   const [error, setError] = useState(false);
@@ -22,7 +23,7 @@ export function GuestSavePrompt() {
   if (stage === "saved") {
     return (
       <p className="animate-rise-in text-center text-[14px] text-text-secondary">
-        you&apos;re all set — that link confirms it&apos;s you.
+        you&apos;re all set, {name || "friend"} — that link confirms it&apos;s you.
       </p>
     );
   }
@@ -31,7 +32,7 @@ export function GuestSavePrompt() {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        if (!EMAIL_RE.test(email)) {
+        if (!name.trim() || !EMAIL_RE.test(email)) {
           setError(true);
           return;
         }
@@ -48,6 +49,14 @@ export function GuestSavePrompt() {
       </p>
       <div className="flex w-full max-w-xs flex-col gap-3">
         <input
+          type="text"
+          required
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="your name"
+          className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[14px] text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none"
+        />
+        <input
           type="email"
           required
           value={email}
@@ -55,14 +64,11 @@ export function GuestSavePrompt() {
           placeholder="email address"
           className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[14px] text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none"
         />
-        <button
-          type="submit"
-          className="btn-primary rounded-xs px-4 py-2.5 text-[13.5px] font-semibold"
-        >
+        <button type="submit" className="btn-primary rounded-xs px-4 py-2.5 text-[13.5px] font-semibold">
           save
         </button>
       </div>
-      {error ? <p className="text-[12px] text-text-tertiary">that doesn&apos;t look like an email yet</p> : null}
+      {error ? <p className="text-[12px] text-text-tertiary">a name and a real-looking email, please</p> : null}
     </form>
   );
 }

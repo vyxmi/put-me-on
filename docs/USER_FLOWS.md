@@ -116,16 +116,16 @@ Example:
 >
 > save this + the music people send you?
 >
-> [email address] [save]
+> [your name] [email address] [save]
 
-Email is the only information requested at this moment.
+**Revised 2026-08-17 (product decision):** the save step asks for a display name as well as email, prefilled with the guest name the sender used for them on the recommendation (editable — the sender may have typed it wrong, or the guest may want something else). This intentionally supersedes the original guidance below, which is kept for context on the tradeoff being made.
+
+Original guidance: do not force display name/handle at this save step unless technically necessary — email is the only information requested at this moment; if they later attempt to SEND a recommendation and do not yet have a display name, ask for it then. The tradeoff accepted by revising this: one extra field at the save moment, in exchange for the guest never hitting a second "what's your name?" interruption later at their first send, and their Inbox/response history reading with their own name immediately rather than the sender's guess at it.
 
 After email verification:
 - preserve the recommendation/response where technically safe
-- give them a persistent account
+- give them a persistent account with the confirmed display name
 - land them in their Inbox
-
-Do not force display name/handle at this save step unless technically necessary. If they later attempt to SEND a recommendation and do not yet have a display name, ask for it then.
 
 Architecture proposal must explicitly explain how guest activity safely transitions to a persistent authenticated account, including edge cases involving: existing email/account, same browser, email verification opened on another device, duplicate identities, failed verification.
 

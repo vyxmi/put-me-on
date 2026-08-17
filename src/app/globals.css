@@ -16,6 +16,7 @@
 
   --accent: #a6a0f0;
   --accent-light: #c3bbf5;
+  --accent-deep: #6d5de0;
   --accent-dim: #726caa;
   --accent-glow: rgba(166, 160, 240, 0.35);
   --warn: #e3a0c4;
@@ -38,6 +39,7 @@
   --color-text-quaternary: var(--text-quaternary);
   --color-accent: var(--accent);
   --color-accent-light: var(--accent-light);
+  --color-accent-deep: var(--accent-deep);
   --color-accent-dim: var(--accent-dim);
   --color-accent-glow: var(--accent-glow);
   --color-warn: var(--warn);
@@ -87,9 +89,38 @@ button {
   text-decoration-color: currentColor;
 }
 
-/* Primary CTA — one confident periwinkle button per screen. */
+/* Topographic contour texture, embossed subtly into buttons — the same
+   visual language as TopographicWeb, at button scale. Two colorways: dark
+   lines for the light-gradient primary fill, light lines for the
+   dark/transparent secondary fill. */
+.btn-primary,
+.btn-secondary {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.btn-primary::before,
+.btn-secondary::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  opacity: 0.14;
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    transform 700ms var(--ease-out);
+  pointer-events: none;
+  z-index: 0;
+}
+.btn-primary:hover::before,
+.btn-secondary:hover::before {
+  opacity: 0.26;
+  transform: scale(1.06) rotate(1.5deg);
+}
+
+/* Primary CTA — one confident periwinkle button per screen, gradient fill
+   with a topographic emboss instead of a single flat tone. */
 .btn-primary {
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent-deep), var(--accent));
   color: var(--bg);
   transition:
     transform var(--duration-fast) var(--ease-out),
@@ -97,8 +128,11 @@ button {
     background var(--duration-base) linear;
   will-change: transform;
 }
+.btn-primary::before {
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100'%3E%3Cg fill='none' stroke='%230A0A0D' stroke-width='1.4'%3E%3Cpath d='M-10,18 Q40,4 90,18 T190,18' opacity='0.55'/%3E%3Cpath d='M-10,42 Q40,26 90,42 T190,42' opacity='0.4'/%3E%3Cpath d='M-10,66 Q40,52 90,66 T190,66' opacity='0.5'/%3E%3Cpath d='M-10,88 Q40,76 90,88 T190,88' opacity='0.32'/%3E%3C/g%3E%3C/svg%3E");
+}
 .btn-primary:hover {
-  background: var(--accent-light);
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
   box-shadow:
     0 10px 28px -10px rgba(166, 160, 240, 0.55),
     0 0 0 1px rgba(166, 160, 240, 0.3);
@@ -124,6 +158,9 @@ button {
     background var(--duration-base) var(--ease-out),
     box-shadow var(--duration-base) var(--ease-out),
     transform var(--duration-fast) var(--ease-out);
+}
+.btn-secondary::before {
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100'%3E%3Cg fill='none' stroke='%23A6A0F0' stroke-width='1.4'%3E%3Cpath d='M-10,18 Q40,4 90,18 T190,18' opacity='0.55'/%3E%3Cpath d='M-10,42 Q40,26 90,42 T190,42' opacity='0.4'/%3E%3Cpath d='M-10,66 Q40,52 90,66 T190,66' opacity='0.5'/%3E%3Cpath d='M-10,88 Q40,76 90,88 T190,88' opacity='0.32'/%3E%3C/g%3E%3C/svg%3E");
 }
 .btn-secondary:hover {
   border-color: var(--accent);
