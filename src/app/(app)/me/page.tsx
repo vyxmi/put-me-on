@@ -49,8 +49,9 @@ export default function MePage() {
               >
                 <Artwork
                   seed={item.track.artSeed}
+                  imageUrl={item.track.artworkUrl}
                   size={44}
-                  radius={11}
+                  radius={2}
                   className="transition-transform duration-200 ease-out group-hover:scale-[1.04]"
                 />
                 <div className="min-w-0">

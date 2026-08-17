@@ -17,6 +17,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
 
   const [urlInput, setUrlInput] = useState("");
   const [urlError, setUrlError] = useState(false);
+  const [resolving, setResolving] = useState(false);
   const [trackResult, setTrackResult] = useState<{ track: Track; ok: boolean } | null>(() =>
     sourceItem ? { track: sourceItem.track, ok: true } : null
   );
@@ -48,10 +49,13 @@ export function Composer({ sourceId }: { sourceId?: string }) {
   }, [otherPeople, recipientQuery]);
   const exactMatch = chips.some((p) => p.displayName.toLowerCase() === recipientQuery.trim().toLowerCase());
 
-  function handleUrlSubmit(e: FormEvent) {
+  async function handleUrlSubmit(e: FormEvent) {
     e.preventDefault();
+    if (resolving) return;
     trackAnalytics("track_link_submitted");
-    const result = resolveTrack(urlInput);
+    setResolving(true);
+    const result = await resolveTrack(urlInput);
+    setResolving(false);
     if ("error" in result) {
       setUrlError(true);
       return;
@@ -109,7 +113,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
     return (
       <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center gap-6 px-6 py-16 text-center animate-fade-slide">
         {trackResult ? (
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-[22px] text-bg shadow-[0_0_30px_6px_rgba(166,160,240,.4)]">
+          <div className="flex h-14 w-14 items-center justify-center rounded-xs bg-accent text-[22px] text-bg shadow-[0_0_30px_6px_rgba(166,160,240,.4)]">
             ✓
           </div>
         ) : null}
@@ -118,7 +122,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
         </p>
         <p className="text-[13.5px] text-text-tertiary">they&apos;ll see it whenever they open the link.</p>
         <div className="flex w-full flex-col items-center gap-2">
-          <div className="flex w-full items-center gap-2.5 rounded-full border border-border px-4 py-2.5">
+          <div className="flex w-full items-center gap-2.5 rounded-xs border border-border px-4 py-2.5">
             <span className="min-w-0 flex-1 truncate text-left font-mono text-[12px] text-text-tertiary">{url}</span>
             <button type="button" onClick={handleCopy} className="shrink-0 text-[12px] text-accent-light hover:text-text-primary">
               copy
@@ -149,24 +153,31 @@ export function Composer({ sourceId }: { sourceId?: string }) {
 
       <div className="relative z-10 flex flex-col gap-8">
         {trackResult ? (
-          <div className="flex animate-rise-in items-center gap-4 rounded-2xl border border-border p-4">
-            <Artwork seed={trackResult.track.artSeed} size={52} radius={12} />
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-[15px] font-semibold text-text-primary">{trackResult.track.title}</p>
-              <p className="truncate text-[13px] text-text-secondary">{trackResult.track.artist}</p>
+          <div className="flex animate-rise-in flex-col gap-2">
+            <div className="flex items-center gap-4 rounded-xs border border-border p-4">
+              <Artwork seed={trackResult.track.artSeed} imageUrl={trackResult.track.artworkUrl} size={52} radius={2} />
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[15px] font-semibold text-text-primary">{trackResult.track.title}</p>
+                <p className="truncate text-[13px] text-text-secondary">{trackResult.track.artist}</p>
+              </div>
+              {isPassOn ? null : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTrackResult(null);
+                    setUrlInput("");
+                  }}
+                  className="shrink-0 text-[12px] text-text-tertiary transition-colors hover:text-text-secondary"
+                >
+                  change
+                </button>
+              )}
             </div>
-            {isPassOn ? null : (
-              <button
-                type="button"
-                onClick={() => {
-                  setTrackResult(null);
-                  setUrlInput("");
-                }}
-                className="shrink-0 text-[12px] text-text-tertiary transition-colors hover:text-text-secondary"
-              >
-                change
-              </button>
-            )}
+            {!trackResult.ok ? (
+              <p className="text-[12px] text-text-tertiary">
+                couldn&apos;t load this one&apos;s details — you can still send it, they&apos;ll see it fine on spotify.
+              </p>
+            ) : null}
           </div>
         ) : (
           <form onSubmit={handleUrlSubmit} className="flex flex-col gap-2">
@@ -180,13 +191,18 @@ export function Composer({ sourceId }: { sourceId?: string }) {
               placeholder="paste a track link…"
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
-              className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[15px] text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none"
+              disabled={resolving}
+              className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[15px] text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none disabled:opacity-50"
             />
             {urlError ? (
               <p className="text-[12px] text-warn">that doesn&apos;t look like a spotify link yet.</p>
             ) : null}
-            <button type="submit" className="text-link mt-1 self-start text-[13px] text-accent-light">
-              continue
+            <button
+              type="submit"
+              disabled={resolving}
+              className="text-link mt-1 self-start text-[13px] text-accent-light disabled:opacity-60"
+            >
+              {resolving ? "looking it up…" : "continue"}
             </button>
           </form>
         )}
@@ -226,7 +242,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
                         setRecipient({ type: "registered", personId: p.id });
                         setRecipientQuery(p.displayName);
                       }}
-                      className="rounded-full border border-border px-3.5 py-2 text-[13px] text-text-secondary transition-all hover:border-border-strong hover:text-text-primary"
+                      className="rounded-xs border border-border px-3.5 py-2 text-[13px] text-text-secondary transition-all hover:border-border-strong hover:text-text-primary"
                     >
                       {p.displayName}
                     </button>
@@ -235,7 +251,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
                     <button
                       type="button"
                       onClick={() => setRecipient({ type: "guest", name: recipientQuery.trim() })}
-                      className="rounded-full border border-dashed border-accent-dim px-3.5 py-2 text-[13px] text-accent-light"
+                      className="rounded-xs border border-dashed border-accent-dim px-3.5 py-2 text-[13px] text-accent-light"
                     >
                       add &ldquo;{recipientQuery.trim()}&rdquo; as someone new
                     </button>
@@ -267,7 +283,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
             type="button"
             onClick={handleSubmit}
             disabled={submitting}
-            className="animate-rise-in rounded-full bg-accent px-4 py-3.5 text-[15px] font-semibold text-bg transition-opacity hover:opacity-90 disabled:opacity-40"
+            className="animate-rise-in rounded-xs bg-accent px-4 py-3.5 text-[15px] font-semibold text-bg transition-opacity hover:opacity-90 disabled:opacity-40"
           >
             {isPassOn ? `pass it on to ${recipientLabel}` : `send to ${recipientLabel}`}
           </button>

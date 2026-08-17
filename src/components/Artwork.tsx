@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 const NOISE_BG =
   "url(\"data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
 
@@ -15,19 +19,25 @@ function hashSeed(seed: string): number {
 
 interface ArtworkProps {
   seed: string;
+  /** Real Spotify cover, when available. Falls back to generated art if this fails to load. */
+  imageUrl?: string;
   size?: number;
   radius?: number;
   className?: string;
   /** Soft colored glow behind the tile — reserve for hero/detail sizes, skip in list rows. */
   halo?: boolean;
-  /** Slow hue-breathing — reserve for hero/detail sizes. */
+  /** Slow hue-breathing — reserve for hero/detail sizes, and only meaningful on generated art. */
   animated?: boolean;
 }
 
-/** Generated placeholder art standing in for real Spotify artwork until
- * metadata fetching exists. Deterministic per track, curated hue family so
- * a page full of different tracks still reads as one coherent palette. */
-export function Artwork({ seed, size = 56, radius = 6, className, halo = false, animated = false }: ArtworkProps) {
+/** Track artwork: real Spotify cover when we have one, otherwise generated
+ * placeholder art. Deterministic per track, curated hue family so a page of
+ * generated covers still reads as one coherent palette instead of a random
+ * rainbow — and so the halo glow stays on-theme even behind a real photo. */
+export function Artwork({ seed, imageUrl, size = 56, radius = 2, className, halo = false, animated = false }: ArtworkProps) {
+  const [imageFailed, setImageFailed] = useState(false);
+  const showImage = Boolean(imageUrl) && !imageFailed;
+
   const n = hashSeed(seed);
   const hue = HUES[n % HUES.length];
   const hue2 = (hue + 32 + (n % 97) * 7) % 360;
@@ -66,20 +76,32 @@ export function Artwork({ seed, size = 56, radius = 6, className, halo = false, 
           borderRadius: radius,
           position: "relative",
           overflow: "hidden",
-          background,
-          animation: animated ? "hue-drift 10s ease-in-out infinite" : undefined,
+          background: showImage ? "#100f16" : background,
+          animation: !showImage && animated ? "hue-drift 10s ease-in-out infinite" : undefined,
         }}
       >
-        <span
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "block",
-            opacity: 0.07,
-            mixBlendMode: "overlay",
-            backgroundImage: NOISE_BG,
-          }}
-        />
+        {showImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={imageUrl}
+            alt=""
+            width={size}
+            height={size}
+            onError={() => setImageFailed(true)}
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          />
+        ) : (
+          <span
+            style={{
+              position: "absolute",
+              inset: 0,
+              display: "block",
+              opacity: 0.07,
+              mixBlendMode: "overlay",
+              backgroundImage: NOISE_BG,
+            }}
+          />
+        )}
       </span>
     </span>
   );

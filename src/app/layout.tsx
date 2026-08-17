@@ -1,15 +1,10 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Space_Grotesk, Geist_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 import { DataProvider } from "@/lib/data/store";
 import { PostHogInit } from "@/components/PostHogInit";
 import { Grain } from "@/components/Grain";
 import "./globals.css";
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-});
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -23,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full bg-bg text-text-primary">
         <Grain />
         <PostHogInit />

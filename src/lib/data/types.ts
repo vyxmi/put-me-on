@@ -35,8 +35,10 @@ export interface Track {
   artist: string;
   album?: string;
   durationMs?: number;
-  /** deterministic seed for generated placeholder artwork */
+  /** deterministic seed for generated placeholder artwork, used when artworkUrl is absent/fails to load */
   artSeed: string;
+  /** real cover image, when metadata resolution succeeded */
+  artworkUrl?: string;
   metadataStatus: TrackMetadataStatus;
 }
 

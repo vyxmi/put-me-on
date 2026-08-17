@@ -7,11 +7,11 @@ import {
   tracks as seedTracks,
   recommendations as seedRecommendations,
   responses as seedResponses,
-  RESOLVABLE_TRACK_IDS,
   CURRENT_USER_ID,
 } from "./mock-data";
 import { generateId, generatePublicId, parseSpotifyTrackUrl } from "../utils/format";
 import { track as trackAnalytics } from "../analytics";
+import { fetchSpotifyTrackMetadata } from "../spotify/resolve-track";
 
 export { CURRENT_USER_ID };
 
@@ -111,7 +111,7 @@ interface DataContextValue {
     sourceRecommendationId?: string;
   }) => Recommendation;
   deleteRecommendation: (id: string) => void;
-  resolveTrack: (url: string) => { track: Track; ok: boolean } | { error: "invalid_url" };
+  resolveTrack: (url: string) => Promise<{ track: Track; ok: boolean } | { error: "invalid_url" }>;
 }
 
 const DataContext = createContext<DataContextValue | null>(null);
@@ -154,31 +154,43 @@ export function DataProvider({ children }: { children: ReactNode }) {
       dispatch({ type: "DELETE_RECOMMENDATION", id });
     };
 
-    const resolveTrack: DataContextValue["resolveTrack"] = (url) => {
+    const resolveTrack: DataContextValue["resolveTrack"] = async (url) => {
       const parsed = parseSpotifyTrackUrl(url);
       if (!parsed) return { error: "invalid_url" };
-      const knownTrackId = RESOLVABLE_TRACK_IDS[parsed.trackId];
-      if (knownTrackId) {
-        const found = state.tracks.find((t) => t.id === knownTrackId);
-        if (found) {
-          trackAnalytics("track_metadata_loaded", { track_id: found.id });
-          return { track: found, ok: true };
-        }
-      }
+
       const existing = state.tracks.find((t) => t.sourceUrl === parsed.normalizedUrl);
-      if (existing) return { track: existing, ok: existing.metadataStatus === "ok" };
-      const newTrack: Track = {
-        id: generateId("track"),
-        provider: "spotify",
-        sourceUrl: parsed.normalizedUrl,
-        title: "track unavailable",
-        artist: "metadata couldn't be loaded",
-        artSeed: parsed.trackId,
-        metadataStatus: "failed",
-      };
+      if (existing) {
+        trackAnalytics(existing.metadataStatus === "ok" ? "track_metadata_loaded" : "track_metadata_failed", {
+          track_id: existing.id,
+        });
+        return { track: existing, ok: existing.metadataStatus === "ok" };
+      }
+
+      const meta = await fetchSpotifyTrackMetadata(parsed.trackId);
+      const newTrack: Track = meta
+        ? {
+            id: generateId("track"),
+            provider: "spotify",
+            sourceUrl: parsed.normalizedUrl,
+            title: meta.title,
+            artist: meta.artist,
+            album: meta.album,
+            artworkUrl: meta.artworkUrl,
+            artSeed: parsed.trackId,
+            metadataStatus: "ok",
+          }
+        : {
+            id: generateId("track"),
+            provider: "spotify",
+            sourceUrl: parsed.normalizedUrl,
+            title: "track unavailable",
+            artist: "metadata couldn't be loaded",
+            artSeed: parsed.trackId,
+            metadataStatus: "failed",
+          };
       dispatch({ type: "ADD_TRACK", track: newTrack });
-      trackAnalytics("track_metadata_failed", { track_id: newTrack.id });
-      return { track: newTrack, ok: false };
+      trackAnalytics(meta ? "track_metadata_loaded" : "track_metadata_failed", { track_id: newTrack.id });
+      return { track: newTrack, ok: Boolean(meta) };
     };
 
     return { state, submitResponse, createRecommendation, deleteRecommendation, resolveTrack };

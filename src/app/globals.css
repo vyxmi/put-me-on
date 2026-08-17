@@ -41,7 +41,7 @@
   --color-accent-dim: var(--accent-dim);
   --color-accent-glow: var(--accent-glow);
   --color-warn: var(--warn);
-  --font-sans: var(--font-space-grotesk);
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 

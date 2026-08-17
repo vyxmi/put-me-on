@@ -27,7 +27,7 @@ export function Rail() {
                 key={item.href}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`-mx-2 rounded-sm px-2 py-1.5 text-[15px] transition-colors ${
+                className={`-mx-2 rounded-xs px-2 py-1.5 text-[15px] transition-colors ${
                   active ? "text-text-primary" : "text-text-secondary hover:text-text-primary"
                 }`}
               >
@@ -39,7 +39,7 @@ export function Rail() {
 
         <Link
           href="/new"
-          className="rounded-sm border border-border-strong px-3 py-2 text-center text-[14px] text-text-primary transition-colors hover:border-accent-dim hover:text-accent"
+          className="rounded-xs border border-border-strong px-3 py-2 text-center text-[14px] text-text-primary transition-colors hover:border-accent-dim hover:text-accent"
         >
           + put someone on
         </Link>

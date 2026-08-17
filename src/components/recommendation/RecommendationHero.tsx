@@ -25,7 +25,7 @@ export function RecommendationHero({
 
   return (
     <div className="flex flex-col items-center gap-5 text-center">
-      <Artwork seed={track.artSeed} size={artSize} radius={size === "large" ? 26 : 15} halo animated />
+      <Artwork seed={track.artSeed} imageUrl={track.artworkUrl} size={artSize} radius={2} halo animated />
       <div>
         <h1
           className={

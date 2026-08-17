@@ -57,7 +57,7 @@ export function GuestSavePrompt() {
         />
         <button
           type="submit"
-          className="rounded-full bg-accent px-4 py-2.5 text-[13.5px] font-semibold text-bg transition-opacity hover:opacity-90"
+          className="rounded-xs bg-accent px-4 py-2.5 text-[13.5px] font-semibold text-bg transition-opacity hover:opacity-90"
         >
           save
         </button>

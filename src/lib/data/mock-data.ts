@@ -15,70 +15,76 @@ export const people: Person[] = [
   { id: "charles", displayName: "Charles", handle: "charles" },
 ];
 
+// Real tracks, real Spotify IDs, real cover art — fetched once via
+// src/lib/spotify/resolve-track.ts and hardcoded here so the seeded demo
+// data works offline. Pasting any of these exact links in the composer
+// will cache-hit this record instead of re-fetching (see
+// store.tsx#resolveTrack); any other Spotify track link goes to the real
+// network fetch.
 export const tracks: Track[] = [
   {
     id: "t-carry-the-zero",
     provider: "spotify",
-    sourceUrl: "https://open.spotify.com/track/1abcCarryTheZero",
+    sourceUrl: "https://open.spotify.com/track/3HMOMdRPywfouYx5B4PvaH",
     title: "Carry the Zero",
-    artist: "Built to Spill",
-    album: "Keep It Like a Secret",
-    durationMs: 4 * 60000 + 22000,
+    artist: "Built To Spill",
+    album: "Keep It like a Secret",
+    artworkUrl: "https://i.scdn.co/image/ab67616d0000b2730c8cece24badfb7bfce2f38d",
     artSeed: "carry-the-zero",
     metadataStatus: "ok",
   },
   {
     id: "t-dagger",
     provider: "spotify",
-    sourceUrl: "https://open.spotify.com/track/2abcDagger",
+    sourceUrl: "https://open.spotify.com/track/5p0ZJLF1ZmL2WNJ2ky8VVb",
     title: "Dagger",
     artist: "Slowdive",
-    album: "Pygmalion",
-    durationMs: 6 * 60000 + 6000,
+    album: "Souvlaki",
+    artworkUrl: "https://i.scdn.co/image/ab67616d0000b27353da07db25e2543cce38abfe",
     artSeed: "dagger",
     metadataStatus: "ok",
   },
   {
     id: "t-cleva",
     provider: "spotify",
-    sourceUrl: "https://open.spotify.com/track/3abcCleva",
+    sourceUrl: "https://open.spotify.com/track/1GoTvQP3JEeA8oh5I9b2xc",
     title: "Cleva",
-    artist: "Erykah Badu",
+    artist: "Erykah Badu, Roy Ayers",
     album: "Mama's Gun",
-    durationMs: 3 * 60000 + 51000,
+    artworkUrl: "https://i.scdn.co/image/ab67616d0000b2730d934cb462fae5a26f829efb",
     artSeed: "cleva",
     metadataStatus: "ok",
   },
   {
     id: "t-redbone",
     provider: "spotify",
-    sourceUrl: "https://open.spotify.com/track/4abcRedbone",
+    sourceUrl: "https://open.spotify.com/track/3vQ4T78TTMOjQXGfXVKQJo",
     title: "Redbone",
     artist: "Childish Gambino",
     album: "Awaken, My Love!",
-    durationMs: 5 * 60000 + 27000,
+    artworkUrl: "https://i.scdn.co/image/ab67616d0000b2731c29562d6e8c1f55bb1311d5",
     artSeed: "redbone",
     metadataStatus: "ok",
   },
   {
     id: "t-slow-show",
     provider: "spotify",
-    sourceUrl: "https://open.spotify.com/track/5abcSlowShow",
+    sourceUrl: "https://open.spotify.com/track/7s97wgRDIbCJwuD46ySBYs",
     title: "Slow Show",
     artist: "The National",
     album: "Boxer",
-    durationMs: 6 * 60000 + 55000,
+    artworkUrl: "https://i.scdn.co/image/ab67616d0000b273815d0d5cf4f0167ee18367d9",
     artSeed: "slow-show",
     metadataStatus: "ok",
   },
   {
     id: "t-motion-pictures",
     provider: "spotify",
-    sourceUrl: "https://open.spotify.com/track/6abcMotionPictures",
+    sourceUrl: "https://open.spotify.com/track/2g2dBiugZROCtl8ipW9NQo",
     title: "Moya",
     artist: "Godspeed You! Black Emperor",
-    album: "F♯ A♯ ∞",
-    durationMs: 14 * 60000 + 39000,
+    album: "Slow Riot for New Zero Kanada",
+    artworkUrl: "https://i.scdn.co/image/ab67616d0000b2737f29e53fb8365b595fe94042",
     artSeed: "moya",
     metadataStatus: "ok",
   },
@@ -246,16 +252,3 @@ export const responses: ResponseRecord[] = [
     updatedAt: ago(24 * DAY),
   },
 ];
-
-/** A handful of "known" Spotify track ids the composer can resolve, keyed by
- * the id segment of the pasted URL — everything else degrades gracefully
- * (metadataStatus: "failed"), matching the fetch-failure behavior in
- * docs/V1_SCOPE.md §5 and docs/ARCHITECTURE.md §9. */
-export const RESOLVABLE_TRACK_IDS: Record<string, string> = {
-  "1abcCarryTheZero": "t-carry-the-zero",
-  "2abcDagger": "t-dagger",
-  "3abcCleva": "t-cleva",
-  "4abcRedbone": "t-redbone",
-  "5abcSlowShow": "t-slow-show",
-  "6abcMotionPictures": "t-motion-pictures",
-};

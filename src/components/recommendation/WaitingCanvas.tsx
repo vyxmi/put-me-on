@@ -62,7 +62,14 @@ export function WaitingCanvas({ items }: { items: EnrichedRecommendation[] }) {
                   onMouseLeave={() => setHoveredId((h) => (h === item.recommendation.id ? null : h))}
                 >
                   <span className="relative block transition-transform duration-300 ease-out hover:scale-[1.08]">
-                    <Artwork seed={item.track.artSeed} size={96} radius={20} halo animated />
+                    <Artwork
+                      seed={item.track.artSeed}
+                      imageUrl={item.track.artworkUrl}
+                      size={96}
+                      radius={2}
+                      halo
+                      animated
+                    />
                     <span
                       className="animate-pulse-dot absolute right-2 top-2 block h-[7px] w-[7px] rounded-full bg-accent"
                       style={{ boxShadow: "0 0 7px 2px rgba(166,160,240,.6)" }}
@@ -91,11 +98,11 @@ export function WaitingCanvas({ items }: { items: EnrichedRecommendation[] }) {
           <div key={item.recommendation.id} style={{ animation: `float${(idx % 3) + 1} ${8 + idx}s ease-in-out infinite` }}>
             <Link
               href={`/inbox/${item.recommendation.id}`}
-              className="flex items-center gap-3.5 rounded-2xl px-2.5 py-3"
+              className="flex items-center gap-3.5 rounded-xs px-2.5 py-3"
               style={{ background: "linear-gradient(180deg, rgba(245,243,239,0.03), transparent)" }}
             >
               <span className="relative block shrink-0">
-                <Artwork seed={item.track.artSeed} size={64} radius={15} animated />
+                <Artwork seed={item.track.artSeed} imageUrl={item.track.artworkUrl} size={64} radius={2} animated />
               </span>
               <span className="flex min-w-0 flex-col gap-0.5">
                 <span className="text-[15px] font-semibold text-text-primary">{item.sender.displayName}</span>

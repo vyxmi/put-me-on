@@ -37,7 +37,7 @@ export function ResponsePicker({
             type="button"
             onClick={() => handleClick(type)}
             aria-pressed={active}
-            className={`flex aspect-square min-w-0 flex-1 flex-col items-center justify-center gap-2 rounded-2xl border text-center transition-all duration-200 ${
+            className={`flex aspect-square min-w-0 flex-1 flex-col items-center justify-center gap-2 rounded-xs border text-center transition-all duration-200 ${
               active
                 ? "border-accent bg-accent/12 text-text-primary"
                 : "border-border text-text-tertiary hover:border-border-strong hover:text-text-secondary"
