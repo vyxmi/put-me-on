@@ -10,10 +10,10 @@ export function TopNav() {
   return (
     <header className="sticky top-0 z-10 border-b border-border bg-bg/95 backdrop-blur-sm md:hidden">
       <div className="flex items-center justify-between px-4 py-3">
-        <Link href="/inbox" className="text-[13px] font-medium tracking-wide text-text-secondary">
+        <Link href="/inbox" className="font-detail text-[13px] font-bold tracking-wide text-text-secondary">
           put me on
         </Link>
-        <Link href="/new" className="text-[13px] text-accent">
+        <Link href="/new" className="text-link text-[13px] text-accent-light">
           + put someone on
         </Link>
       </div>

@@ -10,7 +10,7 @@ import { track as trackAnalytics } from "@/lib/analytics";
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="font-mono text-[11px] uppercase tracking-wider text-text-tertiary">{title}</h2>
+      <h2 className="font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary">{title}</h2>
       {children}
     </div>
   );

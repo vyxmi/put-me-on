@@ -43,7 +43,7 @@ export default function InboxLayout({ children }: { children: React.ReactNode })
                     className="block h-[6px] w-[6px] shrink-0 rounded-full bg-accent"
                     style={{ boxShadow: "0 0 8px 2px rgba(166,160,240,.7)" }}
                   />
-                  <span className="font-mono text-[11px] uppercase tracking-wider text-text-tertiary">
+                  <span className="font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary">
                     {waiting.length} waiting
                   </span>
                 </div>
@@ -55,7 +55,7 @@ export default function InboxLayout({ children }: { children: React.ReactNode })
 
             {history.length > 0 ? (
               <div>
-                <div className="px-4 pb-2 pt-6 font-mono text-[11px] uppercase tracking-wider text-text-tertiary md:px-6">
+                <div className="px-4 pb-2 pt-6 font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary md:px-6">
                   history
                 </div>
                 {history.map((item) => (

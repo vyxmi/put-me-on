@@ -220,6 +220,32 @@ export function usePeople(): Person[] {
   return state.people;
 }
 
+/** People the current user has actually sent to or received from, most
+ * recently active first, deduplicated — the recipient picker's default
+ * suggestions before anyone types anything. */
+export function useRecentCorrespondents(exclude?: string): Person[] {
+  const { state } = useData();
+  return useMemo(() => {
+    const sorted = [...state.recommendations].sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));
+    const seen = new Set<string>();
+    const result: Person[] = [];
+    for (const rec of sorted) {
+      const otherId =
+        rec.senderId === CURRENT_USER_ID
+          ? rec.recipient.type === "registered"
+            ? rec.recipient.personId
+            : null
+          : rec.senderId;
+      if (!otherId || otherId === CURRENT_USER_ID || otherId === exclude || seen.has(otherId)) continue;
+      seen.add(otherId);
+      const person = state.people.find((p) => p.id === otherId);
+      if (person) result.push(person);
+      if (result.length >= 5) break;
+    }
+    return result;
+  }, [state, exclude]);
+}
+
 export function useRecommendation(id: string): EnrichedRecommendation | undefined {
   const { state } = useData();
   const rec = state.recommendations.find((r) => r.id === id);

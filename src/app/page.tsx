@@ -21,7 +21,7 @@ export default function LandingPage() {
       <CursorField className="opacity-50" />
 
       <header className="relative z-10 flex items-center justify-between px-6 py-6 sm:px-10">
-        <span className="text-[13px] font-medium tracking-wide text-text-secondary">put me on</span>
+        <span className="font-detail text-[13px] font-bold tracking-wide text-text-secondary">put me on</span>
         <Link href="/inbox" className="text-link text-[13px] text-text-tertiary">
           already in? →
         </Link>
@@ -68,10 +68,7 @@ export default function LandingPage() {
         ) : null}
 
         <div className="flex flex-col items-start gap-4">
-          <Link
-            href="/inbox"
-            className="rounded-xs bg-accent px-6 py-3.5 text-[15px] font-semibold text-bg transition-opacity hover:opacity-90"
-          >
+          <Link href="/inbox" className="btn-primary rounded-xs px-6 py-3.5 text-[15px] font-semibold">
             open put me on →
           </Link>
           <Link href="/r/r7" className="text-link text-[13px] text-text-tertiary">

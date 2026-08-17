@@ -41,8 +41,9 @@
   --color-accent-dim: var(--accent-dim);
   --color-accent-glow: var(--accent-glow);
   --color-warn: var(--warn);
-  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-detail: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 * {
@@ -84,6 +85,60 @@ button {
 }
 .text-link:hover {
   text-decoration-color: currentColor;
+}
+
+/* Primary CTA — one confident periwinkle button per screen. */
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    background var(--duration-base) linear;
+  will-change: transform;
+}
+.btn-primary:hover {
+  background: var(--accent-light);
+  box-shadow:
+    0 10px 28px -10px rgba(166, 160, 240, 0.55),
+    0 0 0 1px rgba(166, 160, 240, 0.3);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 4px 14px -8px rgba(166, 160, 240, 0.5);
+}
+.btn-primary:disabled {
+  opacity: 0.4;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Secondary — bordered, lights up periwinkle on hover instead of just going gray. */
+.btn-secondary {
+  border: 1px solid var(--border-strong);
+  color: var(--text-primary);
+  transition:
+    border-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out),
+    background var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent-light);
+  background: rgba(166, 160, 240, 0.08);
+  box-shadow: 0 8px 22px -12px rgba(166, 160, 240, 0.45);
+  transform: translateY(-1px);
+}
+.btn-secondary:active {
+  transform: translateY(0);
+}
+.btn-secondary:disabled {
+  opacity: 0.5;
+  transform: none;
+  box-shadow: none;
 }
 
 .hairline {

@@ -5,7 +5,14 @@ import Link from "next/link";
 import { Artwork } from "@/components/Artwork";
 import { CursorField } from "@/components/CursorField";
 import { ShareIcon } from "@/components/icons/UtilityIcons";
-import { useCurrentUser, usePeople, useRecommendation, useResponseActions, CURRENT_USER_ID } from "@/lib/data/store";
+import {
+  useCurrentUser,
+  usePeople,
+  useRecentCorrespondents,
+  useRecommendation,
+  useResponseActions,
+  CURRENT_USER_ID,
+} from "@/lib/data/store";
 import { track as trackAnalytics } from "@/lib/analytics";
 import type { Recipient, Track } from "@/lib/data/types";
 
@@ -42,12 +49,13 @@ export function Composer({ sourceId }: { sourceId?: string }) {
   }, []);
 
   const otherPeople = useMemo(() => people.filter((p) => p.id !== CURRENT_USER_ID), [people]);
+  // Pass-on excludes whoever sent the original — passing it straight back rarely makes sense.
+  const recentCorrespondents = useRecentCorrespondents(isPassOn ? sourceItem?.sender.id : undefined);
   const chips = useMemo(() => {
     const q = recipientQuery.trim().toLowerCase();
-    const pool = q ? otherPeople.filter((p) => p.displayName.toLowerCase().includes(q)) : otherPeople;
-    return pool.slice(0, 6);
-  }, [otherPeople, recipientQuery]);
-  const exactMatch = chips.some((p) => p.displayName.toLowerCase() === recipientQuery.trim().toLowerCase());
+    if (!q) return recentCorrespondents;
+    return otherPeople.filter((p) => p.displayName.toLowerCase().includes(q)).slice(0, 6);
+  }, [otherPeople, recentCorrespondents, recipientQuery]);
 
   async function handleUrlSubmit(e: FormEvent) {
     e.preventDefault();
@@ -143,7 +151,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
         <button
           type="button"
           onClick={handleShare}
-          className="flex items-center gap-1.5 text-[13px] text-text-secondary transition-colors hover:text-text-primary"
+          className="btn-secondary flex items-center gap-1.5 rounded-xs px-4 py-2 text-[13px]"
         >
           <ShareIcon size={14} /> share
         </button>
@@ -177,7 +185,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
                     setTrackResult(null);
                     setUrlInput("");
                   }}
-                  className="shrink-0 text-[12px] text-text-tertiary transition-colors hover:text-text-secondary"
+                  className="shrink-0 text-[12px] text-text-tertiary transition-colors hover:text-accent-light"
                 >
                   change
                 </button>
@@ -191,7 +199,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
           </div>
         ) : (
           <form onSubmit={handleUrlSubmit} className="flex flex-col gap-2">
-            <label htmlFor="spotify-url" className="text-[11px] uppercase tracking-wider text-text-tertiary">
+            <label htmlFor="spotify-url" className="font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary">
               spotify link
             </label>
             <input
@@ -219,7 +227,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
 
         {trackResult ? (
           <div className="flex animate-rise-in flex-col gap-2">
-            <p className="text-[11px] uppercase tracking-wider text-text-tertiary">to</p>
+            <p className="font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary">to</p>
             {recipient ? (
               <div className="flex items-center justify-between">
                 <span className="text-[15px] font-semibold text-text-primary">{recipientLabel}</span>
@@ -252,16 +260,16 @@ export function Composer({ sourceId }: { sourceId?: string }) {
                         setRecipient({ type: "registered", personId: p.id });
                         setRecipientQuery(p.displayName);
                       }}
-                      className="rounded-xs border border-border px-3.5 py-2 text-[13px] text-text-secondary transition-all hover:border-border-strong hover:text-text-primary"
+                      className="rounded-xs border border-border px-3.5 py-2 text-[13px] text-text-secondary transition-all duration-200 hover:-translate-y-px hover:border-accent hover:bg-accent/8 hover:text-accent-light hover:shadow-[0_8px_20px_-12px_rgba(166,160,240,0.5)]"
                     >
                       {p.displayName}
                     </button>
                   ))}
-                  {recipientQuery.trim() && !exactMatch ? (
+                  {recipientQuery.trim() ? (
                     <button
                       type="button"
                       onClick={() => setRecipient({ type: "guest", name: recipientQuery.trim() })}
-                      className="rounded-xs border border-dashed border-accent-dim px-3.5 py-2 text-[13px] text-accent-light"
+                      className="rounded-xs border border-dashed border-accent-dim px-3.5 py-2 text-[13px] text-accent-light transition-all duration-200 hover:-translate-y-px hover:border-accent hover:bg-accent/10 hover:shadow-[0_8px_20px_-12px_rgba(166,160,240,0.5)]"
                     >
                       add &ldquo;{recipientQuery.trim()}&rdquo; as someone new
                     </button>
@@ -274,7 +282,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
 
         {recipient ? (
           <div className="flex animate-rise-in flex-col gap-2">
-            <label htmlFor="note" className="text-[11px] uppercase tracking-wider text-text-tertiary">
+            <label htmlFor="note" className="font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary">
               note (optional)
             </label>
             <textarea
@@ -293,7 +301,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
             type="button"
             onClick={handleSubmit}
             disabled={submitting}
-            className="animate-rise-in rounded-xs bg-accent px-4 py-3.5 text-[15px] font-semibold text-bg transition-opacity hover:opacity-90 disabled:opacity-40"
+            className="btn-primary animate-rise-in rounded-xs px-4 py-3.5 text-[15px] font-semibold"
           >
             {isPassOn ? `pass it on to ${recipientLabel}` : `send to ${recipientLabel}`}
           </button>

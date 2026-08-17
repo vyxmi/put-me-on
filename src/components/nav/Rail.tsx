@@ -14,7 +14,7 @@ export function Rail() {
       <div className="flex flex-col gap-10">
         <Link
           href="/inbox"
-          className="text-[13px] font-medium tracking-wide text-text-secondary transition-colors hover:text-text-primary"
+          className="font-detail text-[13px] font-bold tracking-wide text-text-secondary transition-colors hover:text-accent-light"
         >
           put me on
         </Link>
@@ -27,8 +27,10 @@ export function Rail() {
                 key={item.href}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`-mx-2 rounded-xs px-2 py-1.5 text-[15px] transition-colors ${
-                  active ? "text-text-primary" : "text-text-secondary hover:text-text-primary"
+                className={`-mx-2 rounded-xs px-2 py-1.5 text-[15px] transition-all duration-200 ${
+                  active
+                    ? "text-text-primary"
+                    : "text-text-secondary hover:translate-x-0.5 hover:text-accent-light"
                 }`}
               >
                 {item.label}
@@ -37,10 +39,7 @@ export function Rail() {
           })}
         </nav>
 
-        <Link
-          href="/new"
-          className="rounded-xs border border-border-strong px-3 py-2 text-center text-[14px] text-text-primary transition-colors hover:border-accent-dim hover:text-accent"
-        >
+        <Link href="/new" className="btn-secondary rounded-xs px-3 py-2 text-center text-[14px]">
           + put someone on
         </Link>
       </div>

@@ -6,7 +6,7 @@ import type { InboxData } from "@/lib/data/store";
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div>
-      <div className="px-4 pb-2 pt-5 font-mono text-[11px] uppercase tracking-wider text-text-tertiary md:px-6">
+      <div className="px-4 pb-2 pt-5 font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary md:px-6">
         {title}
       </div>
       {children}
