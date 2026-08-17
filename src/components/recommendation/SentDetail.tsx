@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRecommendation, useResponseActions, usePerson } from "@/lib/data/store";
 import { RecommendationHero } from "./RecommendationHero";
+import { ConnectionLine } from "./ConnectionLine";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { ConnectionMark } from "@/components/icons/ConnectionMark";
 import { RESPONSE_LABEL } from "@/lib/data/types";
 import { relativeTime } from "@/lib/utils/format";
 
@@ -34,20 +34,26 @@ export function SentDetail({ id }: { id: string }) {
         <p className="text-center font-mono text-[12px] text-text-tertiary">passed on from {sourceSender.displayName}</p>
       ) : null}
 
-      <div className="flex flex-col items-center gap-2 pt-6 hairline">
+      <div className="hairline" />
+
+      <ConnectionLine
+        fromLabel="you"
+        toLabel={recipientLabel}
+        connected={response?.type === "put_me_on"}
+        emphasize="to"
+      />
+
+      <div className="flex flex-col items-center gap-1.5">
         {response ? (
           response.type === "put_me_on" ? (
-            <div className="flex flex-col items-center gap-2">
-              <ConnectionMark state="connected" size={64} className="text-accent" />
-              <p className="text-[15px] text-text-primary">you put {recipientLabel} on</p>
-            </div>
+            <p className="text-[15px] text-text-primary">you put {recipientLabel} on</p>
           ) : (
             <p className="text-[14px] text-text-secondary">
-              {recipientLabel} said: <span className="text-text-primary">{RESPONSE_LABEL[response.type]}</span>
+              {recipientLabel} says: <span className="text-text-primary">{RESPONSE_LABEL[response.type]}</span>
             </p>
           )
         ) : (
-          <p className="text-[14px] text-text-tertiary">no response yet</p>
+          <p className="text-[14px] text-text-tertiary">waiting to hear back from {recipientLabel}</p>
         )}
         <p className="font-mono text-[11px] text-text-tertiary">sent {relativeTime(recommendation.createdAt)} ago</p>
       </div>

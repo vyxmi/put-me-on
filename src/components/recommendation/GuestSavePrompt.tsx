@@ -7,13 +7,22 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function GuestSavePrompt() {
   const [email, setEmail] = useState("");
-  const [saved, setSaved] = useState(false);
+  const [stage, setStage] = useState<"form" | "checking" | "saved">("form");
   const [error, setError] = useState(false);
 
-  if (saved) {
+  if (stage === "checking") {
+    return (
+      <div className="flex animate-rise-in items-center gap-2.5">
+        <span className="h-2 w-2 animate-pulse-dot rounded-full bg-accent" style={{ boxShadow: "0 0 8px 2px rgba(166,160,240,.6)" }} />
+        <p className="text-[14px] text-text-secondary">check {email}</p>
+      </div>
+    );
+  }
+
+  if (stage === "saved") {
     return (
       <p className="animate-rise-in text-center text-[14px] text-text-secondary">
-        check {email} to finish saving your history :-)
+        you&apos;re all set — that link confirms it&apos;s you.
       </p>
     );
   }
@@ -28,7 +37,8 @@ export function GuestSavePrompt() {
         }
         setError(false);
         trackAnalytics("guest_email_submitted");
-        setSaved(true);
+        setStage("checking");
+        window.setTimeout(() => setStage("saved"), 2200);
       }}
       className="flex flex-col items-center gap-3 animate-rise-in"
     >
@@ -36,18 +46,18 @@ export function GuestSavePrompt() {
       <p className="max-w-xs text-center text-[13px] text-text-secondary">
         save this + the music people send you?
       </p>
-      <div className="flex w-full max-w-xs gap-2">
+      <div className="flex w-full max-w-xs flex-col gap-3">
         <input
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="email address"
-          className="min-w-0 flex-1 rounded-sm border border-border bg-transparent px-3 py-2 text-[14px] text-text-primary placeholder:text-text-tertiary focus:border-accent-dim"
+          className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[14px] text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none"
         />
         <button
           type="submit"
-          className="shrink-0 rounded-sm border border-border-strong px-3 py-2 text-[13px] text-text-primary transition-colors hover:border-accent-dim hover:text-accent"
+          className="rounded-full bg-accent px-4 py-2.5 text-[13.5px] font-semibold text-bg transition-opacity hover:opacity-90"
         >
           save
         </button>

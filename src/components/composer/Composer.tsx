@@ -40,13 +40,13 @@ export function Composer({ sourceId }: { sourceId?: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const matches = useMemo(() => {
+  const otherPeople = useMemo(() => people.filter((p) => p.id !== CURRENT_USER_ID), [people]);
+  const chips = useMemo(() => {
     const q = recipientQuery.trim().toLowerCase();
-    if (!q) return [];
-    return people.filter((p) => p.id !== CURRENT_USER_ID && p.displayName.toLowerCase().includes(q)).slice(0, 5);
-  }, [people, recipientQuery]);
-
-  const exactMatch = matches.some((p) => p.displayName.toLowerCase() === recipientQuery.trim().toLowerCase());
+    const pool = q ? otherPeople.filter((p) => p.displayName.toLowerCase().includes(q)) : otherPeople;
+    return pool.slice(0, 6);
+  }, [otherPeople, recipientQuery]);
+  const exactMatch = chips.some((p) => p.displayName.toLowerCase() === recipientQuery.trim().toLowerCase());
 
   function handleUrlSubmit(e: FormEvent) {
     e.preventDefault();
@@ -72,6 +72,12 @@ export function Composer({ sourceId }: { sourceId?: string }) {
     if (isPassOn) trackAnalytics("recommendation_passed_on", { recommendation_id: rec.id, source_recommendation_id: sourceId });
     setCreated(rec);
   }
+
+  const recipientLabel = recipient
+    ? recipient.type === "registered"
+      ? people.find((p) => p.id === recipient.personId)?.displayName
+      : recipient.name
+    : null;
 
   if (created) {
     const url = typeof window !== "undefined" ? `${window.location.origin}/r/${created.id}` : `/r/${created.id}`;
@@ -102,31 +108,32 @@ export function Composer({ sourceId }: { sourceId?: string }) {
 
     return (
       <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center gap-6 px-6 py-16 text-center animate-fade-slide">
-        {trackResult ? <Artwork seed={trackResult.track.artSeed} size={96} radius={5} /> : null}
-        <p className="text-[16px] text-text-primary">put on :-)</p>
-        <div className="flex w-full flex-col items-center gap-2">
-          <div className="w-full truncate rounded-sm border border-border px-3 py-2 font-mono text-[13px] text-text-secondary">
-            {url}
+        {trackResult ? (
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-[22px] text-bg shadow-[0_0_30px_6px_rgba(166,160,240,.4)]">
+            ✓
           </div>
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={handleShare}
-              className="flex items-center gap-1.5 rounded-sm border border-border-strong px-3 py-1.5 text-[13px] text-text-primary transition-colors hover:border-accent-dim hover:text-accent"
-            >
-              <ShareIcon size={14} /> share
-            </button>
-            <button
-              type="button"
-              onClick={handleCopy}
-              className="rounded-sm border border-border px-3 py-1.5 text-[13px] text-text-secondary transition-colors hover:border-border-strong hover:text-text-primary"
-            >
-              copy link
+        ) : null}
+        <p className="text-[17px] font-semibold text-text-primary">
+          {isPassOn ? `passed on to ${recipientLabel}` : `sent to ${recipientLabel}`}
+        </p>
+        <p className="text-[13.5px] text-text-tertiary">they&apos;ll see it whenever they open the link.</p>
+        <div className="flex w-full flex-col items-center gap-2">
+          <div className="flex w-full items-center gap-2.5 rounded-full border border-border px-4 py-2.5">
+            <span className="min-w-0 flex-1 truncate text-left font-mono text-[12px] text-text-tertiary">{url}</span>
+            <button type="button" onClick={handleCopy} className="shrink-0 text-[12px] text-accent-light hover:text-text-primary">
+              copy
             </button>
           </div>
           {copied ? <p className="animate-copied font-mono text-[11px] text-accent">copied</p> : <p className="h-4" />}
         </div>
-        <Link href={`/sent/${created.id}`} className="text-link text-[13px] text-text-secondary">
+        <button
+          type="button"
+          onClick={handleShare}
+          className="flex items-center gap-1.5 text-[13px] text-text-secondary transition-colors hover:text-text-primary"
+        >
+          <ShareIcon size={14} /> share
+        </button>
+        <Link href={`/sent/${created.id}`} className="text-link text-[13px] text-text-tertiary">
           view in sent →
         </Link>
       </div>
@@ -142,10 +149,10 @@ export function Composer({ sourceId }: { sourceId?: string }) {
 
       <div className="relative z-10 flex flex-col gap-8">
         {trackResult ? (
-          <div className="flex animate-rise-in items-center gap-4 rounded-sm border border-border p-4">
-            <Artwork seed={trackResult.track.artSeed} size={56} radius={4} />
+          <div className="flex animate-rise-in items-center gap-4 rounded-2xl border border-border p-4">
+            <Artwork seed={trackResult.track.artSeed} size={52} radius={12} />
             <div className="min-w-0 flex-1">
-              <p className="truncate text-[15px] text-text-primary">{trackResult.track.title}</p>
+              <p className="truncate text-[15px] font-semibold text-text-primary">{trackResult.track.title}</p>
               <p className="truncate text-[13px] text-text-secondary">{trackResult.track.artist}</p>
             </div>
             {isPassOn ? null : (
@@ -163,25 +170,22 @@ export function Composer({ sourceId }: { sourceId?: string }) {
           </div>
         ) : (
           <form onSubmit={handleUrlSubmit} className="flex flex-col gap-2">
-            <label htmlFor="spotify-url" className="text-[14px] text-text-secondary">
-              paste a Spotify link
+            <label htmlFor="spotify-url" className="text-[11px] uppercase tracking-wider text-text-tertiary">
+              spotify link
             </label>
             <input
               id="spotify-url"
               type="url"
               inputMode="url"
-              placeholder="https://open.spotify.com/track/..."
+              placeholder="paste a track link…"
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
-              className="rounded-sm border border-border bg-transparent px-3 py-2.5 text-[14px] text-text-primary placeholder:text-text-tertiary focus:border-accent-dim"
+              className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[15px] text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none"
             />
             {urlError ? (
-              <p className="text-[12px] text-text-tertiary">that doesn&apos;t look like a Spotify track link yet.</p>
+              <p className="text-[12px] text-warn">that doesn&apos;t look like a spotify link yet.</p>
             ) : null}
-            <button
-              type="submit"
-              className="mt-1 self-start rounded-sm border border-border-strong px-4 py-2 text-[13px] text-text-primary transition-colors hover:border-accent-dim hover:text-accent"
-            >
+            <button type="submit" className="text-link mt-1 self-start text-[13px] text-accent-light">
               continue
             </button>
           </form>
@@ -189,14 +193,10 @@ export function Composer({ sourceId }: { sourceId?: string }) {
 
         {trackResult ? (
           <div className="flex animate-rise-in flex-col gap-2">
-            <p className="text-[14px] text-text-secondary">who&apos;s this for?</p>
+            <p className="text-[11px] uppercase tracking-wider text-text-tertiary">to</p>
             {recipient ? (
-              <div className="flex items-center justify-between rounded-sm border border-border-strong px-3 py-2">
-                <span className="text-[14px] text-text-primary">
-                  {recipient.type === "registered"
-                    ? people.find((p) => p.id === recipient.personId)?.displayName
-                    : recipient.name}
-                </span>
+              <div className="flex items-center justify-between">
+                <span className="text-[15px] font-semibold text-text-primary">{recipientLabel}</span>
                 <button
                   type="button"
                   onClick={() => {
@@ -209,40 +209,38 @@ export function Composer({ sourceId }: { sourceId?: string }) {
                 </button>
               </div>
             ) : (
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-3">
                 <input
                   type="text"
                   value={recipientQuery}
                   onChange={(e) => setRecipientQuery(e.target.value)}
-                  placeholder="type a name"
-                  className="rounded-sm border border-border bg-transparent px-3 py-2.5 text-[14px] text-text-primary placeholder:text-text-tertiary focus:border-accent-dim"
+                  placeholder="search a name or type someone new…"
+                  className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[15px] text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none"
                 />
-                {recipientQuery.trim() ? (
-                  <div className="flex flex-col overflow-hidden rounded-sm border border-border">
-                    {matches.map((p) => (
-                      <button
-                        key={p.id}
-                        type="button"
-                        onClick={() => {
-                          setRecipient({ type: "registered", personId: p.id });
-                          setRecipientQuery(p.displayName);
-                        }}
-                        className="px-3 py-2 text-left text-[14px] text-text-primary transition-colors hairline-b hover:bg-surface last:border-b-0"
-                      >
-                        {p.displayName}
-                      </button>
-                    ))}
-                    {!exactMatch ? (
-                      <button
-                        type="button"
-                        onClick={() => setRecipient({ type: "guest", name: recipientQuery.trim() })}
-                        className="px-3 py-2 text-left text-[13px] text-text-secondary transition-colors hover:bg-surface"
-                      >
-                        put &ldquo;{recipientQuery.trim()}&rdquo; on — new
-                      </button>
-                    ) : null}
-                  </div>
-                ) : null}
+                <div className="flex flex-wrap gap-2">
+                  {chips.map((p) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => {
+                        setRecipient({ type: "registered", personId: p.id });
+                        setRecipientQuery(p.displayName);
+                      }}
+                      className="rounded-full border border-border px-3.5 py-2 text-[13px] text-text-secondary transition-all hover:border-border-strong hover:text-text-primary"
+                    >
+                      {p.displayName}
+                    </button>
+                  ))}
+                  {recipientQuery.trim() && !exactMatch ? (
+                    <button
+                      type="button"
+                      onClick={() => setRecipient({ type: "guest", name: recipientQuery.trim() })}
+                      className="rounded-full border border-dashed border-accent-dim px-3.5 py-2 text-[13px] text-accent-light"
+                    >
+                      add &ldquo;{recipientQuery.trim()}&rdquo; as someone new
+                    </button>
+                  ) : null}
+                </div>
               </div>
             )}
           </div>
@@ -250,16 +248,16 @@ export function Composer({ sourceId }: { sourceId?: string }) {
 
         {recipient ? (
           <div className="flex animate-rise-in flex-col gap-2">
-            <label htmlFor="note" className="text-[14px] text-text-secondary">
-              say something? <span className="text-text-tertiary">optional</span>
+            <label htmlFor="note" className="text-[11px] uppercase tracking-wider text-text-tertiary">
+              note (optional)
             </label>
             <textarea
               id="note"
               value={note}
               onChange={(e) => setNote(e.target.value.slice(0, 140))}
               rows={2}
-              placeholder="trust me after 2:34"
-              className="resize-none rounded-sm border border-border bg-transparent px-3 py-2.5 text-[14px] text-text-primary placeholder:text-text-tertiary focus:border-accent-dim"
+              placeholder="the part you want them to hear…"
+              className="w-full resize-none border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[14.5px] text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none"
             />
           </div>
         ) : null}
@@ -269,9 +267,9 @@ export function Composer({ sourceId }: { sourceId?: string }) {
             type="button"
             onClick={handleSubmit}
             disabled={submitting}
-            className="animate-rise-in rounded-sm border border-accent-dim bg-transparent px-4 py-3 text-[15px] text-accent transition-colors hover:bg-accent-glow disabled:opacity-50"
+            className="animate-rise-in rounded-full bg-accent px-4 py-3.5 text-[15px] font-semibold text-bg transition-opacity hover:opacity-90 disabled:opacity-40"
           >
-            put {recipient.type === "registered" ? people.find((p) => p.id === recipient.personId)?.displayName : recipient.name} on
+            {isPassOn ? `pass it on to ${recipientLabel}` : `send to ${recipientLabel}`}
           </button>
         ) : null}
       </div>

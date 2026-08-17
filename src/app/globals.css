@@ -3,19 +3,22 @@
 :root {
   color-scheme: dark;
 
-  --bg: #0b0b0c;
-  --surface: #131315;
-  --surface-2: #1c1c1f;
-  --border: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.16);
+  --bg: #0a0a0d;
+  --surface: #131316;
+  --surface-2: #1b1b1f;
+  --border: rgba(245, 243, 239, 0.08);
+  --border-strong: rgba(245, 243, 239, 0.16);
 
-  --text-primary: #f3f1ec;
-  --text-secondary: #9d9d98;
-  --text-tertiary: #6c6c69;
+  --text-primary: #f5f3ef;
+  --text-secondary: #dad8e0;
+  --text-tertiary: #aba8b4;
+  --text-quaternary: #726f7c;
 
-  --accent: #b8c4f0;
-  --accent-dim: #6f7aa8;
-  --accent-glow: rgba(184, 196, 240, 0.35);
+  --accent: #a6a0f0;
+  --accent-light: #c3bbf5;
+  --accent-dim: #726caa;
+  --accent-glow: rgba(166, 160, 240, 0.35);
+  --warn: #e3a0c4;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --duration-fast: 120ms;
@@ -32,10 +35,13 @@
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-tertiary: var(--text-tertiary);
+  --color-text-quaternary: var(--text-quaternary);
   --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
   --color-accent-dim: var(--accent-dim);
   --color-accent-glow: var(--accent-glow);
-  --font-sans: var(--font-geist-sans);
+  --color-warn: var(--warn);
+  --font-sans: var(--font-space-grotesk);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -175,4 +181,97 @@ button {
 .scroll-x {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+/* A dot traveling along a connection line the moment "put me on" lands. */
+@keyframes travel {
+  0% {
+    left: 0%;
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+/* A slow highlight passing through a chain connector — restrained, not a loop you notice consciously. */
+@keyframes shimmer {
+  0% {
+    background-position: 160% 0;
+  }
+  100% {
+    background-position: -160% 0;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+}
+.animate-pulse-dot {
+  animation: pulse-dot 1.4s ease-in-out infinite;
+}
+
+@keyframes float1 {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(-1deg);
+  }
+  50% {
+    transform: translate(6px, -11px) rotate(1deg);
+  }
+}
+@keyframes float2 {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(1deg);
+  }
+  50% {
+    transform: translate(-9px, 9px) rotate(-1.3deg);
+  }
+}
+@keyframes float3 {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(-0.6deg);
+  }
+  50% {
+    transform: translate(8px, 10px) rotate(1.1deg);
+  }
+}
+
+/* Slow hue drift on hero-sized artwork — album art breathing gently, never looping fast enough to distract. */
+@keyframes hue-drift {
+  0%,
+  100% {
+    filter: hue-rotate(0deg) saturate(1);
+  }
+  50% {
+    filter: hue-rotate(18deg) saturate(1.2);
+  }
+}
+
+/* Full-page grain, matching docs/design-direction's "small amount of imperfection." */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }

@@ -27,7 +27,7 @@ export function ResponsePicker({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+    <div className="flex gap-2.5">
       {RESPONSE_TYPES.map((type) => {
         const Icon = ICONS[type];
         const active = current === type;
@@ -37,14 +37,14 @@ export function ResponsePicker({
             type="button"
             onClick={() => handleClick(type)}
             aria-pressed={active}
-            className={`flex flex-col items-center gap-2 rounded-sm border px-3 py-4 text-center transition-colors ${
+            className={`flex aspect-square min-w-0 flex-1 flex-col items-center justify-center gap-2 rounded-2xl border text-center transition-all duration-200 ${
               active
-                ? "border-accent-dim text-accent"
-                : "border-border text-text-secondary hover:border-border-strong hover:text-text-primary"
+                ? "border-accent bg-accent/12 text-text-primary"
+                : "border-border text-text-tertiary hover:border-border-strong hover:text-text-secondary"
             } ${justSelected === type ? "animate-stamp" : ""}`}
           >
-            <Icon size={22} />
-            <span className="text-[12.5px] leading-tight">{RESPONSE_LABEL[type]}</span>
+            <Icon size={20} className={active ? "text-accent-light" : "text-text-tertiary"} />
+            <span className="px-1 text-[10.5px] leading-tight tracking-wide">{RESPONSE_LABEL[type]}</span>
           </button>
         );
       })}

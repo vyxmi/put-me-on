@@ -25,7 +25,7 @@ export function RecommendationHero({
 
   return (
     <div className="flex flex-col items-center gap-5 text-center">
-      <Artwork seed={track.artSeed} size={artSize} radius={6} />
+      <Artwork seed={track.artSeed} size={artSize} radius={size === "large" ? 26 : 15} halo animated />
       <div>
         <h1
           className={
@@ -37,17 +37,34 @@ export function RecommendationHero({
           {track.title}
         </h1>
         <p className="mt-1 text-[15px] text-text-secondary sm:text-[17px]">{track.artist}</p>
+        {track.album ? <p className="mt-0.5 text-[13px] text-text-quaternary">{track.album}</p> : null}
         {track.metadataStatus === "failed" ? (
           <p className="mt-1 font-mono text-[11px] text-text-tertiary">metadata couldn&apos;t be loaded</p>
         ) : null}
       </div>
-      {note ? <p className="max-w-sm text-[15px] text-text-secondary italic">&ldquo;{note}&rdquo;</p> : null}
+      {note ? (
+        <p className="max-w-sm border-l-2 border-border-strong py-0.5 pl-4 text-left text-[15px] leading-relaxed text-text-secondary">
+          &ldquo;{note}&rdquo;
+        </p>
+      ) : null}
       <button
         type="button"
         onClick={handleListen}
-        className="rounded-sm border border-border-strong px-5 py-2.5 text-[14px] text-text-primary transition-colors hover:border-accent-dim hover:text-accent"
+        className="text-link flex items-center gap-1.5 text-[14.5px] text-accent-light"
       >
-        listen <span aria-hidden="true">↗</span>
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path d="M4.7 1.5H10.5V7.3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M10.5 1.5L4.9 7.1" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
+          <path
+            d="M8 3.3H1.6V10.4H8.7V4"
+            stroke="currentColor"
+            strokeOpacity="0.55"
+            strokeWidth="1"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        listen on spotify
       </button>
       {formatDuration(track.durationMs) ? (
         <p className="font-mono text-[11px] text-text-tertiary">{formatDuration(track.durationMs)}</p>
