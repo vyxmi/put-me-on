@@ -156,6 +156,25 @@ button {
   animation: stamp var(--duration-base) var(--ease-out);
 }
 
+/* One-shot brighten-and-settle for the artwork the instant a recommendation is confirmed. */
+@keyframes celebrate {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  35% {
+    transform: scale(1.05);
+    filter: brightness(1.25);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+.animate-celebrate {
+  animation: celebrate 700ms var(--ease-out);
+}
+
 @keyframes copied-pop {
   0% {
     opacity: 0;

@@ -38,9 +38,9 @@ export function ChainPreview({ chain }: { chain: ChainLink }) {
   }, []);
 
   return (
-    <div className="flex flex-col items-center gap-3 rounded-xs border border-border px-5 py-6">
+    <div className="flex flex-col items-center gap-3 rounded-xs border border-border px-4 py-6 sm:px-5">
       <ChainMark size={140} className="text-text-tertiary" secondSegmentDrawn={drawn} />
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
         <NameNode label={chain.fromPerson.displayName} copy={`sent ${chain.track.title} to you`} onHover={setHoverCopy} />
         <span className="text-text-tertiary" aria-hidden="true">
           →
@@ -52,9 +52,9 @@ export function ChainPreview({ chain }: { chain: ChainLink }) {
         <NameNode label={chain.toLabel} copy={`you passed it to ${chain.toLabel}`} onHover={setHoverCopy} />
       </div>
       <p className="h-4 text-[13px] text-text-secondary">{hoverCopy ?? " "}</p>
-      <div className="flex items-center gap-2">
+      <div className="flex max-w-full items-center gap-2 px-2">
         <Artwork seed={chain.track.artSeed} imageUrl={chain.track.artworkUrl} size={28} radius={2} />
-        <p className="text-[13px] text-text-tertiary">
+        <p className="min-w-0 truncate text-[13px] text-text-tertiary">
           {chain.track.title} · {chain.track.artist}
         </p>
       </div>

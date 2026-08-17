@@ -10,11 +10,14 @@ export function RecommendationHero({
   note,
   recommendationId,
   size = "large",
+  celebrate = false,
 }: {
   track: Track;
   note?: string;
   recommendationId: string;
   size?: "large" | "compact";
+  /** One-shot brighten-and-settle on the artwork — reserve for the instant "put me on" lands. */
+  celebrate?: boolean;
 }) {
   const artSize = size === "large" ? 208 : 120;
 
@@ -25,7 +28,15 @@ export function RecommendationHero({
 
   return (
     <div className="flex flex-col items-center gap-5 text-center">
-      <Artwork seed={track.artSeed} imageUrl={track.artworkUrl} size={artSize} radius={2} halo animated />
+      <Artwork
+        seed={track.artSeed}
+        imageUrl={track.artworkUrl}
+        size={artSize}
+        radius={2}
+        halo
+        animated
+        className={celebrate ? "animate-celebrate" : undefined}
+      />
       <div>
         <h1
           className={

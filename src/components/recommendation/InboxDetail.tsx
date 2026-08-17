@@ -30,12 +30,17 @@ export function InboxDetail({ id }: { id: string }) {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-lg flex-col gap-8 px-6 py-10 animate-fade-slide">
+    <div className="mx-auto flex w-full max-w-lg flex-col gap-8 px-5 py-10 sm:px-6 animate-fade-slide">
       <p className="text-center text-[13px] text-text-secondary">
         <span className="text-text-primary">{sender.displayName}</span> wants to put you on to
       </p>
 
-      <RecommendationHero track={track} note={recommendation.note} recommendationId={id} />
+      <RecommendationHero
+        track={track}
+        note={recommendation.note}
+        recommendationId={id}
+        celebrate={justConnected}
+      />
 
       <div className="hairline" />
 

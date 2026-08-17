@@ -25,7 +25,7 @@ export default function MePage() {
   }, []);
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-14 px-6 py-12 animate-fade-slide md:py-16">
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-14 px-5 py-12 animate-fade-slide sm:px-6 md:py-16">
       <div>
         <h1 className="text-[40px] font-semibold tracking-tight text-text-primary sm:text-[52px]">
           {user.displayName.toUpperCase()}

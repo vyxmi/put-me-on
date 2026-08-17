@@ -111,11 +111,21 @@ export function Composer({ sourceId }: { sourceId?: string }) {
     }
 
     return (
-      <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center gap-6 px-6 py-16 text-center animate-fade-slide">
+      <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center gap-6 px-5 py-16 sm:px-6 text-center animate-fade-slide">
         {trackResult ? (
-          <div className="flex h-14 w-14 items-center justify-center rounded-xs bg-accent text-[22px] text-bg shadow-[0_0_30px_6px_rgba(166,160,240,.4)]">
-            ✓
-          </div>
+          <span className="relative inline-block">
+            <Artwork
+              seed={trackResult.track.artSeed}
+              imageUrl={trackResult.track.artworkUrl}
+              size={96}
+              radius={2}
+              halo
+              className="animate-celebrate"
+            />
+            <span className="absolute -bottom-2 -right-2 flex h-6 w-6 items-center justify-center rounded-xs bg-accent text-[13px] text-bg shadow-[0_0_20px_4px_rgba(166,160,240,.5)]">
+              ✓
+            </span>
+          </span>
         ) : null}
         <p className="text-[17px] font-semibold text-text-primary">
           {isPassOn ? `passed on to ${recipientLabel}` : `sent to ${recipientLabel}`}
@@ -145,7 +155,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
   }
 
   return (
-    <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col gap-8 overflow-hidden px-6 py-10">
+    <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col gap-8 overflow-hidden px-5 py-10 sm:px-6">
       <CursorField className="opacity-60" />
       <h1 className="relative z-10 text-center text-[20px] font-semibold text-text-primary">
         {isPassOn ? "pass it on" : "put someone on"}

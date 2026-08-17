@@ -105,7 +105,7 @@ export function WaitingCanvas({ items }: { items: EnrichedRecommendation[] }) {
                 <Artwork seed={item.track.artSeed} imageUrl={item.track.artworkUrl} size={64} radius={2} animated />
               </span>
               <span className="flex min-w-0 flex-col gap-0.5">
-                <span className="text-[15px] font-semibold text-text-primary">{item.sender.displayName}</span>
+                <span className="truncate text-[15px] font-semibold text-text-primary">{item.sender.displayName}</span>
                 <span className="text-[12px] text-text-tertiary">listen on spotify</span>
               </span>
             </Link>

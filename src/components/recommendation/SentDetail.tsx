@@ -23,7 +23,7 @@ export function SentDetail({ id }: { id: string }) {
   const { track, recommendation, recipientLabel, response } = item;
 
   return (
-    <div className="mx-auto flex w-full max-w-lg flex-col gap-8 px-6 py-10 animate-fade-slide">
+    <div className="mx-auto flex w-full max-w-lg flex-col gap-8 px-5 py-10 sm:px-6 animate-fade-slide">
       <p className="text-center text-[13px] text-text-secondary">
         you sent <span className="text-text-primary">{recipientLabel}</span>
       </p>

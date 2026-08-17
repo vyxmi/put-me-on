@@ -56,7 +56,7 @@ export function GuestLanding({ id }: { id: string }) {
   }
 
   return (
-    <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 py-16">
+    <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-5 py-16 sm:px-6">
       <CursorField />
       <div className="relative z-10 flex w-full max-w-md flex-col items-center gap-9">
         <p className="text-center text-[14px] text-text-secondary">
@@ -64,7 +64,12 @@ export function GuestLanding({ id }: { id: string }) {
           <span className="text-text-primary">{recipientLabel}</span> on to
         </p>
 
-        <RecommendationHero track={track} note={recommendation.note} recommendationId={id} />
+        <RecommendationHero
+          track={track}
+          note={recommendation.note}
+          recommendationId={id}
+          celebrate={justConnected}
+        />
 
         <div className="hairline w-full" />
 
