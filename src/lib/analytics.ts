@@ -1,7 +1,9 @@
-// Stand-in for the PostHog integration described in docs/ANALYTICS.md.
-// Same event taxonomy and property shape the real client/server capture
-// calls will use — swap the body of `track` for PostHog calls later without
-// touching call sites. Never pass PII (email, note text, tokens) here.
+import { posthog, ensurePostHogInitialized } from "./posthog/client";
+
+// Client-side capture per docs/ANALYTICS.md. Falls back to console-only
+// logging when NEXT_PUBLIC_POSTHOG_KEY isn't configured, so the mock-data
+// build keeps working without a PostHog project. Never pass PII (email,
+// phone, note text, OTP/tokens) here — internal ids only.
 
 export type AnalyticsEvent =
   | "signup_started"
@@ -28,4 +30,7 @@ export function track(event: AnalyticsEvent, properties: Record<string, string |
   if (process.env.NODE_ENV !== "production") {
     console.info(`[analytics] ${event}`, properties);
   }
+  if (typeof window === "undefined" || !process.env.NEXT_PUBLIC_POSTHOG_KEY) return;
+  ensurePostHogInitialized();
+  posthog.capture(event, properties);
 }

@@ -1,6 +1,6 @@
 # Put Me On — V1 Architecture Proposal
 
-Status: **PROPOSED — revised per feedback below. Still not approved. Do not implement (schema, RLS, auth, API routes, product behavior) until this doc is explicitly approved.**
+Status: **APPROVED (2026-08-16) — approved as-is.** Original rationale and resolved open questions (§21) are kept below for the record rather than deleted.
 
 This proposal follows the requirements in `CLAUDE.md` and is built from `docs/V1_SCOPE.md`, `docs/USER_FLOWS.md`, and `docs/ANALYTICS.md`. Section numbers below match the checklist in `CLAUDE.md`, with one addition (Security Assumptions) requested during review.
 
