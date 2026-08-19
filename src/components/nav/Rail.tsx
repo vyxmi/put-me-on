@@ -15,7 +15,7 @@ export function Rail() {
   return (
     <aside className="hidden md:flex md:w-[76px] md:shrink-0 md:flex-col md:items-center md:border-r md:border-border/50 md:py-7">
       <div className="flex flex-col items-center gap-9">
-        <Link href="/inbox" title="put me on" className="group">
+        <Link href="/" title="put me on" className="group">
           <ConnectionMark size={20} className="text-text-quaternary transition-colors group-hover:text-spectral-ice" />
         </Link>
 

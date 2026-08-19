@@ -14,7 +14,7 @@ export function TopNav() {
   return (
     <header className="sticky top-0 z-20 border-b border-border/50 bg-glass backdrop-blur-md md:hidden">
       <div className="flex items-center justify-between px-5 py-3.5">
-        <Link href="/inbox" className="flex items-center gap-1.5 font-detail text-[14px] font-bold tracking-wide text-text-secondary">
+        <Link href="/" className="flex items-center gap-1.5 font-detail text-[14px] font-bold tracking-wide text-text-secondary">
           <ConnectionMark size={17} className="text-text-quaternary" />
           put me on
         </Link>
