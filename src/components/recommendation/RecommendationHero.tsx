@@ -40,22 +40,24 @@ export function RecommendationHero({
 
   return (
     <div className="flex flex-col items-center gap-5 text-center">
-      <span ref={artRef} data-hero-art style={{ display: "inline-block" }}>
-        <Artwork
-          seed={track.artSeed}
-          imageUrl={track.artworkUrl}
-          size={artSize}
-          radius={2}
-          halo
-          animated
-          className={celebrate ? "animate-celebrate" : undefined}
-        />
+      <span className="inline-block transition-transform duration-300 ease-out hover:-rotate-1 hover:scale-[1.015]">
+        <span ref={artRef} data-hero-art style={{ display: "inline-block" }}>
+          <Artwork
+            seed={track.artSeed}
+            imageUrl={track.artworkUrl}
+            size={artSize}
+            radius={2}
+            halo
+            animated
+            className={celebrate ? "animate-celebrate" : undefined}
+          />
+        </span>
       </span>
       <div>
         <h1
           className={
             size === "large"
-              ? "text-[26px] font-semibold tracking-tight text-text-primary sm:text-[34px]"
+              ? "text-[30px] font-bold tracking-tight text-text-primary sm:text-[42px]"
               : "text-[20px] font-semibold text-text-primary"
           }
         >

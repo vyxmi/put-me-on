@@ -40,12 +40,12 @@ export function RecommendationRow({
         selected ? "bg-surface" : "hover:bg-surface"
       }`}
     >
-      <span className="shrink-0 transition-transform duration-200 ease-out group-hover:scale-[1.04]">
+      <span className="shrink-0 transition-transform duration-300 ease-out group-hover:-rotate-2 group-hover:scale-[1.05]">
         <Artwork seed={item.track.artSeed} imageUrl={item.track.artworkUrl} size={64} radius={3} />
       </span>
       <span className="min-w-0 flex-1">
         <span className="flex items-baseline justify-between gap-3">
-          <span className="truncate text-[15px] font-medium text-text-primary">{headline}</span>
+          <span className="truncate text-[16px] font-medium text-text-primary">{headline}</span>
           <span className="hidden shrink-0 items-center gap-1 font-mono text-[11px] text-text-tertiary md:group-hover:flex">
             open <span aria-hidden="true">→</span>
           </span>

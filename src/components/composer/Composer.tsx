@@ -3,8 +3,8 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
-import { Artwork } from "@/components/Artwork";
-import { CursorField } from "@/components/CursorField";
+import { Artwork, useSampledGlow } from "@/components/Artwork";
+import { Atmosphere } from "@/components/Atmosphere";
 import { ChainTransmission } from "@/components/recommendation/ChainTransmission";
 import { ShareIcon, CheckGlyph } from "@/components/icons/UtilityIcons";
 import {
@@ -40,6 +40,8 @@ export function Composer({ sourceId }: { sourceId?: string }) {
   const [copyPulseKey, setCopyPulseKey] = useState(0);
 
   const isPassOn = Boolean(sourceId && sourceItem);
+  const trackColor = useSampledGlow(trackResult?.track.artworkUrl);
+  const sourceColor = useSampledGlow(sourceItem?.track.artworkUrl);
 
   useEffect(() => {
     if (isPassOn) {
@@ -135,7 +137,9 @@ export function Composer({ sourceId }: { sourceId?: string }) {
     }
 
     return (
-      <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center gap-6 px-5 py-16 sm:px-6 text-center animate-fade-slide">
+      <div className="relative flex flex-1 flex-col overflow-hidden">
+        <Atmosphere seed={trackResult?.track.artSeed ?? "composer-sent"} color={trackColor} intensity="hero" interactive />
+        <div className="relative z-10 mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center gap-6 px-5 py-16 sm:px-6 text-center animate-fade-slide">
         {trackResult ? (
           <span className="relative inline-block">
             <Artwork
@@ -215,14 +219,16 @@ export function Composer({ sourceId }: { sourceId?: string }) {
         <Link href={`/sent/${created.id}`} className="text-link text-[13px] text-text-tertiary">
           view in sent →
         </Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-8 overflow-hidden px-5 py-10 sm:px-6">
-      <CursorField className="opacity-60" />
-      <h1 className="relative z-10 text-center text-[20px] font-semibold text-text-primary">
+    <div className="relative flex flex-1 flex-col overflow-hidden">
+      <Atmosphere seed={sourceItem?.track.artSeed ?? "composer"} color={sourceColor} intensity="ambient" interactive />
+      <div className="relative z-10 mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-8 px-5 py-10 sm:px-6">
+      <h1 className="text-center text-[22px] font-bold text-text-primary">
         {isPassOn ? "pass it on" : "put someone on"}
       </h1>
 
@@ -367,6 +373,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
       <p className="relative z-10 text-center font-mono text-[11px] text-text-tertiary">
         sending as {currentUser.displayName}
       </p>
+      </div>
     </div>
   );
 }

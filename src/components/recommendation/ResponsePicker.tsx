@@ -3,6 +3,7 @@
 import { useState, type ComponentType } from "react";
 import { motion } from "motion/react";
 import { AlreadyKnewIcon, NotForMeIcon, LikedItIcon, PutMeOnIcon } from "@/components/icons/ResponseIcons";
+import { MagneticButton } from "@/components/MagneticButton";
 import { RESPONSE_LABEL, type ResponseType } from "@/lib/data/types";
 
 interface IconRenderProps {
@@ -79,34 +80,36 @@ export function ResponsePicker({
         })}
       </div>
 
-      <motion.button
-        type="button"
-        onClick={() => handleClick("put_me_on")}
-        onMouseEnter={() => setHoveredType("put_me_on")}
-        onMouseLeave={() => setHoveredType((h) => (h === "put_me_on" ? null : h))}
-        onFocus={() => setHoveredType("put_me_on")}
-        onBlur={() => setHoveredType((h) => (h === "put_me_on" ? null : h))}
-        aria-pressed={putMeOnActive}
-        whileTap={{ scale: 0.97 }}
-        animate={
-          justSelected === "put_me_on"
-            ? { scale: [0.97, 1.02, 1] }
-            : { scale: 1, borderColor: putMeOnActive || putMeOnHovered ? "var(--accent)" : "var(--border-strong)" }
-        }
-        transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-        className={`flex items-center justify-center gap-3 rounded-xs border py-4 transition-colors duration-200 ${
-          putMeOnActive || putMeOnHovered ? "bg-accent/12 shadow-[0_8px_20px_-12px_rgba(63,96,212,0.5)]" : ""
-        }`}
-      >
-        <PutMeOnIcon
-          size={36}
-          hovered={putMeOnHovered}
-          active={putMeOnActive}
-          justConnected={justSelected === "put_me_on"}
-          className="text-accent-light"
-        />
-        <span className="text-[15px] font-semibold text-text-primary">put me on</span>
-      </motion.button>
+      <MagneticButton strength={0.15} range={70}>
+        <motion.button
+          type="button"
+          onClick={() => handleClick("put_me_on")}
+          onMouseEnter={() => setHoveredType("put_me_on")}
+          onMouseLeave={() => setHoveredType((h) => (h === "put_me_on" ? null : h))}
+          onFocus={() => setHoveredType("put_me_on")}
+          onBlur={() => setHoveredType((h) => (h === "put_me_on" ? null : h))}
+          aria-pressed={putMeOnActive}
+          whileTap={{ scale: 0.97 }}
+          animate={
+            justSelected === "put_me_on"
+              ? { scale: [0.97, 1.02, 1] }
+              : { scale: 1, borderColor: putMeOnActive || putMeOnHovered ? "var(--accent)" : "var(--border-strong)" }
+          }
+          transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+          className={`flex w-full items-center justify-center gap-3 rounded-xs border py-4 transition-colors duration-200 ${
+            putMeOnActive || putMeOnHovered ? "bg-accent/12 shadow-[0_8px_20px_-12px_rgba(63,96,212,0.5)]" : ""
+          }`}
+        >
+          <PutMeOnIcon
+            size={36}
+            hovered={putMeOnHovered}
+            active={putMeOnActive}
+            justConnected={justSelected === "put_me_on"}
+            className="text-accent-light"
+          />
+          <span className="text-[15px] font-semibold text-text-primary">put me on</span>
+        </motion.button>
+      </MagneticButton>
     </div>
   );
 }

@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Artwork } from "@/components/Artwork";
-import { CursorField } from "@/components/CursorField";
-import { TopographicWeb } from "@/components/TopographicWeb";
+import { Artwork, useSampledGlow } from "@/components/Artwork";
+import { Atmosphere } from "@/components/Atmosphere";
+import { MagneticButton } from "@/components/MagneticButton";
 import { ChainMark } from "@/components/icons/ConnectionMark";
 import { useMeData } from "@/lib/data/store";
 
@@ -16,14 +16,11 @@ const PRINCIPLES = [
 export default function LandingPage() {
   const { chains } = useMeData();
   const chain = chains[0];
+  const chainColor = useSampledGlow(chain?.track.artworkUrl);
 
   return (
     <div className="relative flex min-h-dvh flex-col overflow-hidden">
-      <CursorField className="opacity-50" />
-      <TopographicWeb
-        seed="landing"
-        className="pointer-events-none absolute -right-24 top-0 h-[560px] w-[560px] text-accent opacity-[0.22] sm:-right-16"
-      />
+      <Atmosphere seed="landing" color={chainColor} intensity="hero" interactive />
 
       <header className="relative z-10 flex items-center justify-between px-6 py-6 sm:px-10">
         <span className="font-detail text-[13px] font-bold tracking-wide text-text-secondary">put me on</span>
@@ -34,7 +31,7 @@ export default function LandingPage() {
 
       <main className="relative z-10 mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center gap-14 px-6 py-16 sm:px-10">
         <div className="flex flex-col gap-5">
-          <h1 className="text-[34px] font-semibold leading-[1.08] tracking-tight text-text-primary sm:text-[48px]">
+          <h1 className="text-[40px] font-bold leading-[1.05] tracking-tight text-text-primary sm:text-[60px]">
             spotify knows what you listen to.
             <br />
             <span className="text-accent-light">put me on remembers who put you on.</span>
@@ -57,7 +54,9 @@ export default function LandingPage() {
         {chain ? (
           <div className="flex flex-col items-start gap-4 border-l-2 border-border-strong pl-5">
             <div className="flex items-center gap-3">
-              <Artwork seed={chain.track.artSeed} imageUrl={chain.track.artworkUrl} size={40} radius={2} />
+              <span className="block transition-transform duration-300 ease-out hover:-rotate-2 hover:scale-105">
+                <Artwork seed={chain.track.artSeed} imageUrl={chain.track.artworkUrl} size={40} radius={2} halo />
+              </span>
               <div>
                 <p className="text-[14px] text-text-primary">
                   {chain.fromPerson.displayName} → you → {chain.toLabel}
@@ -73,9 +72,11 @@ export default function LandingPage() {
         ) : null}
 
         <div className="flex flex-col items-start gap-4">
-          <Link href="/inbox" className="btn-primary rounded-xs px-6 py-3.5 text-[15px] font-semibold">
-            open put me on →
-          </Link>
+          <MagneticButton>
+            <Link href="/inbox" className="btn-primary block rounded-xs px-6 py-3.5 text-[15px] font-semibold">
+              open put me on →
+            </Link>
+          </MagneticButton>
           <Link href="/r/r7" className="text-link text-[13px] text-text-tertiary">
             or see what a shared link looks like, as a guest →
           </Link>

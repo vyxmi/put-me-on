@@ -3,6 +3,7 @@
 import { useEffect, type ReactNode } from "react";
 import Link from "next/link";
 import { Artwork } from "@/components/Artwork";
+import { ScrollReveal } from "@/components/ScrollReveal";
 import { ChainPreview } from "@/components/recommendation/ChainPreview";
 import { MeConstellation } from "@/components/recommendation/MeConstellation";
 import { useCurrentUser, useMeData } from "@/lib/data/store";
@@ -65,13 +66,15 @@ export default function MePage() {
       <div className="relative -mt-6 rounded-t-sm" style={{ background: "linear-gradient(180deg, transparent, var(--void) 20%)" }}>
         <div className="mx-auto flex w-full max-w-2xl flex-col gap-14 px-5 pb-16 pt-8 sm:px-6">
           {peopleYouPutOn.length > 0 ? (
-            <Section title="you've put on" count={peopleYouPutOn.length}>
-              <BranchList people={peopleYouPutOn} />
-            </Section>
+            <ScrollReveal>
+              <Section title="you've put on" count={peopleYouPutOn.length}>
+                <BranchList people={peopleYouPutOn} />
+              </Section>
+            </ScrollReveal>
           ) : null}
 
           {recentlyPutOnTo.length > 0 ? (
-            <div className={peopleYouPutOn.length > 0 ? "hairline pt-10" : undefined}>
+            <ScrollReveal className={peopleYouPutOn.length > 0 ? "hairline pt-10" : undefined}>
               <Section title="recently put on to">
                 <div className="flex flex-col gap-4">
                   {recentlyPutOnTo.slice(0, 5).map((item) => (
@@ -95,11 +98,11 @@ export default function MePage() {
                   ))}
                 </div>
               </Section>
-            </div>
+            </ScrollReveal>
           ) : null}
 
           {chains.length > 0 ? (
-            <div className="hairline pt-10">
+            <ScrollReveal className="hairline pt-10">
               <Section title="chains">
                 <div className="flex flex-col gap-4">
                   {chains.map((chain) => (
@@ -107,10 +110,10 @@ export default function MePage() {
                   ))}
                 </div>
               </Section>
-            </div>
+            </ScrollReveal>
           ) : null}
 
-          <div className="hairline pt-10">
+          <ScrollReveal className="hairline pt-10">
             <Section title="account">
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
@@ -124,7 +127,7 @@ export default function MePage() {
                 <p className="text-[13px] text-text-tertiary">account and session settings will live here.</p>
               </div>
             </Section>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </div>
