@@ -151,31 +151,31 @@ export function Composer({ sourceId }: { sourceId?: string }) {
               className="animate-celebrate"
             />
             <span
-              className="absolute -bottom-2 -right-2 flex h-6 w-6 items-center justify-center rounded-xs bg-white-glass-strong text-[13px] text-void"
+              className="absolute -bottom-2 -right-2 flex h-6 w-6 items-center justify-center rounded-xs bg-white-glass-strong text-body-sm text-void"
               style={{ boxShadow: "0 0 20px 4px rgba(124,92,255,0.4)" }}
             >
               ✓
             </span>
           </span>
         ) : null}
-        <p className="text-[17px] font-semibold text-text-primary">
+        <p className="text-lg font-semibold text-text-primary">
           {isPassOn ? `passed on to ${recipientLabel}` : `sent to ${recipientLabel}`}
         </p>
         {isPassOn && sourceItem && recipientLabel ? (
           <ChainTransmission fromLabel={sourceItem.sender.displayName} toLabel={recipientLabel} />
         ) : null}
-        <p className="text-[13.5px] text-text-tertiary">they&apos;ll see it whenever they open the link.</p>
+        <p className="text-body-sm text-text-tertiary">they&apos;ll see it whenever they open the link.</p>
         <div className="flex w-full flex-col items-center gap-2">
           <motion.div
             className="relative flex w-full items-center gap-2.5 overflow-hidden rounded-xs border px-4 py-2.5"
             animate={{ borderColor: copied ? "var(--white-edge)" : "var(--border)" }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           >
-            <span className="min-w-0 flex-1 truncate text-left font-mono text-[12px] text-text-tertiary">{shareUrl}</span>
+            <span className="min-w-0 flex-1 truncate text-left text-mono-caption text-text-tertiary">{shareUrl}</span>
             <button
               type="button"
               onClick={handleCopy}
-              className="flex shrink-0 items-center gap-1.5 text-[12px] text-text-secondary transition-colors hover:text-text-primary"
+              className="flex shrink-0 items-center gap-1.5 text-label text-text-secondary transition-colors hover:text-text-primary"
             >
               <AnimatePresence mode="wait" initial={false}>
                 {copied ? (
@@ -208,18 +208,18 @@ export function Composer({ sourceId }: { sourceId?: string }) {
               />
             ) : null}
           </motion.div>
-          <p className="h-4 font-mono text-[11px] text-text-tertiary">
+          <p className="h-4 text-mono-caption text-text-tertiary">
             {copied ? "saved to your clipboard" : "tap copy anytime to grab the link again"}
           </p>
         </div>
         <button
           type="button"
           onClick={handleShare}
-          className="btn-secondary flex items-center gap-1.5 rounded-xs px-4 py-2 text-[13px]"
+          className="btn-secondary flex items-center gap-1.5 rounded-xs px-4 py-2 text-body-sm"
         >
           <ShareIcon size={14} /> share
         </button>
-        <Link href={`/sent/${created.id}`} className="text-link text-[13px] text-text-tertiary">
+        <Link href={`/sent/${created.id}`} className="text-link text-body-sm text-text-tertiary">
           view in sent →
         </Link>
         </div>
@@ -231,7 +231,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
     <div className="relative flex flex-1 flex-col overflow-hidden">
       <Atmosphere seed={sourceItem?.track.artSeed ?? "composer"} color={sourceColor} intensity="ambient" interactive />
       <div className="relative z-10 mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-8 px-5 py-10 sm:px-6">
-      <h1 className="text-center text-[22px] font-bold text-text-primary">
+      <h1 className="text-center text-section-title text-text-primary">
         {isPassOn ? "pass it on" : "put someone on"}
       </h1>
 
@@ -241,8 +241,8 @@ export function Composer({ sourceId }: { sourceId?: string }) {
             <div className="flex items-center gap-4 rounded-xs border border-border p-4">
               <Artwork seed={trackResult.track.artSeed} imageUrl={trackResult.track.artworkUrl} size={52} radius={2} />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-[15px] font-semibold text-text-primary">{trackResult.track.title}</p>
-                <p className="truncate text-[13px] text-text-secondary">{trackResult.track.artist}</p>
+                <p className="truncate text-body-lg font-semibold text-text-primary">{trackResult.track.title}</p>
+                <p className="truncate text-body-sm text-text-secondary">{trackResult.track.artist}</p>
               </div>
               {isPassOn ? null : (
                 <button
@@ -251,21 +251,21 @@ export function Composer({ sourceId }: { sourceId?: string }) {
                     setTrackResult(null);
                     setUrlInput("");
                   }}
-                  className="shrink-0 text-[12px] text-text-tertiary transition-colors hover:text-text-secondary"
+                  className="shrink-0 text-label text-text-tertiary transition-colors hover:text-text-secondary"
                 >
                   change
                 </button>
               )}
             </div>
             {!trackResult.ok ? (
-              <p className="text-[12px] text-text-tertiary">
+              <p className="text-label text-text-tertiary">
                 couldn&apos;t load this one&apos;s details — you can still send it, they&apos;ll see it fine on spotify.
               </p>
             ) : null}
           </div>
         ) : (
           <form onSubmit={handleUrlSubmit} className="flex flex-col gap-2">
-            <label htmlFor="spotify-url" className="font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary">
+            <label htmlFor="spotify-url" className="text-eyebrow text-text-tertiary">
               spotify link
             </label>
             <input
@@ -276,15 +276,15 @@ export function Composer({ sourceId }: { sourceId?: string }) {
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
               disabled={resolving}
-              className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[15px] text-text-primary placeholder:text-text-tertiary focus:border-white-edge focus:outline-none disabled:opacity-50"
+              className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-body-lg text-text-primary placeholder:text-text-tertiary focus:border-white-edge focus:outline-none disabled:opacity-50"
             />
             {urlError ? (
-              <p className="text-[12px] text-warn">that doesn&apos;t look like a spotify link yet.</p>
+              <p className="text-label text-warn">that doesn&apos;t look like a spotify link yet.</p>
             ) : null}
             <button
               type="submit"
               disabled={resolving}
-              className="text-link mt-1 self-start text-[13px] text-text-primary disabled:opacity-60"
+              className="text-link mt-1 self-start text-body-sm text-text-primary disabled:opacity-60"
             >
               {resolving ? "looking it up…" : "continue"}
             </button>
@@ -293,17 +293,17 @@ export function Composer({ sourceId }: { sourceId?: string }) {
 
         {trackResult ? (
           <div className="flex animate-rise-in flex-col gap-2">
-            <p className="font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary">to</p>
+            <p className="text-eyebrow text-text-tertiary">to</p>
             {recipient ? (
               <div className="flex items-center justify-between">
-                <span className="text-[15px] font-semibold text-text-primary">{recipientLabel}</span>
+                <span className="text-body-lg font-semibold text-text-primary">{recipientLabel}</span>
                 <button
                   type="button"
                   onClick={() => {
                     setRecipient(null);
                     setRecipientQuery("");
                   }}
-                  className="text-[12px] text-text-tertiary transition-colors hover:text-text-secondary"
+                  className="text-label text-text-tertiary transition-colors hover:text-text-secondary"
                 >
                   change
                 </button>
@@ -315,7 +315,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
                   value={recipientQuery}
                   onChange={(e) => setRecipientQuery(e.target.value)}
                   placeholder="search a name or type someone new…"
-                  className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[15px] text-text-primary placeholder:text-text-tertiary focus:border-white-edge focus:outline-none"
+                  className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-body-lg text-text-primary placeholder:text-text-tertiary focus:border-white-edge focus:outline-none"
                 />
                 <div className="flex flex-wrap gap-2">
                   {chips.map((p) => (
@@ -326,7 +326,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
                         setRecipient({ type: "registered", personId: p.id });
                         setRecipientQuery(p.displayName);
                       }}
-                      className="rounded-xs border border-border px-3.5 py-2 text-[13px] text-text-secondary transition-all duration-200 hover:-translate-y-px hover:border-white-edge hover:bg-white-wash hover:text-text-primary hover:shadow-[0_8px_20px_-12px_rgba(124,92,255,0.35)]"
+                      className="rounded-xs border border-border px-3.5 py-2 text-body-sm text-text-secondary transition-all duration-200 hover:-translate-y-px hover:border-white-edge hover:bg-white-wash hover:text-text-primary hover:shadow-[0_8px_20px_-12px_rgba(124,92,255,0.35)]"
                     >
                       {p.displayName}
                     </button>
@@ -335,7 +335,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
                     <button
                       type="button"
                       onClick={() => setRecipient({ type: "guest", name: recipientQuery.trim() })}
-                      className="rounded-xs border border-dashed border-white-edge px-3.5 py-2 text-[13px] text-text-primary transition-all duration-200 hover:-translate-y-px hover:border-white-edge hover:bg-white-wash hover:shadow-[0_8px_20px_-12px_rgba(255,95,168,0.3)]"
+                      className="rounded-xs border border-dashed border-white-edge px-3.5 py-2 text-body-sm text-text-primary transition-all duration-200 hover:-translate-y-px hover:border-white-edge hover:bg-white-wash hover:shadow-[0_8px_20px_-12px_rgba(255,95,168,0.3)]"
                     >
                       add &ldquo;{recipientQuery.trim()}&rdquo; as someone new
                     </button>
@@ -348,7 +348,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
 
         {recipient ? (
           <div className="flex animate-rise-in flex-col gap-2">
-            <label htmlFor="note" className="font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary">
+            <label htmlFor="note" className="text-eyebrow text-text-tertiary">
               note (optional)
             </label>
             <textarea
@@ -357,7 +357,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
               onChange={(e) => setNote(e.target.value.slice(0, 140))}
               rows={2}
               placeholder="the part you want them to hear…"
-              className="w-full resize-none border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[14.5px] text-text-primary placeholder:text-text-tertiary focus:border-white-edge focus:outline-none"
+              className="w-full resize-none border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-body text-text-primary placeholder:text-text-tertiary focus:border-white-edge focus:outline-none"
             />
           </div>
         ) : null}
@@ -367,13 +367,13 @@ export function Composer({ sourceId }: { sourceId?: string }) {
             type="button"
             onClick={handleSubmit}
             disabled={submitting}
-            className="btn-primary animate-rise-in rounded-xs px-4 py-3.5 text-[15px] font-semibold"
+            className="btn-primary animate-rise-in rounded-xs px-4 py-3.5 text-body-lg font-semibold"
           >
             {isPassOn ? `pass it on to ${recipientLabel}` : `send to ${recipientLabel}`}
           </button>
         ) : null}
       </div>
-      <p className="relative z-10 text-center font-mono text-[11px] text-text-tertiary">
+      <p className="relative z-10 text-center text-mono-caption text-text-tertiary">
         sending as {currentUser.displayName}
       </p>
       </div>

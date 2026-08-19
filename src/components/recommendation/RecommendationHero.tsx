@@ -54,33 +54,27 @@ export function RecommendationHero({
         </span>
       </span>
       <div className="flex flex-col items-center gap-2">
-        <h1
-          className={
-            size === "large"
-              ? "text-[24px] font-bold leading-[1.12] tracking-tight text-text-primary sm:text-[32px]"
-              : "text-[18px] font-bold leading-tight text-text-primary"
-          }
-        >
+        <h1 className={size === "large" ? "text-track-title-hero text-text-primary" : "text-track-title-compact text-text-primary"}>
           {track.title}
         </h1>
-        <p className={size === "large" ? "text-[19px] font-semibold text-text-secondary sm:text-[21px]" : "text-[15px] font-semibold text-text-secondary"}>
+        <p className={size === "large" ? "text-track-artist-hero text-text-secondary" : "text-body-lg font-semibold text-text-secondary"}>
           {track.artist}
         </p>
         {track.album ? (
           <span
-            className="mt-1 rounded-full border px-3 py-1 text-[11px] font-medium text-text-tertiary"
+            className="mt-1 rounded-full border px-3 py-1 text-caption font-medium text-text-tertiary"
             style={{ borderColor: "var(--border-strong)" }}
           >
             {track.album}
           </span>
         ) : null}
         {track.metadataStatus === "failed" ? (
-          <p className="mt-1 font-mono text-[11px] text-text-tertiary">metadata couldn&apos;t be loaded</p>
+          <p className="mt-1 text-mono-caption text-text-tertiary">metadata couldn&apos;t be loaded</p>
         ) : null}
       </div>
       {note ? (
         <p
-          className="relative max-w-sm py-0.5 pl-4 text-left text-[15.5px] leading-relaxed text-text-primary"
+          className="relative max-w-sm py-0.5 pl-4 text-left text-body-lg leading-relaxed text-text-primary"
           style={{ borderLeft: "2px solid var(--border-strong)" }}
         >
           &ldquo;{note}&rdquo;
@@ -89,7 +83,7 @@ export function RecommendationHero({
       <button
         type="button"
         onClick={handleListen}
-        className="text-link flex items-center gap-1.5 text-[14.5px] text-text-secondary transition-colors hover:text-text-primary"
+        className="text-link flex items-center gap-1.5 text-body text-text-secondary transition-colors hover:text-text-primary"
       >
         listen on spotify
         <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true">
@@ -97,7 +91,7 @@ export function RecommendationHero({
         </svg>
       </button>
       {formatDuration(track.durationMs) ? (
-        <p className="font-mono text-[11px] text-text-tertiary">{formatDuration(track.durationMs)}</p>
+        <p className="text-mono-caption text-text-tertiary">{formatDuration(track.durationMs)}</p>
       ) : null}
     </div>
   );
