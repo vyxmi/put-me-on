@@ -2,7 +2,17 @@ import type { Person, Track, Recommendation, ResponseRecord } from "./types";
 
 const HOUR = 60 * 60 * 1000;
 const DAY = 24 * HOUR;
-const ago = (ms: number) => new Date(Date.now() - ms).toISOString();
+// A fixed reference point, not Date.now() — this module gets evaluated
+// independently by the server and the client, at genuinely different real
+// moments (the server's copy can be cached and stay loaded for hours in
+// dev). Two calls to `ago()` with the same multiplier landed on opposite
+// sides of a sort comparison between those two evaluations, which is a
+// real SSR hydration mismatch, not a rounding issue. Anchoring to a fixed
+// point makes every createdAt byte-identical everywhere, forever — display
+// still advances normally since relativeTime() compares this fixed value
+// against the real current time at render.
+const NOW = new Date("2026-08-19T12:00:00.000Z").getTime();
+const ago = (ms: number) => new Date(NOW - ms).toISOString();
 
 export const CURRENT_USER_ID = "vyomi";
 
@@ -226,6 +236,78 @@ export const tracks: Track[] = [
     artSeed: "pink-pony-club",
     metadataStatus: "ok",
   },
+  // No cached cover art for these — real metadata, generated placeholder
+  // art (Artwork.tsx falls back to it automatically).
+  {
+    id: "t-hyperballad",
+    provider: "spotify",
+    sourceUrl: "https://open.spotify.com/search/Hyperballad%20Bj%C3%B6rk",
+    title: "Hyperballad",
+    artist: "Björk",
+    album: "Post",
+    artSeed: "hyperballad",
+    metadataStatus: "ok",
+  },
+  {
+    id: "t-son-of-sam",
+    provider: "spotify",
+    sourceUrl: "https://open.spotify.com/search/Son%20of%20Sam%20Elliott%20Smith",
+    title: "Son of Sam",
+    artist: "Elliott Smith",
+    album: "Figure 8",
+    artSeed: "son-of-sam",
+    metadataStatus: "ok",
+  },
+  {
+    id: "t-now-that-youre-gone",
+    provider: "spotify",
+    sourceUrl: "https://open.spotify.com/search/Now%20That%20You're%20Gone%20Club%208",
+    title: "Now That You're Gone",
+    artist: "Club 8",
+    album: "Club 8",
+    artSeed: "now-that-youre-gone",
+    metadataStatus: "ok",
+  },
+  {
+    id: "t-computer-love",
+    provider: "spotify",
+    sourceUrl: "https://open.spotify.com/search/Computer%20Love%20Kraftwerk",
+    title: "Computer Love",
+    artist: "Kraftwerk",
+    album: "Computer World",
+    artSeed: "computer-love",
+    metadataStatus: "ok",
+  },
+  {
+    id: "t-disorder",
+    provider: "spotify",
+    sourceUrl: "https://open.spotify.com/search/Disorder%20Joy%20Division",
+    title: "Disorder",
+    artist: "Joy Division",
+    album: "Unknown Pleasures",
+    artSeed: "disorder",
+    metadataStatus: "ok",
+  },
+  {
+    id: "t-stars",
+    provider: "spotify",
+    sourceUrl: "https://open.spotify.com/search/Stars%20Hum",
+    title: "Stars",
+    artist: "Hum",
+    album: "You'd Prefer an Astronaut",
+    artSeed: "stars-hum",
+    metadataStatus: "ok",
+  },
+  {
+    id: "t-good-morning-captain",
+    provider: "spotify",
+    sourceUrl: "https://open.spotify.com/search/Good%20Morning%20Captain%20Slint",
+    title: "Good Morning, Captain",
+    artist: "Slint",
+    album: "Spiderland",
+    artSeed: "good-morning-captain",
+    metadataStatus: "ok",
+  },
 ];
 
 export const recommendations: Recommendation[] = [
@@ -322,6 +404,70 @@ export const recommendations: Recommendation[] = [
     trackId: "t-cowboy-nudes",
     createdAt: ago(12 * HOUR),
   },
+  // Confirmed put-me-ons from senders who hadn't connected with vyomi yet —
+  // fleshes out the Me constellation beyond thea/kurt.
+  {
+    id: "r13",
+    senderId: "marielle",
+    recipient: { type: "registered", personId: "vyomi" },
+    trackId: "t-hyperballad",
+    note: "the strings at 3:40",
+    createdAt: ago(7 * DAY),
+  },
+  {
+    id: "r14",
+    senderId: "jack",
+    recipient: { type: "registered", personId: "vyomi" },
+    trackId: "t-computer-love",
+    createdAt: ago(16 * DAY),
+  },
+  {
+    id: "r15",
+    senderId: "joni",
+    recipient: { type: "registered", personId: "vyomi" },
+    trackId: "t-disorder",
+    note: "opening track, don't skip",
+    createdAt: ago(30 * DAY),
+  },
+  // Fresh unanswered ones, for the Inbox waiting field.
+  {
+    id: "r16",
+    senderId: "inaya",
+    recipient: { type: "registered", personId: "vyomi" },
+    trackId: "t-son-of-sam",
+    createdAt: ago(4 * HOUR),
+  },
+  {
+    id: "r17",
+    senderId: "brooke",
+    recipient: { type: "registered", personId: "vyomi" },
+    trackId: "t-now-that-youre-gone",
+    note: "found this digging through my mom's cds",
+    createdAt: ago(1 * DAY),
+  },
+  {
+    id: "r18",
+    senderId: "molly",
+    recipient: { type: "registered", personId: "vyomi" },
+    trackId: "t-stars",
+    createdAt: ago(9 * HOUR),
+  },
+  // Sent variety.
+  {
+    id: "r19",
+    senderId: "vyomi",
+    recipient: { type: "registered", personId: "marielle" },
+    trackId: "t-good-morning-captain",
+    note: "give it the full 6 minutes",
+    createdAt: ago(2 * DAY),
+  },
+  {
+    id: "r20",
+    senderId: "vyomi",
+    recipient: { type: "registered", personId: "inaya" },
+    trackId: "t-hoppipolla",
+    createdAt: ago(4 * DAY),
+  },
 ];
 
 export const responses: ResponseRecord[] = [
@@ -388,5 +534,37 @@ export const responses: ResponseRecord[] = [
     isGuestResponse: false,
     createdAt: ago(24 * DAY),
     updatedAt: ago(24 * DAY),
+  },
+  {
+    id: "resp-r13",
+    recommendationId: "r13",
+    type: "put_me_on",
+    isGuestResponse: false,
+    createdAt: ago(6 * DAY),
+    updatedAt: ago(6 * DAY),
+  },
+  {
+    id: "resp-r14",
+    recommendationId: "r14",
+    type: "put_me_on",
+    isGuestResponse: false,
+    createdAt: ago(15 * DAY),
+    updatedAt: ago(15 * DAY),
+  },
+  {
+    id: "resp-r15",
+    recommendationId: "r15",
+    type: "put_me_on",
+    isGuestResponse: false,
+    createdAt: ago(29 * DAY),
+    updatedAt: ago(29 * DAY),
+  },
+  {
+    id: "resp-r20",
+    recommendationId: "r20",
+    type: "liked_it",
+    isGuestResponse: false,
+    createdAt: ago(3 * DAY),
+    updatedAt: ago(3 * DAY),
   },
 ];

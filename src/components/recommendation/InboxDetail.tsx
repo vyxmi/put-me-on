@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRecommendation, useResponseActions } from "@/lib/data/store";
 import { RecommendationHero } from "./RecommendationHero";
+import { RecommendationScene } from "./RecommendationScene";
 import { ResponsePicker } from "./ResponsePicker";
 import { ConnectionLine } from "./ConnectionLine";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -30,42 +31,42 @@ export function InboxDetail({ id }: { id: string }) {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-lg flex-col gap-8 px-5 py-10 sm:px-6 animate-fade-slide">
-      <p className="text-center text-[13px] text-text-secondary">
-        <span className="text-text-primary">{sender.displayName}</span> wants to put you on to
-      </p>
+    <RecommendationScene track={track}>
+      <div className="mx-auto flex w-full max-w-lg flex-col items-center gap-9 px-5 py-12 sm:px-6 sm:py-16 animate-fade-slide">
+        <p className="text-center text-[15px] text-text-secondary">
+          <span className="text-text-primary">{sender.displayName}</span> wants to put you on to
+        </p>
 
-      <RecommendationHero
-        track={track}
-        note={recommendation.note}
-        recommendationId={id}
-        celebrate={justConnected}
-      />
+        <RecommendationHero
+          track={track}
+          note={recommendation.note}
+          recommendationId={id}
+          celebrate={justConnected}
+        />
 
-      <div className="hairline" />
+        <ConnectionLine
+          fromLabel={sender.displayName}
+          toLabel="you"
+          connected={response?.type === "put_me_on"}
+          justConnected={justConnected}
+          emphasize="from"
+        />
 
-      <ConnectionLine
-        fromLabel={sender.displayName}
-        toLabel="you"
-        connected={response?.type === "put_me_on"}
-        justConnected={justConnected}
-        emphasize="from"
-      />
+        <div className="flex w-full flex-col items-center gap-3">
+          <p className="text-[14px] text-text-secondary">what did you think?</p>
+          <div className="w-full max-w-sm">
+            <ResponsePicker current={response?.type} onSelect={handleSelect} />
+          </div>
+        </div>
 
-      <div className="flex flex-col gap-3">
-        <p className="text-[14px] text-text-secondary">what did you think?</p>
-        <ResponsePicker current={response?.type} onSelect={handleSelect} />
-      </div>
-
-      <div className="flex justify-center pt-2">
         <Link
           href={`/new?source=${recommendation.id}`}
-          className="flex items-center gap-2 text-[13px] text-text-secondary transition-colors hover:text-accent"
+          className="flex items-center gap-2 text-[13px] text-text-secondary transition-colors hover:text-accent-light"
         >
           <ConnectionMark state="hover" size={30} />
           pass it on
         </Link>
       </div>
-    </div>
+    </RecommendationScene>
   );
 }

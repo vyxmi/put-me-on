@@ -307,6 +307,10 @@ export interface ChainLink {
 
 export interface MeData {
   peopleWhoPutYouOn: Person[];
+  /** one enriched entry per person in peopleWhoPutYouOn (their most recent
+   * put-you-on), for surfaces that want the actual track/art behind each
+   * connection rather than just the name. Same order as peopleWhoPutYouOn. */
+  putOnByEntries: EnrichedRecommendation[];
   peopleYouPutOn: Person[];
   recentlyPutOnTo: EnrichedRecommendation[];
   chains: ChainLink[];
@@ -328,6 +332,15 @@ export function useMeData(): MeData {
     const putYouOnEntries = receivedByMe.filter((r) => r.response?.type === "put_me_on");
     const peopleWhoPutYouOnIds = new Set(putYouOnEntries.map((r) => r.sender.id));
     const peopleWhoPutYouOn = state.people.filter((p) => peopleWhoPutYouOnIds.has(p.id));
+
+    const mostRecentBySender = new Map<string, EnrichedRecommendation>();
+    for (const r of putYouOnEntries) {
+      const existing = mostRecentBySender.get(r.sender.id);
+      if (!existing || +new Date(r.response!.updatedAt) > +new Date(existing.response!.updatedAt)) {
+        mostRecentBySender.set(r.sender.id, r);
+      }
+    }
+    const putOnByEntries = peopleWhoPutYouOn.map((p) => mostRecentBySender.get(p.id)!).filter(Boolean);
 
     const putOnEntries = sentByMe.filter(
       (r) => r.response?.type === "put_me_on" && r.recommendation.recipient.type === "registered"
@@ -355,6 +368,6 @@ export function useMeData(): MeData {
       })
       .filter((c): c is ChainLink => c !== null);
 
-    return { peopleWhoPutYouOn, peopleYouPutOn, recentlyPutOnTo, chains };
+    return { peopleWhoPutYouOn, putOnByEntries, peopleYouPutOn, recentlyPutOnTo, chains };
   }, [state]);
 }

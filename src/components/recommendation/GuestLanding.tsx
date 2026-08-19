@@ -4,11 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRecommendation, useResponseActions } from "@/lib/data/store";
 import { RecommendationHero } from "./RecommendationHero";
+import { RecommendationScene } from "./RecommendationScene";
 import { ResponsePicker } from "./ResponsePicker";
 import { ConnectionLine } from "./ConnectionLine";
 import { GuestSavePrompt } from "./GuestSavePrompt";
-import { CursorField } from "@/components/CursorField";
-import { TopographicWeb } from "@/components/TopographicWeb";
 import { track as trackAnalytics } from "@/lib/analytics";
 import type { ResponseType } from "@/lib/data/types";
 
@@ -57,46 +56,43 @@ export function GuestLanding({ id }: { id: string }) {
   }
 
   return (
-    <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-5 py-16 sm:px-6">
-      <CursorField />
-      <TopographicWeb
-        seed={id}
-        className="pointer-events-none absolute -top-20 left-1/2 h-[500px] w-[500px] -translate-x-1/2 text-accent opacity-[0.18]"
-      />
-      <div className="relative z-10 flex w-full max-w-md flex-col items-center gap-9">
-        <p className="text-center text-[14px] text-text-secondary">
-          <span className="text-text-primary">{sender.displayName}</span> wants to put{" "}
-          <span className="text-text-primary">{recipientLabel}</span> on to
-        </p>
+    <RecommendationScene track={track}>
+      <div className="relative flex min-h-dvh flex-col items-center justify-center px-5 py-16 sm:px-6">
+        <div className="relative z-10 flex w-full max-w-md flex-col items-center gap-9">
+          <p className="text-center text-[15px] text-text-secondary">
+            <span className="text-text-primary">{sender.displayName}</span> wants to put{" "}
+            <span className="text-text-primary">{recipientLabel}</span> on to
+          </p>
 
-        <RecommendationHero
-          track={track}
-          note={recommendation.note}
-          recommendationId={id}
-          celebrate={justConnected}
-        />
+          <RecommendationHero
+            track={track}
+            note={recommendation.note}
+            recommendationId={id}
+            celebrate={justConnected}
+          />
 
-        <div className="hairline w-full" />
+          <ConnectionLine
+            fromLabel={sender.displayName}
+            toLabel={recipientLabel}
+            connected={response?.type === "put_me_on"}
+            justConnected={justConnected}
+            emphasize="from"
+          />
 
-        <ConnectionLine
-          fromLabel={sender.displayName}
-          toLabel={recipientLabel}
-          connected={response?.type === "put_me_on"}
-          justConnected={justConnected}
-          emphasize="from"
-        />
+          <div className="flex w-full flex-col items-center gap-4">
+            <p className="text-[14px] text-text-secondary">what did you think?</p>
+            <div className="w-full max-w-sm">
+              <ResponsePicker current={response?.type} onSelect={handleSelect} />
+            </div>
+          </div>
 
-        <div className="flex w-full flex-col items-center gap-4">
-          <p className="text-[14px] text-text-secondary">what did you think?</p>
-          <ResponsePicker current={response?.type} onSelect={handleSelect} />
+          {showSavePrompt ? <GuestSavePrompt defaultName={recipientLabel} /> : null}
+
+          <Link href="/inbox" className="text-link text-[12px] text-text-tertiary">
+            put me on
+          </Link>
         </div>
-
-        {showSavePrompt ? <GuestSavePrompt defaultName={recipientLabel} /> : null}
-
-        <Link href="/inbox" className="text-link text-[12px] text-text-tertiary">
-          put me on
-        </Link>
       </div>
-    </div>
+    </RecommendationScene>
   );
 }

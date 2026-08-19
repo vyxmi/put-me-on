@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-type RGB = [number, number, number];
+export type RGB = [number, number, number];
 
 /** Sampled per imageUrl once, then reused — avoids re-decoding the same
  * cover art every time an Artwork instance mounts (list + hero both use it). */
@@ -14,7 +14,7 @@ const glowCache = new Map<string, RGB | null>();
  * (silently — the hash-based glow below is the fallback) if the image
  * hasn't loaded cross-origin cleanly, since that just means a tainted
  * canvas rather than an error worth surfacing. */
-function sampleGlowColor(url: string): Promise<RGB | null> {
+export function sampleGlowColor(url: string): Promise<RGB | null> {
   const cached = glowCache.get(url);
   if (cached !== undefined) return Promise.resolve(cached);
 
@@ -65,6 +65,27 @@ function sampleGlowColor(url: string): Promise<RGB | null> {
     };
     img.src = url;
   });
+}
+
+/** Same sampled color Artwork's own halo uses, for anything else on the
+ * page that wants to be lit by the actual album art (e.g. Atmosphere). */
+export function useSampledGlow(imageUrl: string | undefined): RGB | null {
+  const [glow, setGlow] = useState<RGB | null>(null);
+  useEffect(() => {
+    if (!imageUrl) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting derived state when the input goes away, not a render-cascade risk
+      setGlow(null);
+      return;
+    }
+    let cancelled = false;
+    sampleGlowColor(imageUrl).then((rgb) => {
+      if (!cancelled) setGlow(rgb);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [imageUrl]);
+  return glow;
 }
 
 const NOISE_BG =

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRecommendation, useResponseActions, usePerson } from "@/lib/data/store";
 import { RecommendationHero } from "./RecommendationHero";
+import { RecommendationScene } from "./RecommendationScene";
 import { ConnectionLine } from "./ConnectionLine";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { RESPONSE_LABEL } from "@/lib/data/types";
@@ -23,8 +24,9 @@ export function SentDetail({ id }: { id: string }) {
   const { track, recommendation, recipientLabel, response } = item;
 
   return (
-    <div className="mx-auto flex w-full max-w-lg flex-col gap-8 px-5 py-10 sm:px-6 animate-fade-slide">
-      <p className="text-center text-[13px] text-text-secondary">
+    <RecommendationScene track={track}>
+      <div className="mx-auto flex w-full max-w-lg flex-col items-center gap-9 px-5 py-12 sm:px-6 sm:py-16 animate-fade-slide">
+      <p className="text-center text-[15px] text-text-secondary">
         you sent <span className="text-text-primary">{recipientLabel}</span>
       </p>
 
@@ -33,8 +35,6 @@ export function SentDetail({ id }: { id: string }) {
       {sourceSender ? (
         <p className="text-center font-mono text-[12px] text-text-tertiary">passed on from {sourceSender.displayName}</p>
       ) : null}
-
-      <div className="hairline" />
 
       <ConnectionLine
         fromLabel="you"
@@ -86,6 +86,7 @@ export function SentDetail({ id }: { id: string }) {
           </button>
         )}
       </div>
-    </div>
+      </div>
+    </RecommendationScene>
   );
 }

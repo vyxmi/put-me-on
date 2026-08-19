@@ -4,8 +4,10 @@
   color-scheme: dark;
 
   --bg: #0a0a0d;
+  --void: #050508;
   --surface: #131316;
   --surface-2: #1b1b1f;
+  --glass: rgba(19, 19, 22, 0.55);
   --border: rgba(245, 243, 239, 0.08);
   --border-strong: rgba(245, 243, 239, 0.16);
 
@@ -21,6 +23,15 @@
   --accent-glow: rgba(63, 96, 212, 0.35);
   --warn: #e3a0c4;
 
+  /* Spectral palette — the atmospheric/live-visual color family (blue,
+     violet, pink, red, icy-white), used by Atmosphere.tsx and anywhere a
+     scene needs color beyond the UI's own accent. Named, not arbitrary. */
+  --spectral-violet: #7c5cff;
+  --spectral-blue: #3f7bff;
+  --spectral-pink: #ff5fa8;
+  --spectral-red: #ff6b5b;
+  --spectral-ice: #bfe9ff;
+
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --duration-fast: 120ms;
   --duration-base: 220ms;
@@ -29,8 +40,10 @@
 
 @theme inline {
   --color-bg: var(--bg);
+  --color-void: var(--void);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
+  --color-glass: var(--glass);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
   --color-text-primary: var(--text-primary);
@@ -43,6 +56,11 @@
   --color-accent-dim: var(--accent-dim);
   --color-accent-glow: var(--accent-glow);
   --color-warn: var(--warn);
+  --color-spectral-violet: var(--spectral-violet);
+  --color-spectral-blue: var(--spectral-blue);
+  --color-spectral-pink: var(--spectral-pink);
+  --color-spectral-red: var(--spectral-red);
+  --color-spectral-ice: var(--spectral-ice);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-detail: "Helvetica Neue", Helvetica, Arial, sans-serif;
