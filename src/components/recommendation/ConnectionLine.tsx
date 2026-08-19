@@ -24,10 +24,11 @@ function bezier(t: number, p0: readonly [number, number], p1: readonly [number, 
   return [mt * mt * p0[0] + 2 * mt * t * p1[0] + t * t * p2[0], mt * mt * p0[1] + 2 * mt * t * p1[1] + t * t * p2[1]] as const;
 }
 
-/** The two-people-connecting primitive, expressed as a real SVG path: a
- * quiet line between two names that draws in and lights up once "put me
- * on" lands, with a point of light traveling across it the instant that
- * happens. It also breathes a little — bending gently toward a nearby
+/** The trajectory between two named people, expressed as a real SVG path.
+ * People are the two labels — never node shapes; the only thing that moves
+ * along the line is the song's own light, traveling from sender to
+ * recipient the instant "put me on" lands and leaving a soft trail behind
+ * it. The path also breathes a little — bending gently toward a nearby
  * cursor and springing back — so the connection reads as something alive
  * rather than a static rule. */
 export function ConnectionLine({ fromLabel, toLabel, connected, justConnected, emphasize }: ConnectionLineProps) {
@@ -95,22 +96,24 @@ export function ConnectionLine({ fromLabel, toLabel, connected, justConnected, e
             filter: connected ? "drop-shadow(0 0 3px rgba(124,92,255,0.5)) drop-shadow(0 0 3px rgba(255,95,168,0.35))" : undefined,
           }}
         />
-        <circle cx={FROM_X} cy={MID_Y} r="2" fill={connected ? "var(--white-glass-strong)" : "var(--border-strong)"} style={{ transition: "fill var(--duration-base) linear" }} />
-        <circle
-          cx={TO_X}
-          cy={MID_Y}
-          r="2"
-          fill={connected ? "var(--white-glass-strong)" : "var(--bg)"}
-          stroke={connected ? "var(--white-glass-strong)" : "var(--border-strong)"}
-          strokeWidth="1"
-          style={{ transition: "fill var(--duration-base) linear, stroke var(--duration-base) linear" }}
-        />
         {justConnected && !reduceMotion ? (
-          <motion.circle
-            r="2"
-            fill="var(--white-glass-strong)"
-            style={{ cx: dotX, cy: dotY, filter: "drop-shadow(0 0 4px var(--spectral-violet)) drop-shadow(0 0 5px var(--spectral-pink))" }}
-          />
+          <>
+            {/* the trail: the song's light leaves the path glowing behind it as it travels */}
+            <motion.path
+              d={pathD}
+              pathLength={progress}
+              fill="none"
+              stroke="var(--spectral-pink)"
+              strokeWidth={2.4}
+              strokeLinecap="round"
+              style={{ opacity: 0.4, filter: "blur(1.5px)" }}
+            />
+            <motion.circle
+              r="3.2"
+              fill="var(--white-glass-strong)"
+              style={{ cx: dotX, cy: dotY, filter: "drop-shadow(0 0 5px var(--spectral-violet)) drop-shadow(0 0 8px var(--spectral-pink))" }}
+            />
+          </>
         ) : null}
       </svg>
       <span className={`font-semibold ${emphasize === "to" ? "text-text-primary" : "text-text-tertiary"}`}>{toLabel}</span>

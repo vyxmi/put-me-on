@@ -53,24 +53,36 @@ export function RecommendationHero({
           />
         </span>
       </span>
-      <div>
+      <div className="flex flex-col items-center gap-2">
         <h1
           className={
             size === "large"
-              ? "text-[30px] font-bold tracking-tight text-text-primary sm:text-[42px]"
-              : "text-[20px] font-semibold text-text-primary"
+              ? "text-[32px] font-bold leading-[1.08] tracking-tight text-text-primary sm:text-[46px]"
+              : "text-[22px] font-bold leading-tight text-text-primary"
           }
         >
           {track.title}
         </h1>
-        <p className="mt-1 text-[15px] text-text-primary sm:text-[17px]">{track.artist}</p>
-        {track.album ? <p className="mt-0.5 text-[13px] text-text-tertiary">{track.album}</p> : null}
+        <p className={size === "large" ? "text-[19px] font-semibold text-text-secondary sm:text-[21px]" : "text-[15px] font-semibold text-text-secondary"}>
+          {track.artist}
+        </p>
+        {track.album ? (
+          <span
+            className="mt-1 rounded-full border px-3 py-1 text-[11px] font-medium text-text-tertiary"
+            style={{ borderColor: "var(--border-strong)" }}
+          >
+            {track.album}
+          </span>
+        ) : null}
         {track.metadataStatus === "failed" ? (
           <p className="mt-1 font-mono text-[11px] text-text-tertiary">metadata couldn&apos;t be loaded</p>
         ) : null}
       </div>
       {note ? (
-        <p className="max-w-sm border-l-2 border-border-strong py-0.5 pl-4 text-left text-[15px] leading-relaxed text-text-primary">
+        <p
+          className="relative max-w-sm py-0.5 pl-4 text-left text-[15.5px] leading-relaxed text-text-primary"
+          style={{ borderLeft: "2px solid transparent", borderImage: "linear-gradient(180deg, var(--spectral-violet), var(--spectral-pink)) 1" }}
+        >
           &ldquo;{note}&rdquo;
         </p>
       ) : null}

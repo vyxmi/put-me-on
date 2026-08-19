@@ -140,12 +140,12 @@ export const tracks: Track[] = [
   {
     id: "t-windowlicker",
     provider: "spotify",
-    sourceUrl: "https://open.spotify.com/track/60Pe9j2pCBa4Zp4ztf5nhd",
-    title: "Windowlicker",
-    artist: "Aphex Twin",
-    album: "Windowlicker",
-    artworkUrl: "https://i.scdn.co/image/ab67616d0000b273f5b910ba28f8fc7572cb8018",
-    artSeed: "windowlicker",
+    sourceUrl: "https://open.spotify.com/track/0fOjUafaAhJV16oRBgCtz7",
+    title: "Ladies and Gentlemen We Are Floating in Space",
+    artist: "Spiritualized",
+    album: "Ladies and Gentlemen We Are Floating in Space",
+    artworkUrl: "https://i.scdn.co/image/ab67616d0000b2734ff03e0f8b9c600b6e48b382",
+    artSeed: "floating-in-space",
     metadataStatus: "ok",
   },
   {
@@ -370,6 +370,7 @@ export const recommendations: Recommendation[] = [
     senderId: "vyomi",
     recipient: { type: "guest", name: "Priya" },
     trackId: "t-windowlicker",
+    note: "the strings come in around 3:30 and it's over for me",
     createdAt: ago(6 * DAY),
   },
   {

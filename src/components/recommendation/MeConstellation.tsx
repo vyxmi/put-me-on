@@ -48,11 +48,23 @@ function Beam({ node, hovered }: { node: Placed; hovered: boolean }) {
         }}
       />
       {hovered && !reduceMotion ? (
-        <motion.circle
-          r="0.9"
-          fill="var(--white-glass-strong)"
-          style={{ cx: dotX, cy: dotY, filter: "drop-shadow(0 0 3px var(--spectral-violet)) drop-shadow(0 0 4px var(--spectral-pink))" }}
-        />
+        <>
+          {/* the trail the song's light leaves behind as it travels toward you */}
+          <motion.path
+            d={`M ${node.x} ${node.y} Q ${node.cx} ${node.cy} 50 50`}
+            pathLength={progress}
+            fill="none"
+            stroke="var(--spectral-pink)"
+            strokeWidth={0.9}
+            vectorEffect="non-scaling-stroke"
+            style={{ opacity: 0.4, filter: "blur(0.3px)" }}
+          />
+          <motion.circle
+            r="1.3"
+            fill="var(--white-glass-strong)"
+            style={{ cx: dotX, cy: dotY, filter: "drop-shadow(0 0 3px var(--spectral-violet)) drop-shadow(0 0 4px var(--spectral-pink))" }}
+          />
+        </>
       ) : null}
     </g>
   );
@@ -119,19 +131,22 @@ export function MeConstellation({
             onMouseLeave={() => setHoveredId((h) => (h === node.entry.sender.id ? null : h))}
             onTouchStart={() => setHoveredId(node.entry.sender.id)}
           >
+            {/* the person is the name — typography, never a node shape. The
+                small square is the song they sent, a quiet accent, not a face. */}
             <motion.span
-              className="block rounded-full"
-              animate={{ scale: hovered ? 1.16 : 1 }}
+              className="block"
+              animate={{ scale: hovered ? 1.1 : 1, opacity: hovered ? 1 : 0.85 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <Artwork seed={node.entry.track.artSeed} imageUrl={node.entry.track.artworkUrl} size={30} radius={2} />
+            </motion.span>
+            <span
+              className="text-[14px] font-semibold text-text-primary drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]"
               style={{
-                boxShadow: hovered
-                  ? "0 0 0 2px var(--white-glass-strong), 0 0 20px 4px rgba(124,92,255,0.4)"
-                  : "0 0 0 1px var(--border-strong)",
+                textShadow: hovered ? "0 0 14px var(--spectral-violet)" : undefined,
+                transition: "text-shadow 260ms var(--ease-out)",
               }}
             >
-              <Artwork seed={node.entry.track.artSeed} imageUrl={node.entry.track.artworkUrl} size={56} radius={999} halo />
-            </motion.span>
-            <span className="text-[13px] font-semibold text-text-primary drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]">
               {node.entry.sender.displayName}
             </span>
             <span

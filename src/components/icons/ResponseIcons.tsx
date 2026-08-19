@@ -97,10 +97,10 @@ export function LikedItIcon({ size = 20, className, hovered = false }: IconProps
   );
 }
 
-/** Two nodes joined — the connection completes. This is the brand primitive
- * itself, and the only response where the connection actually lands: hover
- * previews it (line brightens, hollow node starts to fill), selecting it
- * sends a point of light traveling from node to node the instant it locks in. */
+/** The brand primitive itself: a trajectory, and the song's light traveling
+ * it — never a pair of person-nodes at the ends. Hover brightens the path
+ * as anticipation; active rests the light at the far end, arrived; selecting
+ * it sends the light traveling the instant it locks in. */
 export function PutMeOnIcon({
   size = 20,
   className,
@@ -122,16 +122,18 @@ export function PutMeOnIcon({
         }}
       />
       <circle
-        cx="6.6"
-        cy="16.4"
-        r="1.5"
-        stroke="currentColor"
-        strokeWidth="1.15"
-        style={{ fill: active ? "currentColor" : "var(--bg)", transition: "fill 280ms var(--ease-out)" }}
+        cx="17.4"
+        cy="7.6"
+        r={active ? 1.6 : 1.1}
+        fill="currentColor"
+        style={{
+          opacity: active ? 1 : 0.55,
+          filter: active ? "drop-shadow(0 0 3px var(--spectral-violet)) drop-shadow(0 0 3px var(--spectral-pink))" : undefined,
+          transition: "r 280ms var(--ease-out), opacity 280ms var(--ease-out)",
+        }}
       />
-      <circle cx="17.4" cy="7.6" r="1.5" fill="currentColor" />
       {justConnected ? (
-        <circle r="1.4" fill="var(--white-glass-strong)" style={{ filter: "drop-shadow(0 0 3px var(--spectral-violet)) drop-shadow(0 0 4px var(--spectral-pink))" }}>
+        <circle r="1.6" fill="var(--white-glass-strong)" style={{ filter: "drop-shadow(0 0 3px var(--spectral-violet)) drop-shadow(0 0 4px var(--spectral-pink))" }}>
           <animateMotion dur="0.55s" path="M6.6 16.4C9 13 15 11 17.4 7.6" fill="freeze" />
           <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.8;1" dur="0.55s" fill="freeze" />
         </circle>
