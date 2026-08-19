@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useMotionValue, useTransform, animate, useReducedMotion } from "motion/react";
 import { Artwork } from "@/components/Artwork";
 import { Atmosphere } from "@/components/Atmosphere";
+import { LightOrb } from "@/components/icons/LightOrb";
 import type { EnrichedRecommendation } from "@/lib/data/store";
 
 function bezier(t: number, p0: readonly [number, number], p1: readonly [number, number], p2: readonly [number, number]) {
@@ -59,11 +60,11 @@ function Beam({ node, hovered }: { node: Placed; hovered: boolean }) {
             vectorEffect="non-scaling-stroke"
             style={{ opacity: 0.4, filter: "blur(0.3px)" }}
           />
-          <motion.circle
-            r="1.3"
-            fill="var(--white-glass-strong)"
-            style={{ cx: dotX, cy: dotY, filter: "drop-shadow(0 0 3px var(--spectral-violet)) drop-shadow(0 0 4px var(--spectral-pink))" }}
-          />
+          <motion.g style={{ x: dotX, y: dotY }}>
+            <g transform="translate(-2.2, -2.2)" style={{ filter: "drop-shadow(0 0 2px var(--spectral-violet)) drop-shadow(0 0 3px var(--spectral-pink))" }}>
+              <LightOrb size={4.4} />
+            </g>
+          </motion.g>
         </>
       ) : null}
     </g>
