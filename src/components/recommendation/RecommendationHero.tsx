@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "motion/react";
+import Tilt from "react-parallax-tilt";
 import { Artwork } from "@/components/Artwork";
 import { formatDuration } from "@/lib/utils/format";
 import { track as trackAnalytics } from "@/lib/analytics";
@@ -40,8 +41,16 @@ export function RecommendationHero({
 
   return (
     <div className="flex flex-col items-center gap-5 text-center">
-      <span className="inline-block transition-transform duration-300 ease-out hover:-rotate-1 hover:scale-[1.015]">
-        <span ref={artRef} data-hero-art style={{ display: "inline-block" }}>
+      <span ref={artRef} data-hero-art style={{ display: "inline-block" }}>
+        <Tilt
+          tiltEnable={!reduceMotion}
+          tiltMaxAngleX={6}
+          tiltMaxAngleY={6}
+          perspective={900}
+          scale={1.015}
+          transitionSpeed={1200}
+          glareEnable={false}
+        >
           <Artwork
             seed={track.artSeed}
             imageUrl={track.artworkUrl}
@@ -51,7 +60,7 @@ export function RecommendationHero({
             animated
             className={celebrate ? "animate-celebrate" : undefined}
           />
-        </span>
+        </Tilt>
       </span>
       <div className="flex flex-col items-center gap-2">
         <h1 className={size === "large" ? "text-track-title-hero text-text-primary" : "text-track-title-compact text-text-primary"}>
