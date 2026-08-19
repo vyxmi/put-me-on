@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useCurrentUser, useUpdateProfile } from "@/lib/data/store";
 import { CheckGlyph } from "@/components/icons/UtilityIcons";
+import { GlassPanel } from "@/components/ui/GlassPanel";
 
 function Field({
   label,
@@ -22,18 +23,18 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="font-detail text-[11px] font-bold uppercase tracking-wider text-text-tertiary">{label}</label>
+      <label className="text-eyebrow text-text-tertiary">{label}</label>
       <div className="flex items-center gap-1 border-0 border-b border-border pb-1.5 focus-within:border-white-edge">
-        {prefix ? <span className="text-[16px] text-text-tertiary">{prefix}</span> : null}
+        {prefix ? <span className="text-md text-text-tertiary">{prefix}</span> : null}
         <input
           type="text"
           value={value}
           maxLength={maxLength}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full border-0 bg-transparent text-[16px] text-text-primary outline-none"
+          className="w-full border-0 bg-transparent text-md text-text-primary outline-none"
         />
       </div>
-      {error ? <p className="text-[12px] text-warn">{error}</p> : null}
+      {error ? <p className="text-label text-warn">{error}</p> : null}
     </div>
   );
 }

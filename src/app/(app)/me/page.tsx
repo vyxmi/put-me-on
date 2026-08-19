@@ -8,6 +8,7 @@ import { AccountSettings } from "@/components/AccountSettings";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { ChainPreview } from "@/components/recommendation/ChainPreview";
 import { MeConstellation } from "@/components/recommendation/MeConstellation";
+import { GlassPanel } from "@/components/ui/GlassPanel";
 import { useCurrentUser, useMeData, type EnrichedRecommendation } from "@/lib/data/store";
 import { track as trackAnalytics } from "@/lib/analytics";
 
@@ -15,19 +16,9 @@ function Section({ title, count, children }: { title: string; count?: number; ch
   return (
     <div className="flex flex-col gap-5">
       <h2 className="flex items-baseline gap-2">
-        <span className="font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary">{title}</span>
-        {count !== undefined ? <span className="text-[13px] font-semibold text-text-primary">{count}</span> : null}
+        <span className="text-eyebrow text-text-tertiary">{title}</span>
+        {count !== undefined ? <span className="text-body-sm font-semibold text-text-primary">{count}</span> : null}
       </h2>
-      {children}
-    </div>
-  );
-}
-
-/** The glass-panel treatment every section body shares now, so the page
- * reads as one system instead of a stack of differently-styled lists. */
-function Card({ children }: { children: ReactNode }) {
-  return (
-    <div className="flex flex-col gap-1 rounded-sm border px-2 py-2" style={{ background: "var(--glass)", borderColor: "var(--border-strong)" }}>
       {children}
     </div>
   );
@@ -44,8 +35,8 @@ function TrackRow({ href, entry, direction }: { href: string; entry: EnrichedRec
         <Artwork seed={entry.track.artSeed} imageUrl={entry.track.artworkUrl} size={44} radius={3} />
       </span>
       <div className="min-w-0">
-        <p className="truncate text-[15px] text-text-primary">{entry.track.title}</p>
-        <p className="truncate text-[13px] text-text-secondary">
+        <p className="truncate text-body-lg text-text-primary">{entry.track.title}</p>
+        <p className="truncate text-body-sm text-text-secondary">
           {direction === "to" ? "to " : "from "}
           {personName}
         </p>
@@ -72,11 +63,9 @@ export default function MePage() {
         <div className="relative overflow-hidden px-5 pb-8 pt-12 text-center sm:px-6">
           <Atmosphere seed={user.id} intensity="ambient" interactive />
           <div className="relative">
-            <h1 className="text-[48px] font-bold leading-none tracking-tight text-text-primary sm:text-[64px]">
-              {user.displayName.toUpperCase()}
-            </h1>
-            <p className="mt-2 font-mono text-[13px] text-text-tertiary">@{user.handle}</p>
-            <p className="mt-6 text-[14px] text-text-tertiary">no one&apos;s put you on yet — that constellation shows up here once they do.</p>
+            <h1 className="text-display text-text-primary">{user.displayName.toUpperCase()}</h1>
+            <p className="mt-2 font-mono text-body-sm text-text-tertiary">@{user.handle}</p>
+            <p className="mt-6 text-body text-text-tertiary">no one&apos;s put you on yet — that constellation shows up here once they do.</p>
           </div>
         </div>
       )}
@@ -86,11 +75,11 @@ export default function MePage() {
           {putOnToEntries.length > 0 ? (
             <ScrollReveal>
               <Section title="you've put on" count={putOnToEntries.length}>
-                <Card>
+                <GlassPanel className="flex flex-col gap-1 px-2 py-2">
                   {putOnToEntries.map((entry) => (
                     <TrackRow key={entry.recommendation.id} href={`/sent/${entry.recommendation.id}`} entry={entry} direction="to" />
                   ))}
-                </Card>
+                </GlassPanel>
               </Section>
             </ScrollReveal>
           ) : null}
@@ -98,11 +87,11 @@ export default function MePage() {
           {recentlyPutOnTo.length > 0 ? (
             <ScrollReveal className={putOnToEntries.length > 0 ? "hairline pt-10" : undefined}>
               <Section title="recently put on to">
-                <Card>
+                <GlassPanel className="flex flex-col gap-1 px-2 py-2">
                   {recentlyPutOnTo.slice(0, 5).map((entry) => (
                     <TrackRow key={entry.recommendation.id} href={`/inbox/${entry.recommendation.id}`} entry={entry} direction="from" />
                   ))}
-                </Card>
+                </GlassPanel>
               </Section>
             </ScrollReveal>
           ) : null}

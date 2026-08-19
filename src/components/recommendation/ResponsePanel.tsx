@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { GlassPanel } from "@/components/ui/GlassPanel";
 
 /** The glassy, colorless surface "what did you think?" + the four responses
  * live on: a very slight blur on the same --glass material the rest of the
@@ -17,14 +18,11 @@ export function ResponsePanel({
   const isPrimary = weight === "primary";
 
   return (
-    <div
-      className={`w-full rounded-sm border ${isPrimary ? "px-5 py-6 sm:px-7 backdrop-blur-sm" : "px-4 py-4 backdrop-blur-[3px]"}`}
-      style={{
-        background: "var(--glass)",
-        borderColor: isPrimary ? "var(--border-strong)" : "var(--border)",
-      }}
+    <GlassPanel
+      tone={isPrimary ? "default" : "light"}
+      className={isPrimary ? "w-full px-5 py-6 backdrop-blur-sm sm:px-7" : "w-full px-4 py-4 backdrop-blur-[3px]"}
     >
       {children}
-    </div>
+    </GlassPanel>
   );
 }
