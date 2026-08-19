@@ -210,7 +210,7 @@ export function Atmosphere({
         ))}
       </div>
 
-      <div className="grain-overlay" style={{ position: "absolute", opacity: isHero ? 0.06 : 0.045 }} />
+      <div className="grain-overlay" style={{ position: "absolute", opacity: isHero ? 0.11 : 0.08 }} />
 
       <div
         className="absolute inset-0"

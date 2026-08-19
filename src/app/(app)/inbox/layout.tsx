@@ -69,7 +69,12 @@ export default function InboxLayout({ children }: { children: React.ReactNode })
           </div>
         )}
       </div>
-      <div className={`flex-1 overflow-y-auto ${isDetailRoute ? "block" : "hidden md:block"}`}>{children}</div>
+      {/* flex flex-col, not just block — EmptyState (the "select a
+          recommendation" resting state) sizes itself with flex-1, which
+          does nothing unless its parent is actually a flex container. Without
+          this it only took up its own content height, leaving the
+          atmosphere behind it looking cut off partway down the pane. */}
+      <div className={`flex-1 flex-col overflow-y-auto ${isDetailRoute ? "flex" : "hidden md:flex"}`}>{children}</div>
     </div>
   );
 }

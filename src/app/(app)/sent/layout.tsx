@@ -39,7 +39,7 @@ export default function SentLayout({ children }: { children: React.ReactNode }) 
           />
         </div>
       </div>
-      <div className={`flex-1 overflow-y-auto ${isDetailRoute ? "block" : "hidden md:block"}`}>{children}</div>
+      <div className={`flex-1 flex-col overflow-y-auto ${isDetailRoute ? "flex" : "hidden md:flex"}`}>{children}</div>
     </div>
   );
 }

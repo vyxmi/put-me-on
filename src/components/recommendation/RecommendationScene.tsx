@@ -13,7 +13,7 @@ export function RecommendationScene({ track, children }: { track: Track; childre
   const color = useSampledGlow(track.artworkUrl);
 
   return (
-    <div className="relative min-h-full overflow-hidden">
+    <div className="relative min-h-full flex-1 overflow-hidden">
       <Atmosphere seed={track.artSeed} color={color} intensity="hero" interactive />
       {/* z-0, not z-10 — just enough to paint above the absolutely-positioned
           Atmosphere sibling. A mobile sticky header living outside this tree
