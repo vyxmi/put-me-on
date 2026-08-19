@@ -55,7 +55,7 @@ export function ResponsePicker({
           const Icon = SECONDARY_ICONS[type];
           const active = current === type;
           const hovered = hoveredType === type;
-          const iconColor = active ? "text-text-primary" : hovered ? "text-accent-light" : "text-text-tertiary";
+          const iconColor = active ? "text-text-primary" : hovered ? "text-text-primary" : "text-text-tertiary";
           const labelColor = active ? "text-text-primary" : hovered ? "text-text-secondary" : "text-text-tertiary";
 
           return (
@@ -109,8 +109,8 @@ export function ResponsePicker({
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             style={{
               background: putMeOnActive
-                ? "linear-gradient(90deg, transparent, var(--spectral-violet), var(--accent-light), var(--spectral-pink), transparent)"
-                : "linear-gradient(90deg, transparent, var(--accent-light), transparent)",
+                ? "linear-gradient(90deg, transparent, var(--spectral-violet), var(--spectral-blue), var(--spectral-pink), transparent)"
+                : "linear-gradient(90deg, transparent, var(--white-glass-strong), transparent)",
             }}
           />
           <motion.span
@@ -119,7 +119,7 @@ export function ResponsePicker({
             animate={{ opacity: putMeOnActive ? 1 : 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             style={{
-              background: "radial-gradient(ellipse 55% 150% at 50% 50%, rgba(63,96,212,0.2), transparent 75%)",
+              background: "radial-gradient(ellipse 55% 150% at 50% 50%, rgba(124,92,255,0.18), transparent 75%)",
               filter: "blur(8px)",
             }}
           />
@@ -129,7 +129,7 @@ export function ResponsePicker({
               hovered={putMeOnHovered}
               active={putMeOnActive}
               justConnected={justSelected === "put_me_on"}
-              className={putMeOnActive || putMeOnHovered ? "text-accent-light" : "text-text-tertiary"}
+              className={putMeOnActive || putMeOnHovered ? "text-text-primary" : "text-text-tertiary"}
             />
             <span
               className={`text-[15px] font-semibold ${

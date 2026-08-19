@@ -131,7 +131,7 @@ export function PutMeOnIcon({
       />
       <circle cx="17.4" cy="7.6" r="1.5" fill="currentColor" />
       {justConnected ? (
-        <circle r="1.4" fill="var(--accent-light)" style={{ filter: "drop-shadow(0 0 3px var(--accent-light))" }}>
+        <circle r="1.4" fill="var(--white-glass-strong)" style={{ filter: "drop-shadow(0 0 3px var(--spectral-violet)) drop-shadow(0 0 4px var(--spectral-pink))" }}>
           <animateMotion dur="0.55s" path="M6.6 16.4C9 13 15 11 17.4 7.6" fill="freeze" />
           <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.8;1" dur="0.55s" fill="freeze" />
         </circle>

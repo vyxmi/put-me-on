@@ -26,7 +26,10 @@ export function GuestSavePrompt({ defaultName }: { defaultName?: string }) {
     return (
       <Glass>
         <div className="flex animate-rise-in items-center justify-center gap-2.5">
-          <span className="h-2 w-2 animate-pulse-dot rounded-full bg-accent" style={{ boxShadow: "0 0 8px 2px rgba(63,96,212,.6)" }} />
+          <span
+            className="h-2 w-2 animate-pulse-dot rounded-full bg-white-glass-strong"
+            style={{ boxShadow: "0 0 8px 2px var(--spectral-violet)" }}
+          />
           <p className="text-[14px] text-text-secondary">check {email}</p>
         </div>
       </Glass>
@@ -70,7 +73,7 @@ export function GuestSavePrompt({ defaultName }: { defaultName?: string }) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="your name"
-            className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[14px] text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none"
+            className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[14px] text-text-primary placeholder:text-text-tertiary focus:border-white-edge focus:outline-none"
           />
           <input
             type="email"
@@ -78,7 +81,7 @@ export function GuestSavePrompt({ defaultName }: { defaultName?: string }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="email address"
-            className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[14px] text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none"
+            className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[14px] text-text-primary placeholder:text-text-tertiary focus:border-white-edge focus:outline-none"
           />
           <button type="submit" className="btn-primary rounded-xs px-4 py-2.5 text-[13.5px] font-semibold">
             save

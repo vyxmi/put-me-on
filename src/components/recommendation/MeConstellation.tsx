@@ -39,13 +39,20 @@ function Beam({ node, hovered }: { node: Placed; hovered: boolean }) {
       <path
         d={`M ${node.x} ${node.y} Q ${node.cx} ${node.cy} 50 50`}
         fill="none"
-        stroke={hovered ? "var(--accent-light)" : "rgba(230, 232, 245, 0.4)"}
+        stroke={hovered ? "var(--white-glass-strong)" : "rgba(230, 232, 245, 0.4)"}
         strokeWidth={hovered ? 0.55 : 0.42}
         vectorEffect="non-scaling-stroke"
-        style={{ transition: "stroke 260ms var(--ease-out), stroke-width 260ms var(--ease-out)" }}
+        style={{
+          transition: "stroke 260ms var(--ease-out), stroke-width 260ms var(--ease-out)",
+          filter: hovered ? "drop-shadow(0 0 2px var(--spectral-violet))" : undefined,
+        }}
       />
       {hovered && !reduceMotion ? (
-        <motion.circle r="0.9" fill="var(--accent-light)" style={{ cx: dotX, cy: dotY, filter: "drop-shadow(0 0 3px var(--accent-light))" }} />
+        <motion.circle
+          r="0.9"
+          fill="var(--white-glass-strong)"
+          style={{ cx: dotX, cy: dotY, filter: "drop-shadow(0 0 3px var(--spectral-violet)) drop-shadow(0 0 4px var(--spectral-pink))" }}
+        />
       ) : null}
     </g>
   );
@@ -116,7 +123,11 @@ export function MeConstellation({
               className="block rounded-full"
               animate={{ scale: hovered ? 1.16 : 1 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              style={{ boxShadow: hovered ? "0 0 0 2px var(--accent-light), 0 0 20px 4px rgba(63,96,212,.5)" : "0 0 0 1px var(--border-strong)" }}
+              style={{
+                boxShadow: hovered
+                  ? "0 0 0 2px var(--white-glass-strong), 0 0 20px 4px rgba(124,92,255,0.4)"
+                  : "0 0 0 1px var(--border-strong)",
+              }}
             >
               <Artwork seed={node.entry.track.artSeed} imageUrl={node.entry.track.artworkUrl} size={56} radius={999} halo />
             </motion.span>

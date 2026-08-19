@@ -53,6 +53,7 @@ export function MagneticButton({
       ref={ref}
       onPointerMove={handleMove}
       onPointerLeave={handleLeave}
+      onPointerUp={handleLeave}
       style={{ x: springX, y: springY }}
       className={className}
     >

@@ -21,7 +21,7 @@ function NameNode({
       onMouseLeave={() => onHover(null)}
       onFocus={() => onHover(copy)}
       onBlur={() => onHover(null)}
-      className="rounded-xs text-[15px] text-text-primary transition-colors hover:text-accent"
+      className="text-link rounded-xs text-[15px] text-text-primary"
     >
       {label}
     </button>

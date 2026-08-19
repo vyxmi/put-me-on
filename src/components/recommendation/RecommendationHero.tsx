@@ -63,14 +63,14 @@ export function RecommendationHero({
         >
           {track.title}
         </h1>
-        <p className="mt-1 text-[15px] text-text-secondary sm:text-[17px]">{track.artist}</p>
-        {track.album ? <p className="mt-0.5 text-[13px] text-text-quaternary">{track.album}</p> : null}
+        <p className="mt-1 text-[15px] text-text-primary sm:text-[17px]">{track.artist}</p>
+        {track.album ? <p className="mt-0.5 text-[13px] text-text-tertiary">{track.album}</p> : null}
         {track.metadataStatus === "failed" ? (
           <p className="mt-1 font-mono text-[11px] text-text-tertiary">metadata couldn&apos;t be loaded</p>
         ) : null}
       </div>
       {note ? (
-        <p className="max-w-sm border-l-2 border-border-strong py-0.5 pl-4 text-left text-[15px] leading-relaxed text-text-secondary">
+        <p className="max-w-sm border-l-2 border-border-strong py-0.5 pl-4 text-left text-[15px] leading-relaxed text-text-primary">
           &ldquo;{note}&rdquo;
         </p>
       ) : null}

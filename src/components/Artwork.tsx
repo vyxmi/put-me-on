@@ -92,7 +92,7 @@ const NOISE_BG =
   "url(\"data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
 
 /** Purple/blue/violet family only — keeps generated art visually part of
- * the same world as the accent color, rather than a random rainbow. */
+ * the same spectral world as Atmosphere.tsx, rather than a random rainbow. */
 const HUES = [252, 265, 235, 275, 208, 292, 320];
 
 function hashSeed(seed: string): number {

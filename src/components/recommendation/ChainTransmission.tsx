@@ -24,9 +24,9 @@ export function ChainTransmission({ fromLabel, toLabel }: { fromLabel: string; t
     <div className="flex items-center gap-2 text-[13px]">
       <span className="text-text-tertiary">{fromLabel}</span>
       <svg width={44} height={14} viewBox="0 0 44 14" className="shrink-0 overflow-visible" aria-hidden="true">
-        <line x1="4" y1="7" x2="40" y2="7" stroke="var(--accent)" strokeWidth="1.4" strokeLinecap="round" />
-        <circle cx="4" cy="7" r="2" fill="var(--accent)" />
-        <circle cx="40" cy="7" r="2" fill="var(--accent)" />
+        <line x1="4" y1="7" x2="40" y2="7" stroke="var(--white-glass-strong)" strokeWidth="1.4" strokeLinecap="round" />
+        <circle cx="4" cy="7" r="2" fill="var(--white-glass-strong)" />
+        <circle cx="40" cy="7" r="2" fill="var(--white-glass-strong)" />
       </svg>
       <span className="font-semibold text-text-primary">you</span>
       <svg width={44} height={14} viewBox="0 0 44 14" className="shrink-0 overflow-visible" aria-hidden="true">
@@ -35,15 +35,19 @@ export function ChainTransmission({ fromLabel, toLabel }: { fromLabel: string; t
           y1="7"
           x2="40"
           y2="7"
-          stroke="var(--accent)"
+          stroke="var(--white-glass-strong)"
           strokeWidth="1.4"
           strokeLinecap="round"
           style={{ pathLength: reduceMotion ? 1 : progress }}
         />
-        <circle cx="4" cy="7" r="2" fill="var(--accent)" />
-        <circle cx="40" cy="7" r="2" fill="var(--accent)" />
+        <circle cx="4" cy="7" r="2" fill="var(--white-glass-strong)" />
+        <circle cx="40" cy="7" r="2" fill="var(--white-glass-strong)" />
         {!reduceMotion ? (
-          <motion.circle r="2" fill="var(--accent-light)" style={{ cx: dotX, cy: 7, filter: "drop-shadow(0 0 3px var(--accent-light))" }} />
+          <motion.circle
+            r="2"
+            fill="var(--white-glass-strong)"
+            style={{ cx: dotX, cy: 7, filter: "drop-shadow(0 0 4px var(--spectral-violet)) drop-shadow(0 0 5px var(--spectral-pink))" }}
+          />
         ) : null}
       </svg>
       <span className="text-text-tertiary">{toLabel}</span>

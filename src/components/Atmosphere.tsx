@@ -157,7 +157,7 @@ export function Atmosphere({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seed, color, interactive]);
 
-  const edgeMask = edgeFade ? "radial-gradient(ellipse 100% 100% at 50% 50%, black 58%, transparent 96%)" : undefined;
+  const edgeMask = edgeFade ? "radial-gradient(ellipse 100% 100% at 50% 50%, black 18%, transparent 62%)" : undefined;
 
   return (
     <div
@@ -201,8 +201,8 @@ export function Atmosphere({
               transform: "translate(-50%, -50%)",
               borderRadius: "50%",
               background: color
-                ? `radial-gradient(circle, ${rgba(color, b.opacity * (isHero ? 1.3 : 1))}, transparent 68%)`
-                : `radial-gradient(circle, ${hsl(b.hue, 78, 60, b.opacity * (isHero ? 1.3 : 1))}, transparent 68%)`,
+                ? `radial-gradient(circle, ${rgba(color, b.opacity * (isHero ? 0.95 : 1))}, transparent 68%)`
+                : `radial-gradient(circle, ${hsl(b.hue, 78, 60, b.opacity * (isHero ? 0.95 : 1))}, transparent 68%)`,
               filter: `blur(${isHero ? 40 : 26}px)`,
               mixBlendMode: "screen",
             }}
@@ -215,8 +215,8 @@ export function Atmosphere({
       <div
         className="absolute inset-0"
         style={{
-          background: "radial-gradient(circle at 50% 45%, transparent 0%, transparent 40%, var(--void) 92%)",
-          opacity: isHero ? 0.55 : 0.75,
+          background: "radial-gradient(circle at 50% 45%, transparent 0%, transparent 18%, var(--void) 90%)",
+          opacity: isHero ? 0.68 : 0.75,
         }}
       />
     </div>

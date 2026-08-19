@@ -150,7 +150,10 @@ export function Composer({ sourceId }: { sourceId?: string }) {
               halo
               className="animate-celebrate"
             />
-            <span className="absolute -bottom-2 -right-2 flex h-6 w-6 items-center justify-center rounded-xs bg-accent text-[13px] text-bg shadow-[0_0_20px_4px_rgba(63,96,212,.5)]">
+            <span
+              className="absolute -bottom-2 -right-2 flex h-6 w-6 items-center justify-center rounded-xs bg-white-glass-strong text-[13px] text-void"
+              style={{ boxShadow: "0 0 20px 4px rgba(124,92,255,0.4)" }}
+            >
               ✓
             </span>
           </span>
@@ -165,14 +168,14 @@ export function Composer({ sourceId }: { sourceId?: string }) {
         <div className="flex w-full flex-col items-center gap-2">
           <motion.div
             className="relative flex w-full items-center gap-2.5 overflow-hidden rounded-xs border px-4 py-2.5"
-            animate={{ borderColor: copied ? "var(--accent)" : "var(--border)" }}
+            animate={{ borderColor: copied ? "var(--white-edge)" : "var(--border)" }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           >
             <span className="min-w-0 flex-1 truncate text-left font-mono text-[12px] text-text-tertiary">{shareUrl}</span>
             <button
               type="button"
               onClick={handleCopy}
-              className="flex shrink-0 items-center gap-1.5 text-[12px] text-accent-light transition-colors hover:text-text-primary"
+              className="flex shrink-0 items-center gap-1.5 text-[12px] text-text-secondary transition-colors hover:text-text-primary"
             >
               <AnimatePresence mode="wait" initial={false}>
                 {copied ? (
@@ -198,7 +201,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
                 key={copyPulseKey}
                 aria-hidden="true"
                 className="pointer-events-none absolute top-1/2 left-4 h-[6px] w-[6px] rounded-full"
-                style={{ background: "var(--accent-light)", boxShadow: "0 0 8px 2px rgba(63,96,212,.7)" }}
+                style={{ background: "var(--white-glass-strong)", boxShadow: "0 0 8px 2px var(--spectral-violet)" }}
                 initial={{ x: 0, y: "-50%", opacity: 0 }}
                 animate={{ x: "calc(100% - 52px)", y: "-50%", opacity: [0, 1, 1, 0] }}
                 transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
@@ -273,7 +276,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
               disabled={resolving}
-              className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[15px] text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none disabled:opacity-50"
+              className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[15px] text-text-primary placeholder:text-text-tertiary focus:border-white-edge focus:outline-none disabled:opacity-50"
             />
             {urlError ? (
               <p className="text-[12px] text-warn">that doesn&apos;t look like a spotify link yet.</p>
@@ -281,7 +284,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
             <button
               type="submit"
               disabled={resolving}
-              className="text-link mt-1 self-start text-[13px] text-accent-light disabled:opacity-60"
+              className="text-link mt-1 self-start text-[13px] text-text-primary disabled:opacity-60"
             >
               {resolving ? "looking it up…" : "continue"}
             </button>
@@ -312,7 +315,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
                   value={recipientQuery}
                   onChange={(e) => setRecipientQuery(e.target.value)}
                   placeholder="search a name or type someone new…"
-                  className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[15px] text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none"
+                  className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[15px] text-text-primary placeholder:text-text-tertiary focus:border-white-edge focus:outline-none"
                 />
                 <div className="flex flex-wrap gap-2">
                   {chips.map((p) => (
@@ -323,7 +326,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
                         setRecipient({ type: "registered", personId: p.id });
                         setRecipientQuery(p.displayName);
                       }}
-                      className="rounded-xs border border-border px-3.5 py-2 text-[13px] text-text-secondary transition-all duration-200 hover:-translate-y-px hover:border-accent hover:bg-accent/8 hover:text-accent-light hover:shadow-[0_8px_20px_-12px_rgba(63,96,212,0.5)]"
+                      className="rounded-xs border border-border px-3.5 py-2 text-[13px] text-text-secondary transition-all duration-200 hover:-translate-y-px hover:border-white-edge hover:bg-white-wash hover:text-text-primary hover:shadow-[0_8px_20px_-12px_rgba(124,92,255,0.35)]"
                     >
                       {p.displayName}
                     </button>
@@ -332,7 +335,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
                     <button
                       type="button"
                       onClick={() => setRecipient({ type: "guest", name: recipientQuery.trim() })}
-                      className="rounded-xs border border-dashed border-accent-dim px-3.5 py-2 text-[13px] text-accent-light transition-all duration-200 hover:-translate-y-px hover:border-accent hover:bg-accent/10 hover:shadow-[0_8px_20px_-12px_rgba(63,96,212,0.5)]"
+                      className="rounded-xs border border-dashed border-white-edge px-3.5 py-2 text-[13px] text-text-primary transition-all duration-200 hover:-translate-y-px hover:border-white-edge hover:bg-white-wash hover:shadow-[0_8px_20px_-12px_rgba(255,95,168,0.3)]"
                     >
                       add &ldquo;{recipientQuery.trim()}&rdquo; as someone new
                     </button>
@@ -354,7 +357,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
               onChange={(e) => setNote(e.target.value.slice(0, 140))}
               rows={2}
               placeholder="the part you want them to hear…"
-              className="w-full resize-none border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[14.5px] text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none"
+              className="w-full resize-none border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[14.5px] text-text-primary placeholder:text-text-tertiary focus:border-white-edge focus:outline-none"
             />
           </div>
         ) : null}

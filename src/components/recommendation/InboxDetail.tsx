@@ -34,7 +34,7 @@ export function InboxDetail({ id }: { id: string }) {
   return (
     <RecommendationScene track={track}>
       <div className="mx-auto flex w-full max-w-lg flex-col items-center gap-9 px-5 py-12 sm:px-6 sm:py-16 animate-fade-slide">
-        <p className="text-center text-[15px] text-text-secondary">
+        <p className="text-center text-[15px] text-text-primary/90">
           <span className="text-text-primary">{sender.displayName}</span> wants to put you on to
         </p>
 
@@ -54,7 +54,7 @@ export function InboxDetail({ id }: { id: string }) {
         />
 
         <div className="flex w-full flex-col items-center gap-3">
-          <p className="text-[14px] text-text-secondary">what did you think?</p>
+          <p className="text-[14px] text-text-primary/90">what did you think?</p>
           <div className="w-full max-w-sm">
             <ResponsePicker current={response?.type} onSelect={handleSelect} />
           </div>
@@ -64,9 +64,10 @@ export function InboxDetail({ id }: { id: string }) {
           href={`/new?source=${recommendation.id}`}
           onMouseEnter={() => setPassOnHovered(true)}
           onMouseLeave={() => setPassOnHovered(false)}
-          className="group flex items-center gap-3 rounded-xs border border-transparent px-5 py-2.5 transition-colors duration-300 hover:border-border-strong"
+          onTouchStart={() => setPassOnHovered(true)}
+          className="group flex items-center gap-3 rounded-xs border border-transparent px-5 py-2.5 transition-colors duration-300 hover:border-border-strong active:border-border-strong"
         >
-          <ChainMark size={44} className="text-text-tertiary transition-colors duration-300 group-hover:text-accent-light" secondSegmentDrawn={passOnHovered} />
+          <ChainMark size={44} className="text-text-tertiary transition-colors duration-300 group-hover:text-text-primary" secondSegmentDrawn={passOnHovered} />
           <span className="flex flex-col items-start">
             <span className="text-[14px] font-medium text-text-secondary transition-colors duration-300 group-hover:text-text-primary">
               pass it on

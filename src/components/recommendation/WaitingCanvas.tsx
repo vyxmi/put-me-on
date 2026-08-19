@@ -17,7 +17,7 @@ export function WaitingCanvas({ items }: { items: EnrichedRecommendation[] }) {
 
   return (
     <div className="relative">
-      <Atmosphere seed="inbox-waiting-field" intensity="ambient" interactive={false} className="opacity-90" />
+      <Atmosphere seed="inbox-waiting-field" intensity="ambient" interactive={false} className="opacity-70" />
       <div className="relative flex flex-wrap gap-x-4 gap-y-6 px-1 py-6">
         {items.map((item, idx) => {
           const hovered = hoveredId === item.recommendation.id;
@@ -37,8 +37,8 @@ export function WaitingCanvas({ items }: { items: EnrichedRecommendation[] }) {
                 <span data-flip-art className="relative block transition-transform duration-300 ease-out hover:scale-[1.08]">
                   <Artwork seed={item.track.artSeed} imageUrl={item.track.artworkUrl} size={68} radius={2} halo animated />
                   <span
-                    className="animate-pulse-dot absolute right-1 top-1 block h-[6px] w-[6px] rounded-full bg-accent"
-                    style={{ boxShadow: "0 0 7px 2px rgba(63,96,212,.6)" }}
+                    className="animate-pulse-dot absolute right-1 top-1 block h-[6px] w-[6px] rounded-full bg-white-glass-strong"
+                    style={{ boxShadow: "0 0 7px 2px var(--spectral-violet)" }}
                   />
                 </span>
                 <span className="max-w-full truncate text-[13px] font-semibold text-text-primary">{item.sender.displayName}</span>

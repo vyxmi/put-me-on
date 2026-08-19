@@ -40,8 +40,8 @@ export default function InboxLayout({ children }: { children: React.ReactNode })
               <div>
                 <div className="flex items-center gap-2 px-4 pb-2 pt-4 md:px-6">
                   <span
-                    className="block h-[6px] w-[6px] shrink-0 rounded-full bg-accent"
-                    style={{ boxShadow: "0 0 8px 2px rgba(63,96,212,.7)" }}
+                    className="block h-[6px] w-[6px] shrink-0 rounded-full bg-white-glass-strong"
+                    style={{ boxShadow: "0 0 8px 2px var(--spectral-violet)" }}
                   />
                   <span className="font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary">
                     {waiting.length} waiting

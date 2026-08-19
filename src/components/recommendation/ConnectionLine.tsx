@@ -87,26 +87,29 @@ export function ConnectionLine({ fromLabel, toLabel, connected, justConnected, e
         <motion.path
           d={pathD}
           fill="none"
-          stroke={connected ? "var(--accent)" : "var(--border-strong)"}
+          stroke={connected ? "var(--white-glass-strong)" : "var(--border-strong)"}
           strokeWidth={connected ? 1.6 : 1}
           strokeLinecap="round"
-          style={{ transition: "stroke var(--duration-base) linear, stroke-width var(--duration-base) linear" }}
+          style={{
+            transition: "stroke var(--duration-base) linear, stroke-width var(--duration-base) linear",
+            filter: connected ? "drop-shadow(0 0 3px rgba(124,92,255,0.5)) drop-shadow(0 0 3px rgba(255,95,168,0.35))" : undefined,
+          }}
         />
-        <circle cx={FROM_X} cy={MID_Y} r="2" fill={connected ? "var(--accent)" : "var(--border-strong)"} style={{ transition: "fill var(--duration-base) linear" }} />
+        <circle cx={FROM_X} cy={MID_Y} r="2" fill={connected ? "var(--white-glass-strong)" : "var(--border-strong)"} style={{ transition: "fill var(--duration-base) linear" }} />
         <circle
           cx={TO_X}
           cy={MID_Y}
           r="2"
-          fill={connected ? "var(--accent)" : "var(--bg)"}
-          stroke={connected ? "var(--accent)" : "var(--border-strong)"}
+          fill={connected ? "var(--white-glass-strong)" : "var(--bg)"}
+          stroke={connected ? "var(--white-glass-strong)" : "var(--border-strong)"}
           strokeWidth="1"
           style={{ transition: "fill var(--duration-base) linear, stroke var(--duration-base) linear" }}
         />
         {justConnected && !reduceMotion ? (
           <motion.circle
             r="2"
-            fill="var(--accent-light)"
-            style={{ cx: dotX, cy: dotY, filter: "drop-shadow(0 0 3px var(--accent-light))" }}
+            fill="var(--white-glass-strong)"
+            style={{ cx: dotX, cy: dotY, filter: "drop-shadow(0 0 4px var(--spectral-violet)) drop-shadow(0 0 5px var(--spectral-pink))" }}
           />
         ) : null}
       </svg>

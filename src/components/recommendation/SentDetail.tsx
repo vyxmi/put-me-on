@@ -26,7 +26,7 @@ export function SentDetail({ id }: { id: string }) {
   return (
     <RecommendationScene track={track}>
       <div className="mx-auto flex w-full max-w-lg flex-col items-center gap-9 px-5 py-12 sm:px-6 sm:py-16 animate-fade-slide">
-      <p className="text-center text-[15px] text-text-secondary">
+      <p className="text-center text-[15px] text-text-primary/90">
         you sent <span className="text-text-primary">{recipientLabel}</span>
       </p>
 

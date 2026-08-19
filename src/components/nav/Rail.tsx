@@ -37,7 +37,7 @@ export function Rail() {
                   <span
                     className="absolute inset-0 rounded-xs"
                     style={{
-                      background: "radial-gradient(circle at 50% 40%, rgba(63,96,212,0.22), transparent 70%)",
+                      background: "radial-gradient(circle at 50% 40%, var(--white-glow), transparent 70%)",
                     }}
                   />
                 ) : null}
@@ -45,12 +45,12 @@ export function Rail() {
                   size={21}
                   active={active}
                   className={`relative transition-colors duration-200 ${
-                    active ? "text-accent-light" : "text-text-tertiary group-hover:text-text-primary"
+                    active ? "text-text-primary" : "text-text-tertiary group-hover:text-text-primary"
                   }`}
                 />
                 <span
                   className={`relative font-detail text-[9.5px] font-bold uppercase tracking-wider transition-colors duration-200 ${
-                    active ? "text-accent-light" : "text-text-quaternary group-hover:text-text-secondary"
+                    active ? "text-text-primary" : "text-text-quaternary group-hover:text-text-secondary"
                   }`}
                 >
                   {item.label}

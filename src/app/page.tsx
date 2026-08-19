@@ -34,7 +34,16 @@ export default function LandingPage() {
           <h1 className="text-[40px] font-bold leading-[1.05] tracking-tight text-text-primary sm:text-[60px]">
             spotify knows what you listen to.
             <br />
-            <span className="text-accent-light">put me on remembers who put you on.</span>
+            <span
+              style={{
+                backgroundImage: "linear-gradient(90deg, var(--spectral-violet), var(--spectral-blue) 45%, var(--spectral-pink) 85%)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
+              }}
+            >
+              put me on remembers who put you on.
+            </span>
           </h1>
           <p className="max-w-md text-[16px] leading-relaxed text-text-secondary">
             no feed, no playlist, no algorithm choosing for you. someone sends you one song, on purpose. you tell them

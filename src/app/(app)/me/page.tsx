@@ -28,12 +28,15 @@ function Section({ title, count, children }: { title: string; count?: number; ch
 function BranchList({ people }: { people: Person[] }) {
   return (
     <div className="flex flex-col">
-      <span className="text-[15px] font-medium text-text-primary">you</span>
-      <div className="ml-[7px] flex flex-col border-l border-border-strong">
+      <div className="flex items-center gap-2.5">
+        <span className="block h-[7px] w-[7px] rounded-full bg-white-glass-strong" style={{ boxShadow: "0 0 6px 1px var(--spectral-violet)" }} />
+        <span className="text-[16px] font-semibold text-text-primary">you</span>
+      </div>
+      <div className="ml-[3px] flex flex-col border-l border-border-strong">
         {people.map((p) => (
-          <div key={p.id} className="relative flex items-center gap-2.5 py-1.5 pl-5">
-            <span className="absolute left-0 top-1/2 h-px w-4 bg-border-strong" aria-hidden="true" />
-            <span className="text-[15px] text-text-secondary">{p.displayName}</span>
+          <div key={p.id} className="group relative flex items-center gap-2.5 py-2 pl-6">
+            <span className="absolute left-0 top-1/2 h-px w-5 bg-border-strong transition-colors duration-300 group-hover:bg-white-edge" aria-hidden="true" />
+            <span className="text-[15px] text-text-secondary transition-colors duration-300 group-hover:text-text-primary">{p.displayName}</span>
           </div>
         ))}
       </div>
@@ -88,13 +91,9 @@ export default function MePage() {
                       href={`/inbox/${item.recommendation.id}`}
                       className="group flex items-center gap-4"
                     >
-                      <Artwork
-                        seed={item.track.artSeed}
-                        imageUrl={item.track.artworkUrl}
-                        size={48}
-                        radius={3}
-                        className="transition-transform duration-200 ease-out group-hover:scale-[1.04]"
-                      />
+                      <span className="block rounded-[3px] transition-all duration-300 ease-out group-hover:scale-[1.04] group-hover:shadow-[0_0_16px_-2px_var(--spectral-violet)]">
+                        <Artwork seed={item.track.artSeed} imageUrl={item.track.artworkUrl} size={48} radius={3} />
+                      </span>
                       <div className="min-w-0">
                         <p className="truncate text-[16px] text-text-primary">{item.track.title}</p>
                         <p className="truncate text-[14px] text-text-secondary">from {item.sender.displayName}</p>
@@ -120,14 +119,17 @@ export default function MePage() {
 
           <ScrollReveal className="hairline pt-10">
             <Section title="account">
-              <div className="flex flex-col gap-4">
+              <div
+                className="flex flex-col gap-4 rounded-sm border px-5 py-5"
+                style={{ background: "var(--glass)", borderColor: "var(--border-strong)" }}
+              >
                 <div className="flex flex-col gap-1">
                   <span className="font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary">display name</span>
-                  <span className="text-[15px] text-text-primary">{user.displayName}</span>
+                  <span className="text-[16px] text-text-primary">{user.displayName}</span>
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary">handle</span>
-                  <span className="text-[15px] text-text-primary">@{user.handle}</span>
+                  <span className="text-[16px] text-text-primary">@{user.handle}</span>
                 </div>
                 <p className="text-[13px] text-text-tertiary">account and session settings will live here.</p>
               </div>

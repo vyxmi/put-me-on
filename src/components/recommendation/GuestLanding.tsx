@@ -69,7 +69,7 @@ export function GuestLanding({ id }: { id: string }) {
     <RecommendationScene track={track}>
       <div className="relative flex min-h-dvh flex-col items-center justify-center px-5 py-16 sm:px-6">
         <div className="relative z-10 flex w-full max-w-md flex-col items-center gap-9">
-          <p className="text-center text-[15px] text-text-secondary">
+          <p className="text-center text-[15px] text-text-primary/90">
             <span className="text-text-primary">{sender.displayName}</span> wants to put{" "}
             <span className="text-text-primary">{recipientLabel}</span> on to
           </p>
@@ -90,7 +90,7 @@ export function GuestLanding({ id }: { id: string }) {
           />
 
           <div className="flex w-full flex-col items-center gap-4">
-            <p className="text-[14px] text-text-secondary">what did you think?</p>
+            <p className="text-[14px] text-text-primary/90">what did you think?</p>
             <div className="w-full max-w-sm">
               <ResponsePicker current={response?.type} onSelect={handleSelect} />
             </div>
