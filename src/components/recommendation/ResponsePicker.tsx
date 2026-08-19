@@ -1,33 +1,27 @@
 "use client";
 
-import { useState, type ComponentType } from "react";
+import { useState } from "react";
 import { motion } from "motion/react";
-import { AlreadyKnewIcon, NotForMeIcon, LikedItIcon, PutMeOnIcon } from "@/components/icons/ResponseIcons";
+import { PutMeOnIcon } from "@/components/icons/ResponseIcons";
 import { MagneticButton } from "@/components/MagneticButton";
 import { RESPONSE_LABEL, type ResponseType } from "@/lib/data/types";
 
-interface IconRenderProps {
-  size?: number;
-  className?: string;
-  hovered?: boolean;
-  active?: boolean;
-  justConnected?: boolean;
-}
-
 const SECONDARY_TYPES: ResponseType[] = ["already_knew", "not_for_me", "liked_it"];
 
-const SECONDARY_ICONS: Record<string, ComponentType<IconRenderProps>> = {
-  already_knew: AlreadyKnewIcon,
-  not_for_me: NotForMeIcon,
-  liked_it: LikedItIcon,
+/** A one-shot micro-motion per reaction, played on selection — not an icon,
+ * just a small physical response so each choice still feels distinct
+ * without needing a pictogram to carry that. */
+const MICRO_MOTION: Record<string, { scale?: number[]; x?: number[]; filter?: string[] }> = {
+  already_knew: { scale: [1, 1.07, 1] },
+  not_for_me: { x: [0, -5, 0] },
+  liked_it: { scale: [1, 1.09, 1], filter: ["brightness(1)", "brightness(1.35)", "brightness(1)"] },
 };
 
-/** The three quiet reactions and the one that matters read as visually
- * distinct tiers rather than four equal slots: "already knew it" / "not for
- * me" / "liked it" sit together as a plain, tightly-grouped row — reactions
- * you note in passing — while `put me on` stands alone as a wide bar below,
- * since it's the response that actually forges the sender→recipient
- * connection (see ConnectionLine above this in InboxDetail). */
+/** Text-first: the three quiet reactions are just words with a generous
+ * invisible tap area and a small type-specific flourish on selection — no
+ * icons, no button chrome. `put me on` stands apart, but its specialness
+ * now lives entirely in the sender→recipient connection it reveals above,
+ * not in a box or a decorative divider on the control itself. */
 export function ResponsePicker({
   current,
   onSelect,
@@ -41,7 +35,7 @@ export function ResponsePicker({
   function handleClick(type: ResponseType) {
     onSelect(type);
     setJustSelected(type);
-    const settle = type === "put_me_on" ? 650 : 260;
+    const settle = type === "put_me_on" ? 650 : 420;
     window.setTimeout(() => setJustSelected((prev) => (prev === type ? null : prev)), settle);
   }
 
@@ -49,15 +43,11 @@ export function ResponsePicker({
   const putMeOnHovered = hoveredType === "put_me_on";
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-center gap-8">
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
         {SECONDARY_TYPES.map((type) => {
-          const Icon = SECONDARY_ICONS[type];
           const active = current === type;
           const hovered = hoveredType === type;
-          const iconColor = active ? "text-text-primary" : hovered ? "text-text-primary" : "text-text-tertiary";
-          const labelColor = active ? "text-text-primary" : hovered ? "text-text-secondary" : "text-text-tertiary";
-
           return (
             <motion.button
               key={type}
@@ -68,24 +58,27 @@ export function ResponsePicker({
               onFocus={() => setHoveredType(type)}
               onBlur={() => setHoveredType((h) => (h === type ? null : h))}
               aria-pressed={active}
-              whileTap={{ scale: 0.92 }}
-              animate={justSelected === type ? { scale: [0.92, 1.04, 1] } : { scale: 1 }}
-              transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-col items-center gap-2"
+              animate={justSelected === type ? MICRO_MOTION[type] : { scale: 1, x: 0 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="rounded-xs px-4 py-3.5 text-[17px]"
             >
-              <Icon size={30} hovered={hovered} active={active} className={iconColor} />
-              <span className={`text-[14px] font-medium leading-tight ${labelColor}`}>{RESPONSE_LABEL[type]}</span>
+              <span
+                className={
+                  active
+                    ? "font-medium text-text-primary"
+                    : hovered
+                      ? "text-text-secondary"
+                      : "text-text-tertiary"
+                }
+              >
+                {RESPONSE_LABEL[type]}
+              </span>
             </motion.button>
           );
         })}
       </div>
 
-      {/* No box by default — text + the connection glyph. Hover grows a line
-          behind the content, borrowed from the same connecting-line motif
-          above this in InboxDetail; selecting it is the actual visual
-          event (a chromatic line, a soft bloom), not a permanently blue
-          button. */}
-      <MagneticButton strength={0.15} range={70}>
+      <MagneticButton strength={0.12} range={60}>
         <motion.button
           type="button"
           onClick={() => handleClick("put_me_on")}
@@ -94,50 +87,24 @@ export function ResponsePicker({
           onFocus={() => setHoveredType("put_me_on")}
           onBlur={() => setHoveredType((h) => (h === "put_me_on" ? null : h))}
           aria-pressed={putMeOnActive}
-          whileTap={{ scale: 0.97 }}
-          animate={justSelected === "put_me_on" ? { scale: [0.97, 1.02, 1] } : { scale: 1 }}
-          transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-          className="relative flex w-full items-center justify-center gap-3 rounded-xs py-4"
+          whileTap={{ scale: 0.96 }}
+          animate={justSelected === "put_me_on" ? { scale: [0.96, 1.03, 1] } : { scale: 1 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className="flex w-full items-center justify-center gap-3 rounded-xs py-3.5"
         >
-          <motion.span
-            aria-hidden="true"
-            className="absolute left-1/2 top-1/2 h-px -translate-x-1/2 -translate-y-1/2"
-            animate={{
-              width: putMeOnActive ? "86%" : putMeOnHovered ? "54%" : "0%",
-              opacity: putMeOnActive ? 0.95 : putMeOnHovered ? 0.6 : 0,
-            }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              background: putMeOnActive
-                ? "linear-gradient(90deg, transparent, var(--spectral-violet), var(--spectral-blue), var(--spectral-pink), transparent)"
-                : "linear-gradient(90deg, transparent, var(--white-glass-strong), transparent)",
-            }}
+          <PutMeOnIcon
+            size={putMeOnActive ? 32 : 28}
+            hovered={putMeOnHovered}
+            active={putMeOnActive}
+            justConnected={justSelected === "put_me_on"}
+            className={putMeOnActive || putMeOnHovered ? "text-text-primary" : "text-text-tertiary"}
           />
-          <motion.span
-            aria-hidden="true"
-            className="absolute inset-0 rounded-full"
-            animate={{ opacity: putMeOnActive ? 1 : 0 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              background: "radial-gradient(ellipse 55% 150% at 50% 50%, rgba(124,92,255,0.18), transparent 75%)",
-              filter: "blur(8px)",
-            }}
-          />
-          <span className="relative flex items-center gap-3">
-            <PutMeOnIcon
-              size={putMeOnActive ? 34 : 30}
-              hovered={putMeOnHovered}
-              active={putMeOnActive}
-              justConnected={justSelected === "put_me_on"}
-              className={putMeOnActive || putMeOnHovered ? "text-text-primary" : "text-text-tertiary"}
-            />
-            <span
-              className={`text-[15px] font-semibold ${
-                putMeOnActive || putMeOnHovered ? "text-text-primary" : "text-text-secondary"
-              }`}
-            >
-              put me on
-            </span>
+          <span
+            className={`text-[17px] ${
+              putMeOnActive ? "font-semibold text-text-primary" : putMeOnHovered ? "font-medium text-text-primary" : "text-text-secondary"
+            }`}
+          >
+            put me on
           </span>
         </motion.button>
       </MagneticButton>

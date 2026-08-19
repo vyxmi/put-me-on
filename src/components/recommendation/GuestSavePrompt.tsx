@@ -1,18 +1,24 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "motion/react";
 import { track as trackAnalytics } from "@/lib/analytics";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function Glass({ children }: { children: React.ReactNode }) {
+/** Lightweight and secondary on purpose — this rides on top of the same
+ * album-derived scene everything else here does, not a form card sitting
+ * on top of it. Fades/slides in once the response has settled. */
+function Reveal({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      className="w-full max-w-xs rounded-sm border px-5 py-5 backdrop-blur-md"
-      style={{ background: "var(--glass)", borderColor: "var(--border-strong)" }}
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className="flex w-full max-w-xs flex-col items-center gap-3"
     >
       {children}
-    </div>
+    </motion.div>
   );
 }
 
@@ -24,30 +30,30 @@ export function GuestSavePrompt({ defaultName }: { defaultName?: string }) {
 
   if (stage === "checking") {
     return (
-      <Glass>
-        <div className="flex animate-rise-in items-center justify-center gap-2.5">
+      <Reveal>
+        <div className="flex items-center gap-2.5">
           <span
-            className="h-2 w-2 animate-pulse-dot rounded-full bg-white-glass-strong"
+            className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-white-glass-strong"
             style={{ boxShadow: "0 0 8px 2px var(--spectral-violet)" }}
           />
-          <p className="text-[14px] text-text-secondary">check {email}</p>
+          <p className="text-[13px] text-text-tertiary">checking {email}</p>
         </div>
-      </Glass>
+      </Reveal>
     );
   }
 
   if (stage === "saved") {
     return (
-      <Glass>
-        <p className="animate-rise-in text-center text-[14px] text-text-secondary">
+      <Reveal>
+        <p className="text-center text-[13px] text-text-tertiary">
           you&apos;re all set, {name || "friend"} — that link confirms it&apos;s you.
         </p>
-      </Glass>
+      </Reveal>
     );
   }
 
   return (
-    <Glass>
+    <Reveal>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -60,35 +66,35 @@ export function GuestSavePrompt({ defaultName }: { defaultName?: string }) {
           setStage("checking");
           window.setTimeout(() => setStage("saved"), 2200);
         }}
-        className="flex flex-col items-center gap-3 animate-rise-in"
+        className="flex w-full flex-col items-center gap-3"
       >
-        <p className="text-[15px] font-semibold text-text-primary">saved :-)</p>
-        <p className="max-w-xs text-center text-[13px] text-text-secondary">
-          save this + the music people send you?
-        </p>
-        <div className="flex w-full flex-col gap-3">
+        <p className="text-center text-[12.5px] text-text-tertiary">save this + the music people send you?</p>
+        <div className="flex w-full items-end gap-2">
           <input
             type="text"
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="your name"
-            className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[14px] text-text-primary placeholder:text-text-tertiary focus:border-white-edge focus:outline-none"
+            placeholder="name"
+            className="w-[40%] min-w-0 border-0 border-b border-border bg-transparent px-0.5 py-1.5 text-[13px] text-text-primary placeholder:text-text-quaternary focus:border-white-edge focus:outline-none"
           />
           <input
             type="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="email address"
-            className="w-full border-0 border-b border-border bg-transparent px-0.5 py-2.5 text-[14px] text-text-primary placeholder:text-text-tertiary focus:border-white-edge focus:outline-none"
+            placeholder="email"
+            className="min-w-0 flex-1 border-0 border-b border-border bg-transparent px-0.5 py-1.5 text-[13px] text-text-primary placeholder:text-text-quaternary focus:border-white-edge focus:outline-none"
           />
-          <button type="submit" className="btn-primary rounded-xs px-4 py-2.5 text-[13.5px] font-semibold">
+          <button
+            type="submit"
+            className="shrink-0 rounded-xs px-2.5 py-1.5 text-[12px] font-medium text-text-secondary transition-colors hover:text-text-primary"
+          >
             save
           </button>
         </div>
-        {error ? <p className="text-[12px] text-text-tertiary">a name and a real-looking email, please</p> : null}
+        {error ? <p className="text-[11px] text-text-quaternary">a name and a real-looking email, please</p> : null}
       </form>
-    </Glass>
+    </Reveal>
   );
 }

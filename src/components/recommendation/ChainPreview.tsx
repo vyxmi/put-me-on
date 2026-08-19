@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Artwork } from "@/components/Artwork";
 import { ChainMark } from "@/components/icons/ConnectionMark";
 import type { ChainLink } from "@/lib/data/store";
@@ -21,6 +22,7 @@ function NameNode({
       onMouseLeave={() => onHover(null)}
       onFocus={() => onHover(copy)}
       onBlur={() => onHover(null)}
+      onTouchStart={() => onHover(copy)}
       className="text-link rounded-xs text-[15px] text-text-primary"
     >
       {label}
@@ -38,7 +40,10 @@ export function ChainPreview({ chain }: { chain: ChainLink }) {
   }, []);
 
   return (
-    <div className="flex flex-col items-center gap-3 rounded-xs border border-border px-4 py-6 sm:px-5">
+    <div
+      className="flex flex-col items-center gap-3 rounded-sm border px-4 py-6 sm:px-5"
+      style={{ background: "var(--glass)", borderColor: "var(--border-strong)" }}
+    >
       <ChainMark size={140} className="text-text-tertiary" secondSegmentDrawn={drawn} />
       <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
         <NameNode label={chain.fromPerson.displayName} copy={`sent ${chain.track.title} to you`} onHover={setHoverCopy} />
@@ -51,13 +56,16 @@ export function ChainPreview({ chain }: { chain: ChainLink }) {
         </span>
         <NameNode label={chain.toLabel} copy={`you passed it to ${chain.toLabel}`} onHover={setHoverCopy} />
       </div>
-      <p className="h-4 text-[13px] text-text-secondary">{hoverCopy ?? " "}</p>
-      <div className="flex max-w-full items-center gap-2 px-2">
+      <p className="h-4 text-[13px] text-text-secondary">{hoverCopy ?? " "}</p>
+      <Link
+        href={`/sent/${chain.forwardedRecommendationId}`}
+        className="group flex max-w-full items-center gap-2 rounded-xs px-2 py-1 transition-colors duration-200 hover:bg-white-wash"
+      >
         <Artwork seed={chain.track.artSeed} imageUrl={chain.track.artworkUrl} size={28} radius={2} />
-        <p className="min-w-0 truncate text-[13px] text-text-tertiary">
+        <p className="min-w-0 truncate text-[13px] text-text-tertiary transition-colors duration-200 group-hover:text-text-primary">
           {chain.track.title} · {chain.track.artist}
         </p>
-      </div>
+      </Link>
     </div>
   );
 }

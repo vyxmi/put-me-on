@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { AnimatePresence, motion } from "motion/react";
 import { useRecommendation, useResponseActions } from "@/lib/data/store";
 import { RecommendationHero } from "./RecommendationHero";
 import { RecommendationScene } from "./RecommendationScene";
@@ -45,13 +46,20 @@ export function InboxDetail({ id }: { id: string }) {
           celebrate={justConnected}
         />
 
-        <ConnectionLine
-          fromLabel={sender.displayName}
-          toLabel="you"
-          connected={response?.type === "put_me_on"}
-          justConnected={justConnected}
-          emphasize="from"
-        />
+        {/* Held back until put me on lands — the top copy already says who
+            sent this to whom, so showing the connection quiet/unmade first
+            would just repeat that. This is the payoff instead. */}
+        <AnimatePresence>
+          {response?.type === "put_me_on" ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92, y: -4 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <ConnectionLine fromLabel={sender.displayName} toLabel="you" connected justConnected={justConnected} emphasize="from" />
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
 
         <div className="flex w-full flex-col items-center gap-3">
           <p className="text-[14px] text-text-primary/90">what did you think?</p>

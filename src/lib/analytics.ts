@@ -24,7 +24,8 @@ export type AnalyticsEvent =
   | "sent_viewed"
   | "me_viewed"
   | "guest_save_prompt_shown"
-  | "guest_email_submitted";
+  | "guest_email_submitted"
+  | "profile_updated";
 
 export function track(event: AnalyticsEvent, properties: Record<string, string | number | boolean | undefined> = {}) {
   if (process.env.NODE_ENV !== "production") {

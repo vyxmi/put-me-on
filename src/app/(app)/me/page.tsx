@@ -4,6 +4,7 @@ import { useEffect, type ReactNode } from "react";
 import Link from "next/link";
 import { Artwork } from "@/components/Artwork";
 import { Atmosphere } from "@/components/Atmosphere";
+import { AccountSettings } from "@/components/AccountSettings";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { ChainPreview } from "@/components/recommendation/ChainPreview";
 import { MeConstellation } from "@/components/recommendation/MeConstellation";
@@ -120,20 +121,7 @@ export default function MePage() {
 
           <ScrollReveal className="hairline pt-10">
             <Section title="account">
-              <div
-                className="flex flex-col gap-4 rounded-sm border px-5 py-5"
-                style={{ background: "var(--glass)", borderColor: "var(--border-strong)" }}
-              >
-                <div className="flex flex-col gap-1">
-                  <span className="font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary">display name</span>
-                  <span className="text-[16px] text-text-primary">{user.displayName}</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary">handle</span>
-                  <span className="text-[16px] text-text-primary">@{user.handle}</span>
-                </div>
-                <p className="text-[13px] text-text-tertiary">account and session settings will live here.</p>
-              </div>
+              <AccountSettings />
             </Section>
           </ScrollReveal>
         </div>

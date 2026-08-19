@@ -35,6 +35,7 @@ This taxonomy is a contract — exact event names should match what's implemente
 - `guest_save_prompt_shown`
 - `guest_email_submitted`
 - `guest_upgraded_to_account`
+- `profile_updated`
 
 ### Important properties (where appropriate)
 

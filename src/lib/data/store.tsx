@@ -26,7 +26,8 @@ type Action =
   | { type: "CREATE_RECOMMENDATION"; recommendation: Recommendation }
   | { type: "ADD_TRACK"; track: Track }
   | { type: "UPSERT_RESPONSE"; recommendationId: string; responseType: ResponseType; isGuestResponse: boolean }
-  | { type: "DELETE_RECOMMENDATION"; id: string };
+  | { type: "DELETE_RECOMMENDATION"; id: string }
+  | { type: "UPDATE_PROFILE"; personId: string; updates: Partial<Pick<Person, "displayName" | "handle">> };
 
 function reducer(state: DataState, action: Action): DataState {
   switch (action.type) {
@@ -61,6 +62,11 @@ function reducer(state: DataState, action: Action): DataState {
         recommendations: state.recommendations.map((r) =>
           r.id === action.id ? { ...r, deletedAt: new Date().toISOString() } : r
         ),
+      };
+    case "UPDATE_PROFILE":
+      return {
+        ...state,
+        people: state.people.map((p) => (p.id === action.personId ? { ...p, ...action.updates } : p)),
       };
     default:
       return state;
@@ -112,6 +118,7 @@ interface DataContextValue {
   }) => Recommendation;
   deleteRecommendation: (id: string) => void;
   resolveTrack: (url: string) => Promise<{ track: Track; ok: boolean } | { error: "invalid_url" }>;
+  updateProfile: (updates: { displayName?: string; handle?: string }) => { ok: true } | { ok: false; error: string };
 }
 
 const DataContext = createContext<DataContextValue | null>(null);
@@ -193,7 +200,32 @@ export function DataProvider({ children }: { children: ReactNode }) {
       return { track: newTrack, ok: Boolean(meta) };
     };
 
-    return { state, submitResponse, createRecommendation, deleteRecommendation, resolveTrack };
+    const updateProfile: DataContextValue["updateProfile"] = (updates) => {
+      const next: { displayName?: string; handle?: string } = {};
+
+      if (updates.displayName !== undefined) {
+        const displayName = updates.displayName.trim();
+        if (!displayName) return { ok: false, error: "display name can't be empty" };
+        if (displayName.length > 40) return { ok: false, error: "keep it under 40 characters" };
+        next.displayName = displayName;
+      }
+
+      if (updates.handle !== undefined) {
+        const handle = updates.handle.trim().toLowerCase();
+        if (!/^[a-z0-9][a-z0-9_-]{1,23}$/.test(handle)) {
+          return { ok: false, error: "2-24 characters, lowercase letters, numbers, - or _" };
+        }
+        const taken = state.people.some((p) => p.id !== CURRENT_USER_ID && p.handle.toLowerCase() === handle);
+        if (taken) return { ok: false, error: "that handle's already taken" };
+        next.handle = handle;
+      }
+
+      dispatch({ type: "UPDATE_PROFILE", personId: CURRENT_USER_ID, updates: next });
+      trackAnalytics("profile_updated", { fields: Object.keys(next).join(",") });
+      return { ok: true };
+    };
+
+    return { state, submitResponse, createRecommendation, deleteRecommendation, resolveTrack, updateProfile };
   }, [state]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
@@ -256,6 +288,11 @@ export function useRecommendation(id: string): EnrichedRecommendation | undefine
 export function useResponseActions() {
   const { submitResponse, deleteRecommendation, createRecommendation, resolveTrack } = useData();
   return { submitResponse, deleteRecommendation, createRecommendation, resolveTrack };
+}
+
+export function useUpdateProfile() {
+  const { updateProfile } = useData();
+  return updateProfile;
 }
 
 export interface InboxData {
