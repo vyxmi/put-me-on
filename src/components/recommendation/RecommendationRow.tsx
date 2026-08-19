@@ -41,7 +41,7 @@ export function RecommendationRow({
       }`}
     >
       <span className="shrink-0 transition-transform duration-200 ease-out group-hover:scale-[1.04]">
-        <Artwork seed={item.track.artSeed} imageUrl={item.track.artworkUrl} size={52} radius={2} />
+        <Artwork seed={item.track.artSeed} imageUrl={item.track.artworkUrl} size={64} radius={3} />
       </span>
       <span className="min-w-0 flex-1">
         <span className="flex items-baseline justify-between gap-3">

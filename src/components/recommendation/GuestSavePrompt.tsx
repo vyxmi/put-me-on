@@ -14,7 +14,7 @@ export function GuestSavePrompt({ defaultName }: { defaultName?: string }) {
   if (stage === "checking") {
     return (
       <div className="flex animate-rise-in items-center gap-2.5">
-        <span className="h-2 w-2 animate-pulse-dot rounded-full bg-accent" style={{ boxShadow: "0 0 8px 2px rgba(166,160,240,.6)" }} />
+        <span className="h-2 w-2 animate-pulse-dot rounded-full bg-accent" style={{ boxShadow: "0 0 8px 2px rgba(63,96,212,.6)" }} />
         <p className="text-[14px] text-text-secondary">check {email}</p>
       </div>
     );

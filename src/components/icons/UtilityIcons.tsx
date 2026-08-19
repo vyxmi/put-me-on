@@ -15,6 +15,16 @@ export function ShareIcon({ size = 16, className }: IconProps) {
   );
 }
 
+/** A small imperfect check — one stroke, slightly uneven, like a mark made
+ * by hand rather than a system glyph. Used for one-shot confirmations. */
+export function CheckGlyph({ size = 12, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden="true" className={className}>
+      <path d="M3.2 8.4L6.4 11.6L13 4.6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function CloseIcon({ size = 16, className }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>

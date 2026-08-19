@@ -68,7 +68,7 @@ export function SentDetail({ id }: { id: string }) {
                 deleteRecommendation(id);
                 router.push("/sent");
               }}
-              className="text-accent"
+              className="text-warn"
             >
               remove
             </button>

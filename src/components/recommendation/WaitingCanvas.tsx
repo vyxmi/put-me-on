@@ -3,17 +3,25 @@
 import { useState, type MouseEvent } from "react";
 import Link from "next/link";
 import { Artwork } from "@/components/Artwork";
+import { captureFlipSource } from "@/lib/utils/flip-transfer";
 import type { EnrichedRecommendation } from "@/lib/data/store";
 
-const POSITIONS = [
-  { x: 4, y: 6 },
-  { x: 48, y: 26 },
-  { x: 18, y: 58 },
-  { x: 62, y: 4 },
-  { x: 34, y: 62 },
-  { x: 8, y: 36 },
-];
-const DEPTHS = [10, 16, 13, 18, 11, 14];
+/** Golden-angle spiral, not a hand-placed lookup table — every item gets a
+ * position computed from its index and the total count, so the field stays
+ * evenly spread (and never stacks two items on the same spot) no matter how
+ * many recommendations are waiting. */
+const GOLDEN_ANGLE = 137.50776;
+
+function spiralPosition(index: number, total: number): { x: number; y: number; depth: number } {
+  if (total <= 1) return { x: 50, y: 46, depth: 12 };
+  const radius = 34 * Math.sqrt((index + 0.6) / total);
+  const theta = (index * GOLDEN_ANGLE * Math.PI) / 180;
+  return {
+    x: 50 + radius * Math.cos(theta) * 1.15,
+    y: 46 + radius * Math.sin(theta) * 0.95,
+    depth: 10 + ((index * 5) % 11),
+  };
+}
 
 /** The inbox's one deliberately expressive moment: waiting recommendations
  * float gently, scattered rather than stacked. Desktop additionally drifts
@@ -37,10 +45,9 @@ export function WaitingCanvas({ items }: { items: EnrichedRecommendation[] }) {
       onMouseLeave={() => setMouse({ mx: 0, my: 0 })}
     >
       {items.map((item, idx) => {
-        const pos = POSITIONS[idx % POSITIONS.length];
-        const depth = DEPTHS[idx % DEPTHS.length];
-        const px = mouse.mx * depth;
-        const py = mouse.my * depth;
+        const pos = spiralPosition(idx, items.length);
+        const px = mouse.mx * pos.depth;
+        const py = mouse.my * pos.depth;
         const hovered = hoveredId === item.recommendation.id;
         return (
           <div
@@ -60,12 +67,16 @@ export function WaitingCanvas({ items }: { items: EnrichedRecommendation[] }) {
                 onMouseEnter={() => setHoveredId(item.recommendation.id)}
                 onMouseLeave={() => setHoveredId((h) => (h === item.recommendation.id ? null : h))}
                 onTouchStart={() => setHoveredId(item.recommendation.id)}
+                onClick={(e) => {
+                  const artEl = e.currentTarget.querySelector("[data-flip-art]");
+                  captureFlipSource(item.recommendation.id, artEl);
+                }}
               >
-                <span className="relative block transition-transform duration-300 ease-out hover:scale-[1.08]">
+                <span data-flip-art className="relative block transition-transform duration-300 ease-out hover:scale-[1.08]">
                   <Artwork seed={item.track.artSeed} imageUrl={item.track.artworkUrl} size={80} radius={2} halo animated />
                   <span
                     className="animate-pulse-dot absolute right-1.5 top-1.5 block h-[6px] w-[6px] rounded-full bg-accent sm:right-2 sm:top-2 sm:h-[7px] sm:w-[7px]"
-                    style={{ boxShadow: "0 0 7px 2px rgba(166,160,240,.6)" }}
+                    style={{ boxShadow: "0 0 7px 2px rgba(63,96,212,.6)" }}
                   />
                 </span>
                 <span className="truncate text-[13.5px] font-semibold text-text-primary sm:text-[15px]">

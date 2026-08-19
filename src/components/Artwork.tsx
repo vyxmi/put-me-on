@@ -1,6 +1,71 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+type RGB = [number, number, number];
+
+/** Sampled per imageUrl once, then reused — avoids re-decoding the same
+ * cover art every time an Artwork instance mounts (list + hero both use it). */
+const glowCache = new Map<string, RGB | null>();
+
+/** Downsamples the real cover art to a tiny canvas and averages its pixels,
+ * weighted toward the more saturated ones, so the glow reads as "a color
+ * pulled from this photo" rather than a muddy gray average. Resolves null
+ * (silently — the hash-based glow below is the fallback) if the image
+ * hasn't loaded cross-origin cleanly, since that just means a tainted
+ * canvas rather than an error worth surfacing. */
+function sampleGlowColor(url: string): Promise<RGB | null> {
+  const cached = glowCache.get(url);
+  if (cached !== undefined) return Promise.resolve(cached);
+
+  return new Promise((resolve) => {
+    const img = new window.Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      try {
+        const size = 24;
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return resolve(null);
+        ctx.drawImage(img, 0, 0, size, size);
+        const { data } = ctx.getImageData(0, 0, size, size);
+
+        let rSum = 0;
+        let gSum = 0;
+        let bSum = 0;
+        let weightSum = 0;
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          const a = data[i + 3];
+          if (a < 128) continue;
+          const max = Math.max(r, g, b);
+          const min = Math.min(r, g, b);
+          const saturation = max === 0 ? 0 : (max - min) / max;
+          const weight = 0.15 + saturation;
+          rSum += r * weight;
+          gSum += g * weight;
+          bSum += b * weight;
+          weightSum += weight;
+        }
+        const rgb: RGB | null = weightSum === 0 ? null : [Math.round(rSum / weightSum), Math.round(gSum / weightSum), Math.round(bSum / weightSum)];
+        glowCache.set(url, rgb);
+        resolve(rgb);
+      } catch {
+        glowCache.set(url, null);
+        resolve(null);
+      }
+    };
+    img.onerror = () => {
+      glowCache.set(url, null);
+      resolve(null);
+    };
+    img.src = url;
+  });
+}
 
 const NOISE_BG =
   "url(\"data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
@@ -38,6 +103,22 @@ export function Artwork({ seed, imageUrl, size = 56, radius = 2, className, halo
   const [imageFailed, setImageFailed] = useState(false);
   const showImage = Boolean(imageUrl) && !imageFailed;
 
+  const [sampledGlow, setSampledGlow] = useState<RGB | null>(null);
+  useEffect(() => {
+    if (!halo || !showImage || !imageUrl) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting derived state when the inputs that produced it go away, not a render-cascade risk
+      setSampledGlow(null);
+      return;
+    }
+    let cancelled = false;
+    sampleGlowColor(imageUrl).then((rgb) => {
+      if (!cancelled) setSampledGlow(rgb);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [halo, showImage, imageUrl]);
+
   const n = hashSeed(seed);
   const hue = HUES[n % HUES.length];
   const hue2 = (hue + 32 + (n % 97) * 7) % 360;
@@ -64,7 +145,10 @@ export function Artwork({ seed, imageUrl, size = 56, radius = 2, className, halo
             display: "block",
             borderRadius: "50%",
             filter: `blur(${Math.round(size * 0.34)}px)`,
-            background: `radial-gradient(circle at 35% 35%, hsla(${hue},75%,60%,.55), transparent 62%), radial-gradient(circle at 65% 65%, hsla(${hue2},65%,45%,.4), transparent 60%)`,
+            transition: "background 400ms var(--ease-out)",
+            background: sampledGlow
+              ? `radial-gradient(circle at 35% 35%, rgba(${sampledGlow[0]},${sampledGlow[1]},${sampledGlow[2]},.55), transparent 62%), radial-gradient(circle at 65% 65%, rgba(${Math.round(sampledGlow[0] * 0.55)},${Math.round(sampledGlow[1] * 0.55)},${Math.round(sampledGlow[2] * 0.55)},.4), transparent 60%)`
+              : `radial-gradient(circle at 35% 35%, hsla(${hue},75%,60%,.55), transparent 62%), radial-gradient(circle at 65% 65%, hsla(${hue2},65%,45%,.4), transparent 60%)`,
           }}
         />
       ) : null}

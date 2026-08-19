@@ -1,8 +1,11 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import { useReducedMotion } from "motion/react";
 import { Artwork } from "@/components/Artwork";
 import { formatDuration } from "@/lib/utils/format";
 import { track as trackAnalytics } from "@/lib/analytics";
+import { playFlipInto } from "@/lib/utils/flip-transfer";
 import type { Track } from "@/lib/data/types";
 
 export function RecommendationHero({
@@ -20,6 +23,15 @@ export function RecommendationHero({
   celebrate?: boolean;
 }) {
   const artSize = size === "large" ? 208 : 120;
+  const artRef = useRef<HTMLSpanElement>(null);
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (reduceMotion) return;
+    playFlipInto(recommendationId, artRef.current);
+    // one-shot handoff — only ever meaningful on the mount this hero was navigated in with
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function handleListen() {
     trackAnalytics("listen_clicked", { recommendation_id: recommendationId, track_id: track.id });
@@ -28,15 +40,17 @@ export function RecommendationHero({
 
   return (
     <div className="flex flex-col items-center gap-5 text-center">
-      <Artwork
-        seed={track.artSeed}
-        imageUrl={track.artworkUrl}
-        size={artSize}
-        radius={2}
-        halo
-        animated
-        className={celebrate ? "animate-celebrate" : undefined}
-      />
+      <span ref={artRef} data-hero-art style={{ display: "inline-block" }}>
+        <Artwork
+          seed={track.artSeed}
+          imageUrl={track.artworkUrl}
+          size={artSize}
+          radius={2}
+          halo
+          animated
+          className={celebrate ? "animate-celebrate" : undefined}
+        />
+      </span>
       <div>
         <h1
           className={

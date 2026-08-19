@@ -2,9 +2,11 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import Link from "next/link";
+import { AnimatePresence, motion } from "motion/react";
 import { Artwork } from "@/components/Artwork";
 import { CursorField } from "@/components/CursorField";
-import { ShareIcon } from "@/components/icons/UtilityIcons";
+import { ChainTransmission } from "@/components/recommendation/ChainTransmission";
+import { ShareIcon, CheckGlyph } from "@/components/icons/UtilityIcons";
 import {
   useCurrentUser,
   usePeople,
@@ -35,6 +37,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
   const [submitting, setSubmitting] = useState(false);
   const [created, setCreated] = useState<{ id: string } | null>(null);
   const [copied, setCopied] = useState(false);
+  const [copyPulseKey, setCopyPulseKey] = useState(0);
 
   const isPassOn = Boolean(sourceId && sourceItem);
 
@@ -47,6 +50,32 @@ export function Composer({ sourceId }: { sourceId?: string }) {
     // fire once per mount only
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const shareUrl = created ? (typeof window !== "undefined" ? `${window.location.origin}/r/${created.id}` : `/r/${created.id}`) : null;
+
+  async function handleCopy() {
+    if (!created || !shareUrl) return;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+    } catch {
+      // clipboard unavailable — the link is still visible to select manually
+    }
+    trackAnalytics("share_link_copied", { recommendation_id: created.id });
+    setCopied(true);
+    setCopyPulseKey((k) => k + 1);
+    window.setTimeout(() => setCopied(false), 2200);
+  }
+
+  // The link is the whole point of this screen — copy it the instant it
+  // exists instead of making the person hunt for a copy button. handleCopy
+  // is async — its setState calls land in a promise callback, not
+  // synchronously in this effect body, so the cascading-render case
+  // set-state-in-effect guards against doesn't apply here.
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- handleCopy is async; its setState calls run in a promise callback, not synchronously here
+    if (created) void handleCopy();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [created?.id]);
 
   const otherPeople = useMemo(() => people.filter((p) => p.id !== CURRENT_USER_ID), [people]);
   // Pass-on excludes whoever sent the original — passing it straight back rarely makes sense.
@@ -91,25 +120,12 @@ export function Composer({ sourceId }: { sourceId?: string }) {
       : recipient.name
     : null;
 
-  if (created) {
-    const url = typeof window !== "undefined" ? `${window.location.origin}/r/${created.id}` : `/r/${created.id}`;
-
-    async function handleCopy() {
-      try {
-        await navigator.clipboard.writeText(url);
-      } catch {
-        // clipboard unavailable — the link is still visible to select manually
-      }
-      trackAnalytics("share_link_copied", { recommendation_id: created!.id });
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1600);
-    }
-
+  if (created && shareUrl) {
     async function handleShare() {
       trackAnalytics("share_action_opened", { recommendation_id: created!.id });
       if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
         try {
-          await navigator.share({ title: "put me on", url });
+          await navigator.share({ title: "put me on", url: shareUrl! });
           return;
         } catch {
           // user dismissed the native sheet — fall through to copy
@@ -130,7 +146,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
               halo
               className="animate-celebrate"
             />
-            <span className="absolute -bottom-2 -right-2 flex h-6 w-6 items-center justify-center rounded-xs bg-accent text-[13px] text-bg shadow-[0_0_20px_4px_rgba(166,160,240,.5)]">
+            <span className="absolute -bottom-2 -right-2 flex h-6 w-6 items-center justify-center rounded-xs bg-accent text-[13px] text-bg shadow-[0_0_20px_4px_rgba(63,96,212,.5)]">
               ✓
             </span>
           </span>
@@ -138,15 +154,56 @@ export function Composer({ sourceId }: { sourceId?: string }) {
         <p className="text-[17px] font-semibold text-text-primary">
           {isPassOn ? `passed on to ${recipientLabel}` : `sent to ${recipientLabel}`}
         </p>
+        {isPassOn && sourceItem && recipientLabel ? (
+          <ChainTransmission fromLabel={sourceItem.sender.displayName} toLabel={recipientLabel} />
+        ) : null}
         <p className="text-[13.5px] text-text-tertiary">they&apos;ll see it whenever they open the link.</p>
         <div className="flex w-full flex-col items-center gap-2">
-          <div className="flex w-full items-center gap-2.5 rounded-xs border border-border px-4 py-2.5">
-            <span className="min-w-0 flex-1 truncate text-left font-mono text-[12px] text-text-tertiary">{url}</span>
-            <button type="button" onClick={handleCopy} className="shrink-0 text-[12px] text-accent-light hover:text-text-primary">
-              copy
+          <motion.div
+            className="relative flex w-full items-center gap-2.5 overflow-hidden rounded-xs border px-4 py-2.5"
+            animate={{ borderColor: copied ? "var(--accent)" : "var(--border)" }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <span className="min-w-0 flex-1 truncate text-left font-mono text-[12px] text-text-tertiary">{shareUrl}</span>
+            <button
+              type="button"
+              onClick={handleCopy}
+              className="flex shrink-0 items-center gap-1.5 text-[12px] text-accent-light transition-colors hover:text-text-primary"
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {copied ? (
+                  <motion.span
+                    key="copied"
+                    initial={{ opacity: 0, y: 3 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -3 }}
+                    transition={{ duration: 0.18 }}
+                    className="flex items-center gap-1"
+                  >
+                    <CheckGlyph size={11} /> copied
+                  </motion.span>
+                ) : (
+                  <motion.span key="copy" initial={{ opacity: 0, y: 3 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -3 }} transition={{ duration: 0.18 }}>
+                    copy
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </button>
-          </div>
-          {copied ? <p className="animate-copied font-mono text-[11px] text-accent">copied</p> : <p className="h-4" />}
+            {copyPulseKey > 0 ? (
+              <motion.span
+                key={copyPulseKey}
+                aria-hidden="true"
+                className="pointer-events-none absolute top-1/2 left-4 h-[6px] w-[6px] rounded-full"
+                style={{ background: "var(--accent-light)", boxShadow: "0 0 8px 2px rgba(63,96,212,.7)" }}
+                initial={{ x: 0, y: "-50%", opacity: 0 }}
+                animate={{ x: "calc(100% - 52px)", y: "-50%", opacity: [0, 1, 1, 0] }}
+                transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+              />
+            ) : null}
+          </motion.div>
+          <p className="h-4 font-mono text-[11px] text-text-tertiary">
+            {copied ? "saved to your clipboard" : "tap copy anytime to grab the link again"}
+          </p>
         </div>
         <button
           type="button"
@@ -163,7 +220,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
   }
 
   return (
-    <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col gap-8 overflow-hidden px-5 py-10 sm:px-6">
+    <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-8 overflow-hidden px-5 py-10 sm:px-6">
       <CursorField className="opacity-60" />
       <h1 className="relative z-10 text-center text-[20px] font-semibold text-text-primary">
         {isPassOn ? "pass it on" : "put someone on"}
@@ -185,7 +242,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
                     setTrackResult(null);
                     setUrlInput("");
                   }}
-                  className="shrink-0 text-[12px] text-text-tertiary transition-colors hover:text-accent-light"
+                  className="shrink-0 text-[12px] text-text-tertiary transition-colors hover:text-text-secondary"
                 >
                   change
                 </button>
@@ -260,7 +317,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
                         setRecipient({ type: "registered", personId: p.id });
                         setRecipientQuery(p.displayName);
                       }}
-                      className="rounded-xs border border-border px-3.5 py-2 text-[13px] text-text-secondary transition-all duration-200 hover:-translate-y-px hover:border-accent hover:bg-accent/8 hover:text-accent-light hover:shadow-[0_8px_20px_-12px_rgba(166,160,240,0.5)]"
+                      className="rounded-xs border border-border px-3.5 py-2 text-[13px] text-text-secondary transition-all duration-200 hover:-translate-y-px hover:border-accent hover:bg-accent/8 hover:text-accent-light hover:shadow-[0_8px_20px_-12px_rgba(63,96,212,0.5)]"
                     >
                       {p.displayName}
                     </button>
@@ -269,7 +326,7 @@ export function Composer({ sourceId }: { sourceId?: string }) {
                     <button
                       type="button"
                       onClick={() => setRecipient({ type: "guest", name: recipientQuery.trim() })}
-                      className="rounded-xs border border-dashed border-accent-dim px-3.5 py-2 text-[13px] text-accent-light transition-all duration-200 hover:-translate-y-px hover:border-accent hover:bg-accent/10 hover:shadow-[0_8px_20px_-12px_rgba(166,160,240,0.5)]"
+                      className="rounded-xs border border-dashed border-accent-dim px-3.5 py-2 text-[13px] text-accent-light transition-all duration-200 hover:-translate-y-px hover:border-accent hover:bg-accent/10 hover:shadow-[0_8px_20px_-12px_rgba(63,96,212,0.5)]"
                     >
                       add &ldquo;{recipientQuery.trim()}&rdquo; as someone new
                     </button>

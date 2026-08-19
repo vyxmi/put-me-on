@@ -24,7 +24,7 @@ export default function SentLayout({ children }: { children: React.ReactNode }) 
         }`}
       >
         <div className="px-4 pb-2 pt-6 md:px-6">
-          <h1 className="text-[22px] font-semibold text-text-primary">sent</h1>
+          <h1 className="text-[22px] font-semibold uppercase tracking-tight text-text-primary">sent</h1>
         </div>
         <RecommendationList
           data={data}

@@ -14,11 +14,11 @@
   --text-tertiary: #aba8b4;
   --text-quaternary: #726f7c;
 
-  --accent: #a6a0f0;
-  --accent-light: #c3bbf5;
-  --accent-deep: #6d5de0;
-  --accent-dim: #726caa;
-  --accent-glow: rgba(166, 160, 240, 0.35);
+  --accent: #3f60d4;
+  --accent-light: #6f8de6;
+  --accent-deep: #2c46b0;
+  --accent-dim: #5568a8;
+  --accent-glow: rgba(63, 96, 212, 0.35);
   --warn: #e3a0c4;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -134,13 +134,13 @@ button {
 .btn-primary:hover {
   background: linear-gradient(135deg, var(--accent), var(--accent-light));
   box-shadow:
-    0 10px 28px -10px rgba(166, 160, 240, 0.55),
-    0 0 0 1px rgba(166, 160, 240, 0.3);
+    0 10px 28px -10px rgba(63, 96, 212, 0.55),
+    0 0 0 1px rgba(63, 96, 212, 0.3);
   transform: translateY(-1px);
 }
 .btn-primary:active {
   transform: translateY(0) scale(0.98);
-  box-shadow: 0 4px 14px -8px rgba(166, 160, 240, 0.5);
+  box-shadow: 0 4px 14px -8px rgba(63, 96, 212, 0.5);
 }
 .btn-primary:disabled {
   opacity: 0.4;
@@ -160,13 +160,13 @@ button {
     transform var(--duration-fast) var(--ease-out);
 }
 .btn-secondary::before {
-  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100'%3E%3Cg fill='none' stroke='%23A6A0F0' stroke-width='1.4'%3E%3Cpath d='M-10,18 Q40,4 90,18 T190,18' opacity='0.55'/%3E%3Cpath d='M-10,42 Q40,26 90,42 T190,42' opacity='0.4'/%3E%3Cpath d='M-10,66 Q40,52 90,66 T190,66' opacity='0.5'/%3E%3Cpath d='M-10,88 Q40,76 90,88 T190,88' opacity='0.32'/%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100'%3E%3Cg fill='none' stroke='%233F60D4' stroke-width='1.4'%3E%3Cpath d='M-10,18 Q40,4 90,18 T190,18' opacity='0.55'/%3E%3Cpath d='M-10,42 Q40,26 90,42 T190,42' opacity='0.4'/%3E%3Cpath d='M-10,66 Q40,52 90,66 T190,66' opacity='0.5'/%3E%3Cpath d='M-10,88 Q40,76 90,88 T190,88' opacity='0.32'/%3E%3C/g%3E%3C/svg%3E");
 }
 .btn-secondary:hover {
   border-color: var(--accent);
   color: var(--accent-light);
-  background: rgba(166, 160, 240, 0.08);
-  box-shadow: 0 8px 22px -12px rgba(166, 160, 240, 0.45);
+  background: rgba(63, 96, 212, 0.08);
+  box-shadow: 0 8px 22px -12px rgba(63, 96, 212, 0.45);
   transform: translateY(-1px);
 }
 .btn-secondary:active {
@@ -335,6 +335,18 @@ button {
 }
 .animate-pulse-dot {
   animation: pulse-dot 1.4s ease-in-out infinite;
+}
+
+/* Response picker: already-knew's "quiet echo" — one ping outward on hover, never looping. */
+@keyframes echo-ping {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
 }
 
 @keyframes float1 {

@@ -26,7 +26,7 @@ export default function InboxLayout({ children }: { children: React.ReactNode })
         }`}
       >
         <div className="px-4 pb-2 pt-6 md:px-6">
-          <h1 className="text-[22px] font-semibold text-text-primary">inbox</h1>
+          <h1 className="text-[22px] font-semibold uppercase tracking-tight text-text-primary">inbox</h1>
         </div>
 
         {waiting.length === 0 && history.length === 0 ? (
@@ -41,7 +41,7 @@ export default function InboxLayout({ children }: { children: React.ReactNode })
                 <div className="flex items-center gap-2 px-4 pb-2 pt-4 md:px-6">
                   <span
                     className="block h-[6px] w-[6px] shrink-0 rounded-full bg-accent"
-                    style={{ boxShadow: "0 0 8px 2px rgba(166,160,240,.7)" }}
+                    style={{ boxShadow: "0 0 8px 2px rgba(63,96,212,.7)" }}
                   />
                   <span className="font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary">
                     {waiting.length} waiting
@@ -54,7 +54,7 @@ export default function InboxLayout({ children }: { children: React.ReactNode })
             ) : null}
 
             {history.length > 0 ? (
-              <div>
+              <div className={waiting.length > 0 ? "hairline mt-2" : undefined}>
                 <div className="px-4 pb-2 pt-6 font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary md:px-6">
                   history
                 </div>
