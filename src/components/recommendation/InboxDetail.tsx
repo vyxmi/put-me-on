@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useRecommendation, useResponseActions } from "@/lib/data/store";
-import { useSampledGlow } from "@/components/Artwork";
 import { RecommendationHero } from "./RecommendationHero";
 import { RecommendationScene } from "./RecommendationScene";
 import { ResponsePicker } from "./ResponsePicker";
@@ -19,7 +18,6 @@ export function InboxDetail({ id }: { id: string }) {
   const { submitResponse } = useResponseActions();
   const [justConnected, setJustConnected] = useState(false);
   const [passOnHovered, setPassOnHovered] = useState(false);
-  const color = useSampledGlow(item?.track.artworkUrl);
 
   if (!item || item.recommendation.deletedAt) {
     return <EmptyState title="this recommendation isn't available" description="it may have been removed." />;
@@ -65,7 +63,7 @@ export function InboxDetail({ id }: { id: string }) {
         </AnimatePresence>
 
         <div className="w-full max-w-sm">
-          <ResponsePanel color={color}>
+          <ResponsePanel>
             <div className="flex w-full flex-col items-center gap-4">
               <p className="text-[14px] text-text-primary/90">what did you think?</p>
               <ResponsePicker current={response?.type} onSelect={handleSelect} />

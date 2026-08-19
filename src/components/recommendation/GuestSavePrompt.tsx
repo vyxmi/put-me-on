@@ -4,14 +4,13 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import { track as trackAnalytics } from "@/lib/analytics";
 import { ResponsePanel } from "./ResponsePanel";
-import type { RGB } from "@/components/Artwork";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /** Same glass material as the response panel above it, but the lighter
  * `secondary` weight — this is a follow-up, not a second decision to make.
  * Slides/fades up once the response has settled. */
-function Reveal({ color, children }: { color: RGB | null; children: React.ReactNode }) {
+function Reveal({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -19,14 +18,14 @@ function Reveal({ color, children }: { color: RGB | null; children: React.ReactN
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       className="w-full"
     >
-      <ResponsePanel color={color} weight="secondary">
+      <ResponsePanel weight="secondary">
         <div className="flex w-full flex-col items-center gap-3">{children}</div>
       </ResponsePanel>
     </motion.div>
   );
 }
 
-export function GuestSavePrompt({ defaultName, color = null }: { defaultName?: string; color?: RGB | null }) {
+export function GuestSavePrompt({ defaultName }: { defaultName?: string }) {
   const [name, setName] = useState(defaultName ?? "");
   const [email, setEmail] = useState("");
   const [stage, setStage] = useState<"form" | "checking" | "saved">("form");
@@ -34,7 +33,7 @@ export function GuestSavePrompt({ defaultName, color = null }: { defaultName?: s
 
   if (stage === "checking") {
     return (
-      <Reveal color={color}>
+      <Reveal>
         <div className="flex items-center gap-2.5">
           <span
             className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-white-glass-strong"
@@ -48,7 +47,7 @@ export function GuestSavePrompt({ defaultName, color = null }: { defaultName?: s
 
   if (stage === "saved") {
     return (
-      <Reveal color={color}>
+      <Reveal>
         <p className="text-center text-[13px] text-text-tertiary">
           you&apos;re all set, {name || "friend"} — that link confirms it&apos;s you.
         </p>
@@ -57,7 +56,7 @@ export function GuestSavePrompt({ defaultName, color = null }: { defaultName?: s
   }
 
   return (
-    <Reveal color={color}>
+    <Reveal>
       <form
         onSubmit={(e) => {
           e.preventDefault();

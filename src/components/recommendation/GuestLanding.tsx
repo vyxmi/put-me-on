@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useRecommendation, useResponseActions } from "@/lib/data/store";
-import { useSampledGlow } from "@/components/Artwork";
 import { RecommendationHero } from "./RecommendationHero";
 import { RecommendationScene } from "./RecommendationScene";
 import { ResponsePicker } from "./ResponsePicker";
@@ -23,7 +22,6 @@ export function GuestLanding({ id }: { id: string }) {
   const hasShownPrompt = useRef(false);
   const [justConnected, setJustConnected] = useState(false);
   const [showSavePrompt, setShowSavePrompt] = useState(false);
-  const color = useSampledGlow(item?.track.artworkUrl);
 
   useEffect(() => {
     if (item && !item.recommendation.deletedAt && !hasFiredView.current) {
@@ -113,7 +111,7 @@ export function GuestLanding({ id }: { id: string }) {
             </AnimatePresence>
 
             <div className="w-full max-w-sm">
-              <ResponsePanel color={color}>
+              <ResponsePanel>
                 <div className="flex w-full flex-col items-center gap-4">
                   <p className="text-[14px] text-text-primary/90">what did you think?</p>
                   <ResponsePicker current={response?.type} onSelect={handleSelect} />
@@ -123,7 +121,7 @@ export function GuestLanding({ id }: { id: string }) {
 
             {showSavePrompt ? (
               <div className="w-full max-w-sm">
-                <GuestSavePrompt defaultName={recipientLabel} color={color} />
+                <GuestSavePrompt defaultName={recipientLabel} />
               </div>
             ) : null}
           </div>

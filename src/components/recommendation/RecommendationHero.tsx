@@ -57,8 +57,8 @@ export function RecommendationHero({
         <h1
           className={
             size === "large"
-              ? "text-[32px] font-bold leading-[1.08] tracking-tight text-text-primary sm:text-[46px]"
-              : "text-[22px] font-bold leading-tight text-text-primary"
+              ? "text-[24px] font-bold leading-[1.12] tracking-tight text-text-primary sm:text-[32px]"
+              : "text-[18px] font-bold leading-tight text-text-primary"
           }
         >
           {track.title}
@@ -81,7 +81,7 @@ export function RecommendationHero({
       {note ? (
         <p
           className="relative max-w-sm py-0.5 pl-4 text-left text-[15.5px] leading-relaxed text-text-primary"
-          style={{ borderLeft: "2px solid transparent", borderImage: "linear-gradient(180deg, var(--spectral-violet), var(--spectral-pink)) 1" }}
+          style={{ borderLeft: "2px solid var(--border-strong)" }}
         >
           &ldquo;{note}&rdquo;
         </p>
@@ -91,19 +91,10 @@ export function RecommendationHero({
         onClick={handleListen}
         className="text-link flex items-center gap-1.5 text-[14.5px] text-text-secondary transition-colors hover:text-text-primary"
       >
-        <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-          <path d="M4.7 1.5H10.5V7.3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M10.5 1.5L4.9 7.1" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
-          <path
-            d="M8 3.3H1.6V10.4H8.7V4"
-            stroke="currentColor"
-            strokeOpacity="0.55"
-            strokeWidth="1"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
         listen on spotify
+        <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.3M8.5 3.5V7.7" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </button>
       {formatDuration(track.durationMs) ? (
         <p className="font-mono text-[11px] text-text-tertiary">{formatDuration(track.durationMs)}</p>
