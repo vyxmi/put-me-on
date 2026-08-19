@@ -7,6 +7,7 @@ import { RecommendationHero } from "./RecommendationHero";
 import { RecommendationScene } from "./RecommendationScene";
 import { ConnectionLine } from "./ConnectionLine";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { TrashIcon } from "@/components/icons/UtilityIcons";
 import { RESPONSE_LABEL } from "@/lib/data/types";
 import { relativeTime } from "@/lib/utils/format";
 
@@ -60,19 +61,27 @@ export function SentDetail({ id }: { id: string }) {
 
       <div className="flex justify-center">
         {confirmingDelete ? (
-          <div className="flex items-center gap-3 text-[13px]">
-            <span className="text-text-secondary">remove this recommendation?</span>
+          <div
+            className="flex items-center gap-3 rounded-xs border px-4 py-2.5"
+            style={{ background: "var(--glass)", borderColor: "var(--border-strong)" }}
+          >
+            <TrashIcon size={15} className="text-text-tertiary" />
+            <span className="text-[13px] text-text-secondary">remove this recommendation?</span>
             <button
               type="button"
               onClick={() => {
                 deleteRecommendation(id);
                 router.push("/sent");
               }}
-              className="text-warn"
+              className="text-[13px] font-medium text-warn transition-opacity hover:opacity-75"
             >
               remove
             </button>
-            <button type="button" onClick={() => setConfirmingDelete(false)} className="text-text-tertiary">
+            <button
+              type="button"
+              onClick={() => setConfirmingDelete(false)}
+              className="text-[13px] text-text-tertiary transition-colors hover:text-text-primary"
+            >
               cancel
             </button>
           </div>
@@ -80,8 +89,9 @@ export function SentDetail({ id }: { id: string }) {
           <button
             type="button"
             onClick={() => setConfirmingDelete(true)}
-            className="text-[13px] text-text-tertiary transition-colors hover:text-text-secondary"
+            className="flex items-center gap-1.5 text-[13px] text-text-tertiary transition-colors hover:text-text-secondary"
           >
+            <TrashIcon size={13} />
             remove
           </button>
         )}

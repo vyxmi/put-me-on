@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCurrentUser } from "@/lib/data/store";
 import { ConnectionMark } from "@/components/icons/ConnectionMark";
 import { InboxIcon, SentIcon, MeIcon } from "@/components/icons/NavIcons";
 import { MagneticButton } from "@/components/MagneticButton";
@@ -12,10 +11,9 @@ const ICONS = { "/inbox": InboxIcon, "/sent": SentIcon, "/me": MeIcon };
 
 export function Rail() {
   const pathname = usePathname();
-  const user = useCurrentUser();
 
   return (
-    <aside className="hidden md:flex md:w-[76px] md:shrink-0 md:flex-col md:items-center md:justify-between md:border-r md:border-border/50 md:py-7">
+    <aside className="hidden md:flex md:w-[76px] md:shrink-0 md:flex-col md:items-center md:border-r md:border-border/50 md:py-7">
       <div className="flex flex-col items-center gap-9">
         <Link href="/inbox" title="put me on" className="group">
           <ConnectionMark size={20} className="text-text-quaternary transition-colors group-hover:text-spectral-ice" />
@@ -35,9 +33,12 @@ export function Rail() {
               >
                 {active ? (
                   <span
-                    className="absolute inset-0 rounded-xs"
+                    aria-hidden="true"
+                    className="absolute rounded-full"
                     style={{
-                      background: "radial-gradient(circle at 50% 40%, var(--white-glow), transparent 70%)",
+                      inset: "-12px",
+                      background: "radial-gradient(circle, var(--white-glow), transparent 72%)",
+                      opacity: 0.45,
                     }}
                   />
                 ) : null}
@@ -70,15 +71,6 @@ export function Rail() {
           </Link>
         </MagneticButton>
       </div>
-
-      <Link
-        href="/me"
-        title={user.displayName}
-        className="flex h-8 w-8 items-center justify-center rounded-full text-[12px] font-semibold text-text-secondary transition-colors hover:text-text-primary"
-        style={{ background: "var(--surface-2)", border: "1px solid var(--border-strong)" }}
-      >
-        {user.displayName.charAt(0).toUpperCase()}
-      </Link>
     </aside>
   );
 }

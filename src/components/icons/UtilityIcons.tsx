@@ -33,6 +33,17 @@ export function CloseIcon({ size = 16, className }: IconProps) {
   );
 }
 
+export function TrashIcon({ size = 16, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+      <path d="M5 7h14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M9.5 7V5.2c0-.66.54-1.2 1.2-1.2h2.6c.66 0 1.2.54 1.2 1.2V7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M7 7l.8 12.1c.05.83.74 1.4 1.57 1.4h5.26c.83 0 1.52-.57 1.57-1.4L17 7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10.3 11v6M13.7 11v6" stroke="currentColor" strokeOpacity="0.6" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function BackIcon({ size = 16, className }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>

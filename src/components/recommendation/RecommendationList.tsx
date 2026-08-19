@@ -32,7 +32,7 @@ export function RecommendationList({
   const isEmpty = data.waiting.length === 0 && data.history.length === 0;
 
   if (isEmpty) {
-    return <EmptyState title={emptyTitle} description={emptyDescription} />;
+    return <EmptyState title={emptyTitle} description={emptyDescription} spacious={false} />;
   }
 
   return (

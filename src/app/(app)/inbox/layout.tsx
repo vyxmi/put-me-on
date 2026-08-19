@@ -33,16 +33,13 @@ export default function InboxLayout({ children }: { children: React.ReactNode })
           <EmptyState
             title="nothing here yet"
             description="when someone puts you on to something, it'll show up here."
+            spacious={false}
           />
         ) : (
           <div className="flex flex-col pb-8">
             {waiting.length > 0 ? (
               <div>
-                <div className="flex items-center gap-2 px-4 pb-2 pt-4 md:px-6">
-                  <span
-                    className="block h-[6px] w-[6px] shrink-0 rounded-full bg-white-glass-strong"
-                    style={{ boxShadow: "0 0 8px 2px var(--spectral-violet)" }}
-                  />
+                <div className="flex items-center px-4 pb-2 pt-4 md:px-6">
                   <span className="font-detail font-bold text-[11px] uppercase tracking-wider text-text-tertiary">
                     {waiting.length} waiting
                   </span>

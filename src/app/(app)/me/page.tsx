@@ -7,9 +7,8 @@ import { Atmosphere } from "@/components/Atmosphere";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { ChainPreview } from "@/components/recommendation/ChainPreview";
 import { MeConstellation } from "@/components/recommendation/MeConstellation";
-import { useCurrentUser, useMeData } from "@/lib/data/store";
+import { useCurrentUser, useMeData, type EnrichedRecommendation } from "@/lib/data/store";
 import { track as trackAnalytics } from "@/lib/analytics";
-import type { Person } from "@/lib/data/types";
 
 function Section({ title, count, children }: { title: string; count?: number; children: ReactNode }) {
   return (
@@ -23,30 +22,40 @@ function Section({ title, count, children }: { title: string; count?: number; ch
   );
 }
 
-/** The reverse shape: you, branching out to everyone you've put on — a quiet
- * tree rather than a converge point, since the direction of intent is flipped. */
-function BranchList({ people }: { people: Person[] }) {
+/** The glass-panel treatment every section body shares now, so the page
+ * reads as one system instead of a stack of differently-styled lists. */
+function Card({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center gap-2.5">
-        <span className="block h-[7px] w-[7px] rounded-full bg-white-glass-strong" style={{ boxShadow: "0 0 6px 1px var(--spectral-violet)" }} />
-        <span className="text-[16px] font-semibold text-text-primary">you</span>
-      </div>
-      <div className="ml-[3px] flex flex-col border-l border-border-strong">
-        {people.map((p) => (
-          <div key={p.id} className="group relative flex items-center gap-2.5 py-2 pl-6">
-            <span className="absolute left-0 top-1/2 h-px w-5 bg-border-strong transition-colors duration-300 group-hover:bg-white-edge" aria-hidden="true" />
-            <span className="text-[15px] text-text-secondary transition-colors duration-300 group-hover:text-text-primary">{p.displayName}</span>
-          </div>
-        ))}
-      </div>
+    <div className="flex flex-col gap-1 rounded-sm border px-2 py-2" style={{ background: "var(--glass)", borderColor: "var(--border-strong)" }}>
+      {children}
     </div>
+  );
+}
+
+/** One row shape for both directions — who, which track, which way it
+ * travelled — so "you've put on" and "recently put on to" read as the same
+ * kind of thing pointed in opposite directions, not two different widgets. */
+function TrackRow({ href, entry, direction }: { href: string; entry: EnrichedRecommendation; direction: "to" | "from" }) {
+  const personName = direction === "to" ? entry.recipientLabel : entry.sender.displayName;
+  return (
+    <Link href={href} className="group flex items-center gap-3.5 rounded-xs px-3 py-2.5 transition-colors duration-200 hover:bg-white-wash">
+      <span className="block shrink-0 rounded-[3px] transition-all duration-300 ease-out group-hover:scale-[1.05] group-hover:shadow-[0_0_16px_-2px_var(--spectral-violet)]">
+        <Artwork seed={entry.track.artSeed} imageUrl={entry.track.artworkUrl} size={44} radius={3} />
+      </span>
+      <div className="min-w-0">
+        <p className="truncate text-[15px] text-text-primary">{entry.track.title}</p>
+        <p className="truncate text-[13px] text-text-secondary">
+          {direction === "to" ? "to " : "from "}
+          {personName}
+        </p>
+      </div>
+    </Link>
   );
 }
 
 export default function MePage() {
   const user = useCurrentUser();
-  const { putOnByEntries, peopleYouPutOn, recentlyPutOnTo, chains } = useMeData();
+  const { putOnByEntries, putOnToEntries, recentlyPutOnTo, chains } = useMeData();
 
   useEffect(() => {
     trackAnalytics("me_viewed");
@@ -73,34 +82,26 @@ export default function MePage() {
 
       <div className="relative -mt-6 rounded-t-sm" style={{ background: "linear-gradient(180deg, transparent, var(--void) 20%)" }}>
         <div className="mx-auto flex w-full max-w-2xl flex-col gap-14 px-5 pb-16 pt-8 sm:px-6">
-          {peopleYouPutOn.length > 0 ? (
+          {putOnToEntries.length > 0 ? (
             <ScrollReveal>
-              <Section title="you've put on" count={peopleYouPutOn.length}>
-                <BranchList people={peopleYouPutOn} />
+              <Section title="you've put on" count={putOnToEntries.length}>
+                <Card>
+                  {putOnToEntries.map((entry) => (
+                    <TrackRow key={entry.recommendation.id} href={`/sent/${entry.recommendation.id}`} entry={entry} direction="to" />
+                  ))}
+                </Card>
               </Section>
             </ScrollReveal>
           ) : null}
 
           {recentlyPutOnTo.length > 0 ? (
-            <ScrollReveal className={peopleYouPutOn.length > 0 ? "hairline pt-10" : undefined}>
+            <ScrollReveal className={putOnToEntries.length > 0 ? "hairline pt-10" : undefined}>
               <Section title="recently put on to">
-                <div className="flex flex-col gap-4">
-                  {recentlyPutOnTo.slice(0, 5).map((item) => (
-                    <Link
-                      key={item.recommendation.id}
-                      href={`/inbox/${item.recommendation.id}`}
-                      className="group flex items-center gap-4"
-                    >
-                      <span className="block rounded-[3px] transition-all duration-300 ease-out group-hover:scale-[1.04] group-hover:shadow-[0_0_16px_-2px_var(--spectral-violet)]">
-                        <Artwork seed={item.track.artSeed} imageUrl={item.track.artworkUrl} size={48} radius={3} />
-                      </span>
-                      <div className="min-w-0">
-                        <p className="truncate text-[16px] text-text-primary">{item.track.title}</p>
-                        <p className="truncate text-[14px] text-text-secondary">from {item.sender.displayName}</p>
-                      </div>
-                    </Link>
+                <Card>
+                  {recentlyPutOnTo.slice(0, 5).map((entry) => (
+                    <TrackRow key={entry.recommendation.id} href={`/inbox/${entry.recommendation.id}`} entry={entry} direction="from" />
                   ))}
-                </div>
+                </Card>
               </Section>
             </ScrollReveal>
           ) : null}

@@ -12,7 +12,7 @@ export function TopNav() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-10 border-b border-border/50 bg-glass backdrop-blur-md md:hidden">
+    <header className="sticky top-0 z-20 border-b border-border/50 bg-glass backdrop-blur-md md:hidden">
       <div className="flex items-center justify-between px-5 py-3.5">
         <Link href="/inbox" className="flex items-center gap-1.5 font-detail text-[14px] font-bold tracking-wide text-text-secondary">
           <ConnectionMark size={17} className="text-text-quaternary" />
