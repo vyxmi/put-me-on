@@ -16,8 +16,8 @@ export function WaitingCanvas({ items }: { items: EnrichedRecommendation[] }) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   return (
-    <div className="relative overflow-hidden rounded-sm">
-      <Atmosphere seed="inbox-waiting-field" intensity="ambient" interactive={false} className="opacity-80" />
+    <div className="relative">
+      <Atmosphere seed="inbox-waiting-field" intensity="ambient" interactive={false} className="opacity-90" />
       <div className="relative flex flex-wrap gap-x-4 gap-y-6 px-1 py-6">
         {items.map((item, idx) => {
           const hovered = hoveredId === item.recommendation.id;

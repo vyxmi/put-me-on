@@ -3,6 +3,7 @@
 import { useEffect, type ReactNode } from "react";
 import Link from "next/link";
 import { Artwork } from "@/components/Artwork";
+import { Atmosphere } from "@/components/Atmosphere";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { ChainPreview } from "@/components/recommendation/ChainPreview";
 import { MeConstellation } from "@/components/recommendation/MeConstellation";
@@ -55,11 +56,15 @@ export default function MePage() {
           <MeConstellation displayName={user.displayName} handle={user.handle} entries={putOnByEntries} seed={user.id} />
         </div>
       ) : (
-        <div className="px-5 pt-12 text-center sm:px-6">
-          <h1 className="text-[48px] font-bold leading-none tracking-tight text-text-primary sm:text-[64px]">
-            {user.displayName.toUpperCase()}
-          </h1>
-          <p className="mt-2 font-mono text-[13px] text-text-tertiary">@{user.handle}</p>
+        <div className="relative overflow-hidden px-5 pb-8 pt-12 text-center sm:px-6">
+          <Atmosphere seed={user.id} intensity="ambient" interactive />
+          <div className="relative">
+            <h1 className="text-[48px] font-bold leading-none tracking-tight text-text-primary sm:text-[64px]">
+              {user.displayName.toUpperCase()}
+            </h1>
+            <p className="mt-2 font-mono text-[13px] text-text-tertiary">@{user.handle}</p>
+            <p className="mt-6 text-[14px] text-text-tertiary">no one&apos;s put you on yet — that constellation shows up here once they do.</p>
+          </div>
         </div>
       )}
 

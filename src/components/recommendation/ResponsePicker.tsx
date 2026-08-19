@@ -80,6 +80,11 @@ export function ResponsePicker({
         })}
       </div>
 
+      {/* No box by default — text + the connection glyph. Hover grows a line
+          behind the content, borrowed from the same connecting-line motif
+          above this in InboxDetail; selecting it is the actual visual
+          event (a chromatic line, a soft bloom), not a permanently blue
+          button. */}
       <MagneticButton strength={0.15} range={70}>
         <motion.button
           type="button"
@@ -90,24 +95,50 @@ export function ResponsePicker({
           onBlur={() => setHoveredType((h) => (h === "put_me_on" ? null : h))}
           aria-pressed={putMeOnActive}
           whileTap={{ scale: 0.97 }}
-          animate={
-            justSelected === "put_me_on"
-              ? { scale: [0.97, 1.02, 1] }
-              : { scale: 1, borderColor: putMeOnActive || putMeOnHovered ? "var(--accent)" : "var(--border-strong)" }
-          }
+          animate={justSelected === "put_me_on" ? { scale: [0.97, 1.02, 1] } : { scale: 1 }}
           transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-          className={`flex w-full items-center justify-center gap-3 rounded-xs border py-4 transition-colors duration-200 ${
-            putMeOnActive || putMeOnHovered ? "bg-accent/12 shadow-[0_8px_20px_-12px_rgba(63,96,212,0.5)]" : ""
-          }`}
+          className="relative flex w-full items-center justify-center gap-3 rounded-xs py-4"
         >
-          <PutMeOnIcon
-            size={36}
-            hovered={putMeOnHovered}
-            active={putMeOnActive}
-            justConnected={justSelected === "put_me_on"}
-            className="text-accent-light"
+          <motion.span
+            aria-hidden="true"
+            className="absolute left-1/2 top-1/2 h-px -translate-x-1/2 -translate-y-1/2"
+            animate={{
+              width: putMeOnActive ? "86%" : putMeOnHovered ? "54%" : "0%",
+              opacity: putMeOnActive ? 0.95 : putMeOnHovered ? 0.6 : 0,
+            }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              background: putMeOnActive
+                ? "linear-gradient(90deg, transparent, var(--spectral-violet), var(--accent-light), var(--spectral-pink), transparent)"
+                : "linear-gradient(90deg, transparent, var(--accent-light), transparent)",
+            }}
           />
-          <span className="text-[15px] font-semibold text-text-primary">put me on</span>
+          <motion.span
+            aria-hidden="true"
+            className="absolute inset-0 rounded-full"
+            animate={{ opacity: putMeOnActive ? 1 : 0 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              background: "radial-gradient(ellipse 55% 150% at 50% 50%, rgba(63,96,212,0.2), transparent 75%)",
+              filter: "blur(8px)",
+            }}
+          />
+          <span className="relative flex items-center gap-3">
+            <PutMeOnIcon
+              size={putMeOnActive ? 34 : 30}
+              hovered={putMeOnHovered}
+              active={putMeOnActive}
+              justConnected={justSelected === "put_me_on"}
+              className={putMeOnActive || putMeOnHovered ? "text-accent-light" : "text-text-tertiary"}
+            />
+            <span
+              className={`text-[15px] font-semibold ${
+                putMeOnActive || putMeOnHovered ? "text-text-primary" : "text-text-secondary"
+              }`}
+            >
+              put me on
+            </span>
+          </span>
         </motion.button>
       </MagneticButton>
     </div>

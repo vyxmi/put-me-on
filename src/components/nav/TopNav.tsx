@@ -15,7 +15,10 @@ export function TopNav() {
           <ConnectionMark size={16} className="text-text-quaternary" />
           put me on
         </Link>
-        <Link href="/new" className="font-detail text-[11px] font-bold uppercase tracking-wide text-accent-light">
+        <Link
+          href="/new"
+          className="btn-primary rounded-full px-3.5 py-1.5 font-detail text-[11px] font-bold uppercase tracking-wide"
+        >
           + put someone on
         </Link>
       </div>

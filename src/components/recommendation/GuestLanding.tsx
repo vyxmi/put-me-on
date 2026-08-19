@@ -8,6 +8,7 @@ import { RecommendationScene } from "./RecommendationScene";
 import { ResponsePicker } from "./ResponsePicker";
 import { ConnectionLine } from "./ConnectionLine";
 import { GuestSavePrompt } from "./GuestSavePrompt";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { track as trackAnalytics } from "@/lib/analytics";
 import type { ResponseType } from "@/lib/data/types";
 
@@ -33,14 +34,23 @@ export function GuestLanding({ id }: { id: string }) {
         setShowSavePrompt(true);
         trackAnalytics("guest_save_prompt_shown", { recommendation_id: id });
       }, 550);
-      return () => window.clearTimeout(t);
+      // Reset the guard on cleanup too, not just clear the timer — React
+      // StrictMode double-invokes this effect in dev (mount, cleanup,
+      // mount again). Without resetting the ref, that cleanup permanently
+      // "used up" the one-shot guard and the timeout never got rescheduled,
+      // so the prompt silently never appeared in dev. Production only
+      // invokes once, so this is a no-op there.
+      return () => {
+        window.clearTimeout(t);
+        hasShownPrompt.current = false;
+      };
     }
   }, [item?.response, id]);
 
   if (!item || item.recommendation.deletedAt) {
     return (
-      <div className="relative flex min-h-dvh items-center justify-center px-6">
-        <p className="text-[15px] text-text-secondary">this recommendation is no longer available.</p>
+      <div className="flex min-h-dvh flex-col">
+        <EmptyState title="this recommendation is no longer available." />
       </div>
     );
   }

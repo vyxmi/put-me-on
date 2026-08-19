@@ -79,6 +79,12 @@ interface AtmosphereProps {
   intensity?: "hero" | "ambient";
   /** pointer-reactive drift toward cursor. Off for small/ambient placements where it'd be more noise than signal. */
   interactive?: boolean;
+  /** Mask the whole field to fully transparent well before the container's
+   * literal edge, so an inset placement (a card, a list panel) dissolves
+   * into the page instead of reading as a rectangle with light in it.
+   * Defaults on for ambient (almost always inset) and off for hero (almost
+   * always full-bleed, where reaching the edge is the point). */
+  edgeFade?: boolean;
 }
 
 /** The shared "colorful, alive, layered light" surface: blurred hue blobs
@@ -86,7 +92,14 @@ interface AtmosphereProps {
  * turbulence/displacement filter, with a grain layer on top so it never
  * reads as a flat gradient. Built entirely from CSS + SVG filters + GSAP —
  * no WebGL/canvas dependency. */
-export function Atmosphere({ seed, color = null, className, intensity = "ambient", interactive = true }: AtmosphereProps) {
+export function Atmosphere({
+  seed,
+  color = null,
+  className,
+  intensity = "ambient",
+  interactive = true,
+  edgeFade = intensity === "ambient",
+}: AtmosphereProps) {
   const filterId = useId().replace(/:/g, "");
   const containerRef = useRef<HTMLDivElement>(null);
   const blobRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -144,12 +157,19 @@ export function Atmosphere({ seed, color = null, className, intensity = "ambient
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seed, color, interactive]);
 
+  const edgeMask = edgeFade ? "radial-gradient(ellipse 100% 100% at 50% 50%, black 58%, transparent 96%)" : undefined;
+
   return (
     <div
       ref={containerRef}
       aria-hidden="true"
       className={`pointer-events-none absolute inset-0 overflow-hidden ${className ?? ""}`}
-      style={{ ["--px" as string]: 0, ["--py" as string]: 0 }}
+      style={{
+        ["--px" as string]: 0,
+        ["--py" as string]: 0,
+        maskImage: edgeMask,
+        WebkitMaskImage: edgeMask,
+      }}
     >
       <svg width="0" height="0" style={{ position: "absolute" }}>
         <filter id={filterId} colorInterpolationFilters="sRGB">

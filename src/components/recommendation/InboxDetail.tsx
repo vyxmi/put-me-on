@@ -8,13 +8,14 @@ import { RecommendationScene } from "./RecommendationScene";
 import { ResponsePicker } from "./ResponsePicker";
 import { ConnectionLine } from "./ConnectionLine";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { ConnectionMark } from "@/components/icons/ConnectionMark";
+import { ChainMark } from "@/components/icons/ConnectionMark";
 import type { ResponseType } from "@/lib/data/types";
 
 export function InboxDetail({ id }: { id: string }) {
   const item = useRecommendation(id);
   const { submitResponse } = useResponseActions();
   const [justConnected, setJustConnected] = useState(false);
+  const [passOnHovered, setPassOnHovered] = useState(false);
 
   if (!item || item.recommendation.deletedAt) {
     return <EmptyState title="this recommendation isn't available" description="it may have been removed." />;
@@ -61,10 +62,17 @@ export function InboxDetail({ id }: { id: string }) {
 
         <Link
           href={`/new?source=${recommendation.id}`}
-          className="flex items-center gap-2 text-[13px] text-text-secondary transition-colors hover:text-accent-light"
+          onMouseEnter={() => setPassOnHovered(true)}
+          onMouseLeave={() => setPassOnHovered(false)}
+          className="group flex items-center gap-3 rounded-xs border border-transparent px-5 py-2.5 transition-colors duration-300 hover:border-border-strong"
         >
-          <ConnectionMark state="hover" size={30} />
-          pass it on
+          <ChainMark size={44} className="text-text-tertiary transition-colors duration-300 group-hover:text-accent-light" secondSegmentDrawn={passOnHovered} />
+          <span className="flex flex-col items-start">
+            <span className="text-[14px] font-medium text-text-secondary transition-colors duration-300 group-hover:text-text-primary">
+              pass it on
+            </span>
+            <span className="text-[11px] text-text-quaternary">continue the chain</span>
+          </span>
         </Link>
       </div>
     </RecommendationScene>

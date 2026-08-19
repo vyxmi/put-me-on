@@ -77,7 +77,7 @@ export function RecommendationHero({
       <button
         type="button"
         onClick={handleListen}
-        className="text-link flex items-center gap-1.5 text-[14.5px] text-accent-light"
+        className="text-link flex items-center gap-1.5 text-[14.5px] text-text-secondary transition-colors hover:text-text-primary"
       >
         <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
           <path d="M4.7 1.5H10.5V7.3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
